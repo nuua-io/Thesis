@@ -1,0 +1,261 @@
+This chapter will define all the Nuua Language. It provides enough information to get started with it
+and it provides the knowledge to understand how it is suposed to work.
+
+When defining the Nuua Language, I had to look for an unambiguous grammar that could provide simple, elegant
+and yet non-ambiguous syntax to code a nuua program. The final result was cleaner than expected and yet very
+functional.
+
+\section{Data Types}
+
+Data types represent all the native types that Nuua supports for it's values. By default Nuua
+gives the programmer some common data types to work with. In addition to those types
+Nuua already have a casting mechanism to allow casting between diferent types, allowing
+operations between values of diferent types to be performed without issues (for example, making a simple
+addition between an integer and a float).
+
+\subsection{Integer}
+
+Integers are named as \texttt{int} and it represents subset of numbers represented by $\mathbb{Z}$. It includes 0
+and the integers are represented using $64$ bits. Meaning it's range for a given integer $x$ is:
+
+\begin{center}
+$\frac{2^{64}}{2} < x < \frac{2^{64}}{2} - 1$
+\end{center}
+
+\subsection{Unsigned Integer}
+
+Unsigned integers are named as \texttt{uint} and they are simply nonnegative integers (positive integers) $\mathbb{Z}^*={0} \cup \mathbb{Z}^+$.
+It's value is also represend using $64$ bits, meaning it's range for a given unsigned $x$ is:
+
+\begin{center}
+    $0 < x < 2^{64} - 1$
+\end{center}
+
+\subsection{Float}
+
+Floats are named as \texttt{float} and they are double precision points that uses a total of $64$ bits. $52$ fraction bits, $11$ bits
+of exponent and $1$ sign bit.
+
+\subsection{Boolean}
+
+Booleans are named as \texttt{bool} and they are simple booleans, they can be either \texttt{true} or \texttt{false}.
+
+\begin{center}
+    \texttt{true / false}
+\end{center}
+
+\subsection{String}
+
+Strings are named as \texttt{string} and they are used to manipulate arrays of chars. It's implementation uses
+a C++ \texttt{std::string}. It can store any text that's surrounded by \texttt{'"'}.
+
+\begin{center}
+    \texttt{"A string is represented like this"}
+\end{center}
+
+\subsection{List}
+
+Lists are named as \texttt{list[type]} and they are used to manipulate a list of other values. They can only have a single
+type as the inner list items, so all the list items need to be of the same type. Lists are defined as \texttt{'['} followed
+by any number of items separated by a comma, and finishing with a \texttt{']'}. To access elements in the list you can
+reference it by using it's integer key.
+
+\begin{center}
+    \texttt{["this", "is", "a", "valid", "list", "of", "strings"]}
+\end{center}
+
+\subsection{Dictionary}
+
+Dictionaries are named as \texttt{dict[type]} and they are used to store values of the same type. However, unlike lists, they
+use a string-based mapping, allowing each value to be bound to a specific string key, instead of an integer as the key.
+That means that to access an element, you need to provide it's string key instead of the key index.
+Dictionaries are defined as \texttt{'\{'} followed by an identifier (not a string!) without spaces,
+then with a \texttt{':'} to mark the end of the string key and finally followed by it's value.
+You can then add more elements following the same pattern and using a comma as a separator.
+When all elements are added you then need to finish the dictionary with a \texttt{'\}'}.
+Dictionaries, as lists, can only store 1 type of values. So each key can only store the same type.
+
+\begin{center}
+    \texttt{\{name: "Erik", occupation: "Student", color: "\#ff0000"\}}
+\end{center}
+
+\subsection{Function}
+
+Nuua functions are a bit special, it's name in Nuua is \texttt{fun} they are always represented as what's commontly known as annoymous functions. That means
+that functions are values, and therefore they need to be assigned if you want to save it. This allows quick and easy callback
+mechanisms that will be further explained. However, as this concerns, functions share a similar syntax as what's also commontly
+known as arrow functions. However, nuua functions can be defined in 3 diferent ways, each resulting in diferent function bodies.
+
+The base syntax starts with a \texttt{'('} followed by the declarations of the arguments separated by a comma (declarations are explained in
+the following sections). Then when the arguments are added, you need to close the parethensis with a \texttt{')'}.
+Since now, the sintax feels it's the same as a simple math grouping. However, after the closing parenthesis you'll need to specify
+the return type of the function. So you need to add \texttt{':'} followed by the return type. There are however, 3 types of functions
+to define, they depend on the following characters you add after the return type.
+
+\begin{itemize}
+    \item Single expression functions
+    \item Single statement functions
+    \item Normal Functions with multiple statements
+\end{itemize}
+
+Single expression functions are definind by adding an arrow \texttt{'->'} after the function closing parenthesis followed by a
+single expression. This expression will in fact be evaluated and futher returned as the function result.
+
+\begin{center}
+    \texttt{(a: int, b: int): int -> a + b}
+\end{center}
+
+Single statement functions are definind by adding a big arrow \texttt{'=>'} after the function closing parenthesis followed by a
+single statement. This statement will be the only thing evaluated when the function is run. Nothing (none) is returned if the provided
+argument is not a return statement.
+
+\begin{center}
+    \texttt{(a: int, b: int): int => return a + b}
+\end{center}
+
+Normal Functions with multiple statements are definind by adding a new block \texttt{'\{'} after the function
+closing parenthesis followed by a a new line and the block statements. When finished, you'll need to provide
+a closing bracket for the block \texttt{'\}'} followed by a new line.
+
+\begin{center}
+    \makebox[\textwidth]{\Longstack[l]{
+        \texttt{(a: int, b: int): int \{ } \\
+        \hspace{1cm}\texttt{return a + b} \\
+        \texttt{\}}
+    }}
+\end{center}
+
+\section{Operations}
+
+Operations can be performed into each value, to modify the outcome. For example, you might want to perform
+an addition of two integers $1 + 2$. This can perfectly be done and in fact there are more native operations that
+can be performed into values. Automatic casting will be performed if the values do not match in type. If no reasonable
+casting can be done it will fail at runetime with an error message.
+
+\subsection{Negation}
+
+Negation is an unary operation that simply negates the current value. It uses the operator \texttt{'!'}.
+This means it's boolean representation will be negated. For example, negating a \texttt{true} value,
+will result into a \texttt{false}. This operation can only be performed into boolean values, but
+automatic casting will be performed to achieve the result if it's not a boolean. The value would then be
+casted into a boolean and further negated.
+
+\subsection{Negative}
+
+Negative is an unary operation that takes the float representation (or integer) and applies it's negative result.
+It uses the \texttt{'-'} operand as an unary, meaning it just requires the right hand side operand.
+This makes the value be negative (if it was positive) or positive (if it was negative).
+The operation is done by multiplying $-1$ to the int or float value. The result will be an int or a float,
+depending on the input values.
+
+\subsection{Addition}
+
+Addition can be performed using the \texttt{'+'} operator. This is a binary operation, meaning it requires two operands,
+the left and the right handside of the operation.
+
+A special case can be found when trying to add two strings \texttt{"abc" + "def"}, this will in fact result in the addition
+of both strings into a single resulting string \texttt{"abcdef"}. Otherwise, the value is transformed into a float and further
+used to add both values, returing a float.
+
+\subsection{Substraction}
+
+Substraction can be performed using the \texttt{'-'} operator. This is a binary operation, meaning it requires two operands,
+the left and the right handside of the operation.
+The value is transformed into a float and further used to substract both values, returing a float.
+
+\subsection{Multiplication}
+
+Multiplication can be performed using the \texttt{'*'} operator. This is a binary operation, meaning it requires two operands,
+the left and the right handside of the operation.
+
+A special case can be found when one of the two operators is a string. This will result into the subsequent repetition of the
+string $x$ times, beeing $x$ the other operand. For example, \texttt{"abc" * 2} will result into \texttt{"abcabc"}. The same
+result will be achieved if the operands were inverted. Otherwise, the values are converted into a float and a normal multiplication
+is performed, returning a float.
+
+\subsection{Division}
+
+Division can be performed using the \texttt{'/'} operator. This is a binary operation, meaning it requires two operands,
+the left and the right handside of the operation.
+The value is transformed into a float and further used to divide the left hand side given the right hand side divisor, returing a float.
+
+If the right hand side of the operator is 0, it will throw an error because a division by 0 cannot be performed.
+
+\subsection{Equality}
+
+The equality operation can be done using the \texttt{'=='} operator. This operation is binary, so it requires the left and the
+right hand side operators to work. It will then determine with a boolean value if the two values are the same. Bear in mind, this
+operation is not strict, beeing able to say \texttt{true} when for example, the following operation is given \texttt{10 == 10.00}
+or perhaps, a bit more clear to understand what that means by given diferent values that can still give \texttt{true}, for example,
+\texttt{0 == ""} or \texttt{false == 0}.
+
+There is also the inverse of this operation. It uses the \texttt{'!='} operator. It works the same way but it gives
+true when the values are diferent.
+
+\subsection{Higher Than (or equal to)}
+
+The higher than opreation is a binary operation that uses the \texttt{'>'} operator to determine if the left hand side value is
+higher than the right hand side. It uses the float representation of the values to perform such an operation.
+
+There is also a the same operation with the included equality test on it, you may use it with the \texttt{'>='} operator.
+
+\subsection{Lower Than (or equal to)}
+
+The lower than opreation is a binary operation that uses the \texttt{'<'} operator to determine if the left hand side value is
+lower than the right hand side. It uses the float representation of the values to perform such an operation.
+
+There is also a the same operation with the included equality test on it, you may use it with the \texttt{'<='} operator.
+
+\section{Variable Declarations}
+
+Variables can be used to store data in an identifier you might recognize. However, you need to specify the variable type
+to know what kind of data type you're willing to store on it. This is called a variable declaration, you simply declare
+you want to use a variable named \texttt{variable\_name} with a value type of \texttt{my\_type}. The syntax is as follows:
+
+\begin{center}
+    \texttt{variable\_name: my\_type}
+\end{center}
+
+The list of types was specified in the last section. The variable name can be anything starting with a character followed by
+anything, including \texttt{'\_'}. No spaces are allowed.
+
+You may also specify an initializer to set the variable to an initial value. If no initializer is specified like the example above,
+the value will be initialized but into a 0 state. Meaning it will be usable. To declare a variable with an initializer, you just need
+to add a \texttt{'='} after the type.
+
+\begin{center}
+    \texttt{variable\_name: my\_type = initializer}
+\end{center}
+
+So for instance, if you want to declare a variable called \texttt{sum} that it's the addition of two integers $10$ and $20$,
+you may do such like follows:
+
+\begin{center}
+    \texttt{sum: int = 10 + 20}
+\end{center}
+
+\section{Using variables}
+
+To use the value stored in a variable, you first need to declare the variable and then you need to load it by using the variable
+name as a value. For example, given the following declaration:
+
+\begin{center}
+    \texttt{sum: int = 10 + 20}
+\end{center}
+
+You may then load the variable by using sum:
+
+\begin{center}
+    \texttt{sum: int = 10 + 20} \\
+    \texttt{res: int = sum * 2}
+\end{center}
+
+In this example, the variable \texttt{res} will have the value of $60$.
+
+\section{Control Flow - Conditionals}
+
+...
+
+\section{Control Flow - Loops}
+
+...

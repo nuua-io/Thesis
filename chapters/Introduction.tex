@@ -1,0 +1,185 @@
+Programming languages are used everyday by thousands of engineers and yet few of them understand how they work.
+A programming language is basically the syntax and grammar used as humans to tell a computer what to do. When
+somebody wants a computer to do something, it needs to write a program using a programming language and then
+a compiler needs to translate it into machine code for the computer to be able to execute it.
+
+To design such a software system, it's vital to understand the theory behind it and learn about all the different
+steps involved to make a computer understand and execute a custom programming language.
+
+\section{Objectives}
+
+The objectives of this document are to define and implement a fully featured experimental programming language to learn and
+overcome the diferent challenges that are presented during the process. This document also explains and implement
+all the different aspects of the programming language ecosystem. This includes for instance the standard library,
+dependency management and a full featured webpage for the language. The experimental language is called \textbf{Nuua}.
+
+To better summarize the objectives, this list should give a great overview to understand what this document achieves.
+
+\begin{itemize}
+    \item Understand the theory behind all steps involved in common programming languages to be able to reproduce them and adapt it
+        at the needs of the project.
+    \item Define a non-ambiguous grammar for the Nuua Programming Language. This grammar is simple, elegan and yet following most
+        common programming language's specifications to avoid confusion when learning it, allowing either mature programmers or newcomers to
+        pick up the grammar quickly and efficiently.
+    \item Choose an efficient programming language to code the language with. The language would need to be efficient, fast and yet able to code with it
+        pretty fast to avoid wasting time. Among other options, the languages that satify the previous statement are low level programming languages like
+        C, C++, D, Rust, Go, Crystal or Nim.
+    \item Define a scalable project structure to allow the programming language to grow efficiently without creating a
+        big ball of mud \footnote{\href{https://en.wikipedia.org/wiki/Big_ball_of_mud}{Big ball of mud (Wikipedia)}}. The software system
+        that is chosen will be very important towards the scalability of the project.
+    \item Create the programming language with a defined set of features found in most programming languages. Those include from basic datatypes
+        to object oriented programming.
+    \item Create a Standard Library with a common set of operations or protocols implemented (For example the HTTP protocol) and also common
+        libraries to work with diferent data types in a higher level of abstraction (For example data collections).
+    \item Create a cloud centralized dependency manager to allow the programs to require certain libraries with a certain version. Possible
+        references are NPM (Node Package Manager), Composer (PHP package manager), Cargo (Rust package manager) or Go mods (Go modules).
+    \item Develop the project's website to showcase the language, store the documentation and host the information for the dependency manager.
+\end{itemize}
+
+\section{High level overview}
+
+To firstly understand all the complex system that this document implements, it's important to explain a few key concepts
+found in a typical compiler. As mentioned, the job of a compiler is to take an input source and translate it into
+another. Often, the compiler term is used to express a translation to a much diferent environment, that means that usually, the input
+is written in a high level language and further translated into a lower level of abstraction. As an example, GCC (GNU Compiler Collection) and
+it's implementation of the C programming language basically compiles the input code into assembly (and optimized if needed), then to an object file and finally linked
+to generate an executable. That said, the compiler job was to translate a high level programming language (C) into a low level programming language (Assembly).
+However, there are multiple types of compilers, and each one is used to implement different translation tasks.
+
+\begin{itemize}
+    \item \textbf{Compiler}: Translates a high level language to a low level language in the same or diferent architecture.
+        For example, GCC's C implementation
+    \item \textbf{Cross-Compiler}: The translation is done to a specific (and probably diferent than the compiler's machine) architecture.
+        For example, AVR-GCC compiles specifically for the AVR microcontroller architecture. Other closer examples may be found when compiling for
+        32 bits or 64 bits target architecture.
+    \item \textbf{Bootstrap compiler}: A compiler that is built using the language it compiles to (The initial version is written in another language)
+        For example, the official Go compiler is written in Go.
+    \item \textbf{Decompiler}: Translates a low level language to a high level language in the same or diferent architecture.
+        For example, the Boomerang decompiler.
+    \item \textbf{Transpiler (Source-to-source compiler)}: Translates a language to a similar level of abstraction (usually between high level languages).
+        For example, TypeScript (compiles to JavaScript).
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [node distance=1cm]
+
+        % Nodes of the layered system
+        \node[block] (input) {Input language};
+        \node[block,right=of input] (compiler) {Compiler};
+        \node[block,right=of compiler] (output) {Output language};
+
+        % Lines
+        \draw[line] (input) -- (compiler);
+        \draw[line] (compiler) -- (output);
+
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{Compiler overview}
+    \label{fig:compiler_overview}
+\end{figure}
+
+\section{Language runtime}
+
+A compiler job is just to translate, and then, it's up to the language implementation to run it. There are diferent ways to
+run or execute a programming language.
+
+\begin{itemize}
+    \item \textbf{Machine-language compiler}: If the target language of the compiler is executable code, this can be run
+        by the operating system and it will produce the nessesary outputs. Machine code have a big advantage and disadvantage.
+        The executed code will be very fast but the executable is not portable among diferent architectured. This introduces
+        platform-dependent builds that are very fast.
+    \item \textbf{Interpreter}: Interpreters are often a very diferent overview of this problem. Interpreters do not compile
+        to machine language, and instead, it often compiles to bytecode (a portable and reduced instruction set similar to machine instructions
+        that is used to execute the language. The advantages are that is platform-independent and it's designed specifically with the language
+        needs but one big disadvantage is that it's much slower to run than real machine-code. Interpreters can also make language execution
+        dynamic allowing untyped languages that plays around with diferent variable types.
+    \item \textbf{Just-in-time compiler}: Just-in-time compilers (often called JIT compilers) are an intermidiate aproach between the other two
+        that tries to speed up the execution of interpreters by compiling chunks of code at a specific moment while the program run to speed up portions
+        of the code that is often executed (for example functions that are called frequently). Esentially, the JIT compiler needs to decide when to compile
+        a specific part of the code at runtime and adds a small overhead in exchange for a machine-language performance on successive calls.
+\end{itemize}
+
+\section{Structure}
+
+Nuua is structured as a layered system. This system is known to be robust and scalable at very low
+performance cost. It's very easy to understand and yet very powerful for software systems like this one.
+This systems are also used for other complex software systems, such as operating systems or complex
+protocols like TCP/IP.
+
+By using a layered system, you can make sure each layer's function is correctly executed without
+messing with the whole system itself, creating a very impresive way to scale-up or upgrade existing
+parts of the system without damaging the others. However, a consistent API should in fact be established
+from the ground up to avoid breaking changes. If the API is maintained, the individual layers may be
+upgraded independently without the need of extra work. A layered system consists of diferent independent
+ordered layers that need to meet certain requirements. The requirements are mostly simple, each layer can
+only use the API given by the layer that's below it and it can only give an API to the one above.
+
+Since this structure is ideal for Nuua, the decision to build it upon it was inevitable. Therefore, the layers
+Nuua have in it's system are exposed in \autoref{fig:nuua_system}. An independent module called Logger is found
+on the left side of the figure. This module is in fact a simple logger used by all layers to output messages if
+needed (like errors messages). However, since all modules require the use of it, it can be used but not modified.
+
+There's also three distinct sections found in the system, the back end, the middle end and the front end. I'll talk about them in
+a future section since it's not the purpose of the current one. However it's important to keep in mind they exist.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [node distance=1cm]
+
+        % Nodes of the layered system
+        \node[big_block] (app) {Application};
+        \node[big_block,below=of app] (vm) {Virtual Machine};
+        \node[big_block,below=of vm] (compiler) {Compiler};
+        \node[big_block,below=of compiler] (analyzer) {Analyzer};
+        \node[big_block,below=of analyzer] (parser) {Parser};
+        \node[big_block,below=of parser] (lexer) {Lexer};
+
+        % Independent module
+        \node[block, left=of compiler] (logger) {Logger};
+
+        % Separator
+        \draw[thick,dashed] ($(app.north west) + (-0.5, 0)$) -- ($(lexer.south west) + (-0.5, 0)$);
+
+        % Top arrows
+        \draw[line] (-3, 1.75) node[anchor=east] {Input} -| ($(app.north) + (-1, 0)$);
+        \draw[line] ($(app.north) + (1, 0)$) |- (3, 1.75) node[anchor=west] {Output};
+
+        % Arrows going down
+        \draw[line] ($(app.south) + (-1, 0)$) -- ($(vm.north) + (-1, 0)$);
+        \draw[line] ($(vm.south) + (-1, 0)$) -- ($(compiler.north) + (-1, 0)$);
+        \draw[line] ($(compiler.south) + (-1, 0)$) -- ($(analyzer.north) + (-1, 0)$);
+        \draw[line] ($(analyzer.south) + (-1, 0)$) -- ($(parser.north) + (-1, 0)$);
+        \draw[line] ($(parser.south) + (-1, 0)$) -- ($(lexer.north) + (-1, 0)$);
+
+        % Arrows going up
+        \draw[line] ($(vm.north) + (1, 0)$) -- ($(app.south) + (1, 0)$);
+        \draw[line] ($(compiler.north) + (1, 0)$) -- ($(vm.south) + (1, 0)$);
+        \draw[line] ($(analyzer.north) + (1, 0)$) -- ($(compiler.south) + (1, 0)$);
+        \draw[line] ($(parser.north) + (1, 0)$) -- ($(analyzer.south) + (1, 0)$);
+        \draw[line] ($(lexer.north) + (1, 0)$) -- ($(parser.south) + (1, 0)$);
+
+        % Logger arrows
+        \draw[line] (app.west) -- (logger);
+        \draw[line] (vm.west) -- (logger);
+        \draw[line] (compiler.west) -- (logger);
+        \draw[line] (analyzer.west) -- (logger);
+        \draw[line] (parser.west) -- (logger);
+        \draw[line] (lexer.west) -- (logger);
+
+        % The right specifiers
+        \draw[tuborg, decoration={brace}] let \p1=(parser.north), \p2=(lexer.south) in
+            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Front end};
+        \draw[tuborg, decoration={brace}] let \p1=(analyzer.north), \p2=(analyzer.south) in
+            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Middle end};
+        \draw[tuborg, decoration={brace}] let \p1=(vm.north), \p2=(compiler.south) in
+            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Back end};
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{Nuua's Layered System}
+    \label{fig:nuua_system}
+\end{figure}
