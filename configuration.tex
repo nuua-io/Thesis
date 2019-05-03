@@ -1,0 +1,90 @@
+% Document releated
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% Cover configuration commands
+\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}}
+\def\intro#1{\gdef\@intro{#1}\gdef\theintro{#1}}
+\def\author#1{\gdef\@author{#1}\gdef\theauthor{#1}}
+\def\meta#1{\gdef\@meta{#1}\gdef\themeta{#1}}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{float}
+
+% Symbols and Math
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Code listings
+\usepackage{listings}
+\usepackage{minted}
+
+% References and links
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\hypersetup{hidelinks=true}
+\usepackage[usestackEOL]{stackengine}
+
+% Custom tab command
+\newcommand\tab[1][10mm]{\hspace*{#1}}
+
+% Tables configuration
+\setlength{\tabcolsep}{0.6em}
+{\renewcommand{\arraystretch}{1.35}
+
+% Footnotes
+\renewcommand{\thefootnote}{\textbf{\arabic{footnote}}}
+\addtolength{\footnotesep}{1.5mm}
+\setlength{\skip\footins}{1cm}
+
+% Bibliography
+\usepackage[backend=bibtex,style=ieee]{biblatex}
+\addbibresource{references}
+\nocite{*}
+
+% Headers and footers
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+% \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[RO,LE]{\thepage\ of \pageref{LastPage}}
+\fancypagestyle{plain}{
+\fancyhf{}
+\fancyfoot[RO,LE]{\thepage\ of \pageref{LastPage}}}
+
+\usetikzlibrary{
+    calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols
+}
+\tikzset{
+    block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=7.5em},
+    big_block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=10em},
+    bigger_block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=15em},
+    line/.style={->, thick,shorten >=1.5pt},
+    decoration={brace},
+    tuborg/.style={decorate},
+    tubnode/.style={midway, right=2pt},
+}
+
+\graphicspath{{images/}}
+
+\title{The design of an experimental programming language and its translator}
+\subtitle{The Nuua Programming Language}
+\author{Èrik Campobadal Forés}
+\intro{
+    A bachelor thesis presented for the degree of\\
+    ICT Systems Engineer
+}
+\meta{
+    EMIT- Department of Mining, Industrial and ICT Engineering\\
+    Directed by Sebastia Vila Marta\\
+    Polytechnic University of Catalonia\\
+    Catalonia, Spain\\
+    June 2019
+}

@@ -3,3 +3,7 @@
 *.toc
 *.out
 *.lof
+*.bbl
+*blg
+*.xml
+*blx.bib

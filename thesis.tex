@@ -1,46 +1,26 @@
-\documentclass[12pt]{report}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{graphicx}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{listings}
-\usepackage{tikz}
-\usepackage{float}
-\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
-\usepackage[usestackEOL]{stackengine}
-\usepackage{minted}
-
-\usetikzlibrary{
-    calc,trees,positioning,arrows,chains,shapes.geometric,%
-    decorations.pathreplacing,decorations.pathmorphing,shapes,%
-    matrix,shapes.symbols
-}
-\tikzset{
-    block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=7.5em},
-    big_block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=10em},
-    line/.style={->, thick,shorten >=1.5pt},
-    decoration={brace},
-    tuborg/.style={decorate},
-    tubnode/.style={midway, right=2pt},
-}
-
-\graphicspath{{images/}}
-
-\title{Engineering a Programming Language}
-\author{Èrik Campobadal Forés}
+\input{configuration}
 
 \begin{document}
+\pagestyle{plain}
 
 \input{cover}
 
 \tableofcontents
 \listoffigures
 
+\clearpage
+% \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+% \renewcommand{\sectionmark}[1]{\markright{\ #1}{}}
+\fancyhead[L]{\scriptsize{\textsl{\leftmark}}}
+\fancyhead[R]{\scriptsize{\textsl{\rightmark}}}
+
 \chapter{Introduction}
 \input{chapters/Introduction}
 
-\chapter{The Nuua Language}
-\input{chapters/TheNuuaLanguage}
+% \chapter{The Nuua Language}
+% \input{chapters/TheNuuaLanguage}
+
+\chapter{Bibliography}
+\printbibliography[heading=none]
 
 \end{document}
