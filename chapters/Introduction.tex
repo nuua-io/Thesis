@@ -1,118 +1,70 @@
-Programming languages are used every day by thousands of engineers and yet few of them understand how they work.
-A programming language is a syntax and grammar used as humans to tell a computer what to do. When
-somebody wants a computer to do something, it needs to write a program using a programming language and then
+Programming languages are used every day by millions of engineers as part of their daily routine.
+A programming language is used to tell a computer what to do. When
+somebody wants a computer to do something, it needs to write a program using a programming language. Then
 a compiler needs to translate it into machine code for the computer to execute it.
 
-To design such a software system it's vital to understand the theory behind a compiler and learn about all the different
-steps involved to make a computer understand and execute a custom programming language.
+To design a programming language it's important to understand the theory behind a compiler and learn about all the different
+steps involved to make a computer understand and execute a programming language.
 
 \section{Objectives}
 
-The objectives of this document are to define and implement a fully featured experimental programming language to learn and
-overcome the different challenges that are presented during the process. This document also explains and implement
-all the different aspects of the programming language ecosystem. This includes, for instance, the standard library,
-dependency management and a full-featured webpage for the language. The experimental language is called \textbf{Nuua}.
+The main objective of this thesis is to design an experimental programming language and implement an interpreter to execute
+any program written with it. The different challenges that are faced during the design and implementation process are also explained and
+solved in their respective chapters. The experimental language built in this thesis is called \textbf{Nuua}.
 
-To better summarize the objectives, this list should give a great overview to understand what this document achieves.
+The objective can be partitioned into the following points.
 
 \begin{itemize}
-    \item Understand the theory behind all steps involved in common programming languages to be able to reproduce them and adapt it
-        at the needs of the project.
-    \item Define a non-ambiguous grammar for the Nuua Programming Language. This grammar must be simple, elegant and yet it needs to follow the most
+    \item Learn all the steps involved in a common compiler implementation and reproduce them acording to the project needs.
+    \item Design the Nuua Programming Language. This grammar must be simple, elegant and yet it needs to follow the most
         common programming language's specifications to avoid confusion when learning it, allowing either mature programmers or newcomers to pick up the grammar quickly and efficiently.
-    \item Choose an efficient programming language to code the language with. The language would need to be efficient, fast and yet able to code with it
-        pretty fast to avoid wasting time. Among other options, the languages that satisfy the previous statement are low-level programming languages like
-        C, C++, D, Rust, Go, Crystal or Nim.
-    \item Define a scalable project structure to allow the programming language to grow efficiently without creating a
-        big ball of mud \footnote{\href{https://en.wikipedia.org/wiki/Big_ball_of_mud}{Big ball of mud (Wikipedia)}}. The software system that is chosen will be very important towards the scalability of the project.
-    \item Create the programming language with a defined set of features found in most programming languages. Those include from basic datatypes
-        to object-oriented programming.
-    \item Create a Standard Library with a common set of operations and also common libraries to work with different data types in
-        a higher level of abstraction (For example data collections).
-    \item Create a cloud centralized dependency manager to allow the programs to require certain libraries with a certain version. Possible
-        references are NPM (Node Package Manager), Composer (PHP package manager), Cargo (Rust package manager) or Go mods (Go modules).
-    \item Develop the project's website to showcase the language, store the documentation and host the information for the dependency manager.
+    \item Choose an efficient programming language to build the compiler with. Among other options, the languages that satisfy the previous
+    statement are low-level programming languages like C, C++, D, Rust, Go, Crystal, Zig or Nim.
+    \item Define a scalable software system to allow the compiler to grow efficiently. The software system that is chosen will be very important towards the scalability of the project.
+    \item Build a compiler for the Nuua programming language and a very simple standard library.
 \end{itemize}
 
-\section{High level overview}
+\section{Preliminary overview}
 
-To firstly understand all the complex system that this document implements, it's important to explain a few key concepts
-found in a typical compiler. This section details the most important aspects found in a typical programming language and in a compiler infrastructure.
-This high-level overview won't deal with details and only explains the basics to understand the whole system without deep understanding.
-However, is good to note that the most import aspects can be explained further in their respective chapters.
-
+This section details the most important aspects found in a compiler.
+This preliminary overview won't deal with details and only explains the basics to understand the whole system without deep knowledge.
+Further chapters contain expanded information respective to some of the details mentioned here.
 
 \subsection{Language grammar}
 
-Most programming languages can be expressed using a notation called \textbf{Backus Naur form} or \textbf{BNF} for short. This notation is a form of a formal
-grammar (Specifically, a context-free grammar) that is used to specify the rules, grammar and alphabet of a language. The BNF form is often used to write
-a language specification, so language implementations are able to implement and understand the grammar and rules of a certain language. This
-document uses a variant of the BNF notation called \textbf{Extended Backus Naur form} or \textbf{EBNF} for short with a modified syntax to
-write the Nuua language specification.
+Context-free grammar is a notation used to specify the syntax of a programming language. Following the syntax definition explained
+in \autocite[Section~2.2]{compilers} a context-free grammar consists of four components:
 
-In short, in a formal language, there are two different types of symbols. Terminals and non-terminals.
+\begin{enumerate}
+    \item A group of terminal symbols also known as tokens. In a programming language tokens may be literal symbols like '+', '*' or numbers and identifiers.
+    \item A group of non-terminals that can be reduced to terminals based on the production rules.
+    \item A group of production rules that consists of a non-terminal on the left side and a sequence of terminals and/or non-terminals on the right side.
+    \item A non-terminal start symbol.
+\end{enumerate}
 
-\begin{itemize}
-    \item \textbf{Terminals}: Symbols that are literals. In a programming language, literal symbols may refer to signs like '+', '*'
-        or even numbers or identifiers. Those are often called tokens and they are part of the result of a lexing process.
-    \item \textbf{Non-terminals}: Symbols that can be replaced or often reduced based on the grammar rules. Its replacement or reduction
-        ends up being a terminal symbol.
-\end{itemize}
+This thesis will use the \emph{extended Backus-Naur form} also known as \emph{EBNF} to express the context-free grammar representation of Nuua.
+EBNF is often used in different ways due to the big ammount of variants that exists. To clarify the EBNF syntax that this thesis is going to use, the
+following table will be used to specify the production rules. More information may be found in the EBNF grammar article \autocite{EBNF_grammar}.
 
-The EBNF notation has the following constraints.
-
-\begin{center}
-    \texttt{symbol = pattern;}
-\end{center}
-
-In this code, \textbf{symbol} represents a non-terminal symbol and \textbf{pattern} represents the current non-terminal symbol grammar rule.
-In EBNF there are ways to represent different situations. This table relates the EBNF syntax symbols that can be used to define rules.
-
-\begin{center}
-    \begin{tabular}{ | l | p{10cm} |}
-    \hline
-    \textbf{Symbol} & \textbf{Definition} \\ \hline
-    \texttt{=} & Used to define a rule. \\ \hline
-    \texttt{,} & Used to concatenate patterns. \\ \hline
-    \texttt{|} & Used to define a union of two sets of patterns. \\ \hline
-    \texttt{*} & Used to define an exception. \\ \hline
-    \texttt{-} & Used to define a union of two sets of patterns. \\ \hline
-    \texttt{[...]} & Used to define an optional pattern. \\ \hline
-    \texttt{\{...\}} & Used to define an 0 or many pattern. \\ \hline
-    \texttt{(...)} & Used to group a pattern. \\ \hline
-    \texttt{"..."} or \texttt{'...'} & Used to define a terminal symbol. \\ \hline
-    \texttt{(*...*)} & Used to define a comment. \\ \hline
-    \texttt{?...?} & Used to define a special pattern. \\ \hline
-    \texttt{;} or \texttt{.} & Used to terminate a given grammar rule. \\ \hline
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l p{10cm} }
+        \textbf{Symbol} & \textbf{Definition} \\
+        \texttt{:} & Used to define a production rule. \\
+        \texttt{\textit{space}} & Used to concatenate patterns (space separated). \\
+        \texttt{A|B} & Used to define a union of A and B. \\
+        \texttt{A+} & Used to define a one or more pattern of A. \\
+        \texttt{A*} & Used to define a zero or more pattern. \\
+        \texttt{A?} & Used to define an optional pattern. \\
+        \texttt{(A)} & Used to group a pattern. \\
+        \texttt{"T"} or \texttt{'T'} & Used to define a terminal symbol. \\
+        \texttt{;} & Used to terminate a given production rule. \\
     \end{tabular}
-\end{center}
+    \caption{EBNF syntax}
+    \label{fig:ebnf_syntax}
+\end{table}
 
-The following example defines a set of symbols to define how an integer may look like, allowing any integer to have an optional symbol prefix followed by
-as many digits as needed.\\
-
-\texttt{integer\\\tab= ["-" | "+"], digit, \{digit\}\\\tab;}\\
-\texttt{digit\\\tab= "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"\\\tab;}\\
-
-However, this document will use a modified version of EBNF that deals with common regular expression (regex) patterns.
-The special symbols found in this modified version are:
-
-\begin{center}
-    \begin{tabular}{ | l | p{10cm} |}
-    \hline
-    \textbf{Symbol} & \textbf{Definition} \\ \hline
-    \texttt{:} & Used to define a rule. \\ \hline
-    \texttt{\textit{space}} & Used to concatenate patterns (space separated). \\ \hline
-    \texttt{|} & Used to define a union of two sets of patterns. \\ \hline
-    \texttt{...+} & Used to define a one or more pattern. \\ \hline
-    \texttt{...*} & Used to define a zero or more pattern. \\ \hline
-    \texttt{...?} & Used to define an optional pattern. \\ \hline
-    \texttt{(...)} & Used to group a pattern. \\ \hline
-    \texttt{"..."} or \texttt{'...'} & Used to define a terminal symbol. \\ \hline
-    \texttt{;} & Used to terminate a given grammar rule. \\ \hline
-    \end{tabular}
-\end{center}
-
-So the previous example grammar would now be written as:\\
+As a simple example, to define a language that consists in a single integer, the following EBNF grammar could be used:\\
 
 \texttt{integer\\\tab: ("-" | "+")? digit+\\\tab;}\\
 \texttt{digit\\\tab: "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"\\\tab;}\\
@@ -122,26 +74,12 @@ write the language grammar.
 
 \subsection{Compilers}
 
-The job of a compiler is to take an input source and translate it into another. Often, the compiler term is used to express
-a translation to a much different environment, that means that usually, the input is written in a high-level language and further
-translated into a lower level of abstraction. As an example, GCC (GNU Compiler Collection) and its implementation of the C programming
-language basically compiles the input code into assembly (and optimized if needed), then to an object file and finally linked
-in building the executable. That said, the compiler job was to translate a high-level programming language (C) into a low-level programming
-language (Assembly). However, there are multiple types of compilers, and each one is used to implement different translation tasks.
-
-\begin{itemize}
-    \item \textbf{Compiler}: Translates a high-level language to a low-level language in the same or different architecture.
-        For example, GCC's C implementation
-    \item \textbf{Cross-Compiler}: The translation is done to a specific (and probably different than the compiler's machine) architecture.
-        For example, AVR-GCC compiles specifically for the AVR microcontroller architecture. Other closer examples may be found when compiling for
-        32 bits or 64 bits target architecture.
-    \item \textbf{Bootstrap compiler}: A compiler that is built using the language it compiles to (The initial version is written in another language)
-        For example, the official Go compiler is written in Go.
-    \item \textbf{Decompiler}: Translates a low-level language to a high-level language in the same or different architecture.
-        For example, the Boomerang decompiler.
-    \item \textbf{Transpiler (Source-to-source compiler)}: Translates a language to a similar level of abstraction (usually between high-level languages).
-        For example, TypeScript (compiles to JavaScript).
-\end{itemize}
+The job of a compiler is to take an input language and translate it into another as showin in \autoref{fig:compiler_overview}.
+Often, the compiler term is used to express a translation to a much different level of abstraction, that usually means
+that the input is written in a high-level language and further translated into another low-level language.
+However, there are multiple types of compilers, and each one is used to implement different translation tasks.
+Nuua's system architecture built in this thesis, as described in \autoref{sec:sys_arch}, is based on a interpreter architecture, wich consists of a
+compiler that translates the Nuua language into an intermediate representation known as \emph{bytecode} and further interpreted by a virtual machine.
 
 \begin{figure}[H]
     \centering
@@ -163,18 +101,6 @@ language (Assembly). However, there are multiple types of compilers, and each on
     \caption{Compiler overview}
     \label{fig:compiler_overview}
 \end{figure}
-
-A compiler job is just to translate, and then, it's up to the language implementation to run it. There are different ways to
-run or execute a programming language.
-
-\begin{itemize}
-    \item \textbf{Machine-language compiler}: Compilers whose target language is executable code (machine-language) can be run
-        by the operating system. Machine code has a big advantage and disadvantage. The executed code will be very fast but the executable is not portable among different architectured. This introduces platform-dependent builds that are very fast.
-    \item \textbf{Interpreter}: Interpreters are often a very different overview of this problem. Interpreters do not compile
-        to machine language and instead it often compiles to bytecode, a portable and reduced instruction set similar to machine instructions that are used to execute the language. The advantages are that is platform-independent and it's designed specifically with the language needs but one big disadvantage is that it's much slower to run than real machine-code. Interpreters can also make language execution dynamic allowing untyped languages that play around with different variable types.
-    \item \textbf{Just-in-time compiler}: Just-in-time compilers (often called JIT compilers) are an intermediate approach between the other two
-        that tries to speed up the execution of interpreters by compiling chunks of code at a specific moment while the program run to speed up portions of the code that is often executed (for example functions that are called frequently). Essentially, the JIT compiler needs to decide when to compile a specific part of the code at runtime and adds a small overhead in exchange for a machine-language performance on successive calls.
-\end{itemize}
 
 \subsection{Phases of a compiler}
 
@@ -239,15 +165,32 @@ section, a small introduction to each phase is needed to understand the Nuua's s
         This phase often has to deal with instruction scheduling or register allocation while they have to output a fully working program.
 \end{itemize}
 
+\section{Interpreters}
+
+There are different ways to interpret a language. This thesis implements a bytecode virtual machine (register-based) where the bytecode is the
+intermidiate representation generated by the Nuua compiler. Among the most common interpreters built for programming languages, we may find the
+following types of interpreters:
+
+\begin{itemize}
+    \item \textbf{Bytecode interpreter}: The programming language is first compiled into an intermediate bytecode representation and further executed
+        by this virtual machine. A very famous example of a programming language interpreted by virtual machine is the Lua virtual machine \autocite{the_implementation_of_lua}
+    \item \textbf{Abstract syntax tree interpreter}: This kind of interpreters just need the AST to work with, so no extra compilation to an intermediate
+        representation is needed and therefore, easier to implement. However, due it's nature, they are much slower to execute and debug due the recursiveness
+        of working with tree structures.
+    \item \textbf{Just-in-time compiler}: Just-in-time compilers (often called JIT compilers) are an intermediate approach between a compiler that generates
+    machine code and an interpreter. JIT compilers compile chunks of code at a specific moments while the program run to speed up portions of the code that is beeing interpreted (for example functions that are called frequently). Essentially, the JIT compiler needs to decide when to compile a specific part of the code at runtime and adds a small overhead in exchange for a machine-language performance on specific parts.
+\end{itemize}
+
 \section{System architecture}
+\label{sec:sys_arch}
 
 To design the system architecture of Nuua, consideration of existing system architectures needs to be taken since existing architectures
 often work better than the custom-made ones and they often lead to greater project scalability. It's trivial
 to make this choice before starting the project since changing a system architecture after it's initial
 development phases becomes a very bad choice and may lead to a big ball of mud. Two choices in software development might be hierarchical
-or layered systems. Nuua's architecture is based on a \textbf{layered system}.
+or layered systems. Nuua's architecture is based on a \emph{layered system} \autocite{software_architecture}.
 
-A layered system has specific constraints regarding code communication. Specifically, a layered system consists
+A layered system has specific requirements regarding code communication. Specifically, a layered system consists
 of different layers arranged vertically. Those layers have a specific criterion that needs to be met. As a matter of fact,
 each layer can only use the layer below and gives an API for the layer above (if any) to use its functions. For example,
 the \autoref{fig:layered_system} contains a simple 3-tier layered system. Layer 3 can only use Layer 2, and the output comes
@@ -299,8 +242,8 @@ on the left side of the figure. This module is a logger used by all layers to ou
         % Nodes of the layered system
         \node[big_block] (app) {Application};
         \node[big_block,below=of app] (vm) {Virtual Machine};
-        \node[big_block,below=of vm] (compiler) {Compiler};
-        \node[big_block,below=of compiler] (analyzer) {Analyzer};
+        \node[big_block,below=of vm] (compiler) {Code generator};
+        \node[big_block,below=of compiler] (analyzer) {Semantic analyzer};
         \node[big_block,below=of analyzer] (parser) {Parser};
         \node[big_block,below=of parser] (lexer) {Lexer};
 
@@ -337,12 +280,10 @@ on the left side of the figure. This module is a logger used by all layers to ou
         \draw[line] (lexer.west) -- (logger);
 
         % The right specifiers
-        \draw[tuborg, decoration={brace}] let \p1=(parser.north), \p2=(lexer.south) in
-            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Front end};
-        \draw[tuborg, decoration={brace}] let \p1=(analyzer.north), \p2=(analyzer.south) in
-            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Middle end};
-        \draw[tuborg, decoration={brace}] let \p1=(vm.north), \p2=(compiler.south) in
-            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Back end};
+        \draw[tuborg, decoration={brace}] let \p1=(app.north), \p2=(vm.south) in
+            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Interpreter};
+        \draw[tuborg, decoration={brace}] let \p1=(compiler.north), \p2=(lexer.south) in
+            ($(2.5, \y1)$) -- ($(2.5, \y2)$) node[tubnode] {Compiler};
     \end{tikzpicture}
 
     % Caption and Label
@@ -357,9 +298,9 @@ on the left side of the figure. This module is a logger used by all layers to ou
         the purpose is to analyze the command line arguments and fire the application accordingly.
     \item \textbf{Virtual Machine}: The virtual machine is the interpreter that runs Nuua. It's a register-based virtual machine that
         acts as the Nuua runtime environment.
-    \item \textbf{Compiler}: Is responsible for the translation of the AST to the virtual machine bytecode. This acts as the code generation
+    \item \textbf{Code generator}: Is responsible for the translation of the AST to the virtual machine bytecode. This acts as the code generation
         part of a compiler architecture.
-    \item \textbf{Analyzer}: Does all the semantic analysis of the compiler and optimizes the AST for faster and smaller output.
+    \item \textbf{Semantic analyzer}: Does all the semantic analysis of the compiler and optimizes the AST for faster and smaller output.
     \item \textbf{Parser}: Acts as the syntax analyzer, it uses a list of tokens and generates a fully valid AST.
     \item \textbf{Lexer}: Scans the source code and translates the characters to tokens, creating a list of tokens representing
         the original source code.
