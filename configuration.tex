@@ -4,6 +4,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 
+% Configuration of KOMA-script
+\setkomafont{dictumtext}{\itshape\small}
+\setkomafont{dictumauthor}{\normalfont}
+\renewcommand*\dictumwidth{0.75\linewidth}
+\renewcommand*\dictumauthorformat[1]{\vspace{0.5cm}--- #1\vspace{0.25cm}}
+\renewcommand*\dictumrule{}
+
 % Cover configuration commands
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 \def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}}
@@ -22,6 +29,11 @@
 
 % Code listings
 \usepackage{listings}
+\lstset{
+  breaklines=true,
+  basicstyle=\ttfamily
+}
+\lstset{columns=fullflexible,basicstyle=\ttfamily}
 \usepackage{minted}
 
 % References and links

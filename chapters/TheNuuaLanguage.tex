@@ -2,7 +2,7 @@ This chapter defines the Nuua programming language. The language is set to be of
 paradigm and a statically typed system. The official Nuua compiler is written in C++ with a zero-dependency policy and it's
 implemented as an interpreter using a register-based virtual machine.
 
-\section{Nuua Grammar}
+\section{Grammar}
 
 Nuua's grammar is inspired by other existing programming languages by taking advantage of some of the best features some of them offer.
 Inspiration comes specially from Python, Rust and Go.
@@ -10,9 +10,9 @@ Inspiration comes specially from Python, Rust and Go.
 The precedence relationship between expressions is heavily inspired by C, D, Rust and Dart. The official documentation for those languages
 exposes similar tables for operator precedences and Nuua has taken akin levels of precedence as those.
 
-Nuua does not make use of the \texttt{';'} to separate statements, instead, it uses the same separator as Go. Statements can be separated by
-a \texttt{'\textbackslash n'} but it does not make use of the \texttt{\textbackslash t} to indicate statements inside blocks, and uses the typical
-block separator \texttt{\{ ... \}}.
+Nuua does not make use of the \texttt{";"} to separate statements, instead, it uses the same separator as Go. Statements can be separated by
+a \texttt{"\textbackslash n"} but it does not make use of the \texttt{"\textbackslash t"} to indicate statements inside blocks, and uses the typical
+block separator \texttt{"\{" ... "\}"}.
 
 \subsection{Lexical Grammar}
 
@@ -22,141 +22,728 @@ context free grammar and the lexical grammar is a regular grammar.
 
 Nuua's lexical rules are as follors:
 
-\texttt{
-    DIGIT\\
-        \tab: '0' ... '9'\\
-        \tab;
-}
+\begin{lstlisting}
+DIGIT
+    : "0" ... "9"
+    ;
+\end{lstlisting}
 
 Digits are any character from '0' to '9', given that the ASCII table \footnote{\href{https://en.wikipedia.org/wiki/ASCII}{ASCII table (Wikipedia)}} uses
-a sequential enumeration for them, it's very easy to determine what characters are between '0' and '9'.
+a sequential enumeration for the table items it's very easy to determine what characters are between '0' and '9'.
 
-\texttt{
-    ALPHA\\
-        \tab: 'a' ... 'z'\\
-        \tab| 'A' ... 'Z'\\
-        \tab| '\_'\\
-        \tab;
-}
+\begin{lstlisting}
+ALPHA
+    : "a" ... "z"
+    | "A" ... "Z"
+    | "_"
+    ;
+\end{lstlisting}
 
 Alpha are characters that are part of the english alphabet in lower or upper case. It also includes '\_' as a special character.
 
-\texttt{
-    ALPHANUM\\
-        \tab: DIGIT\\
-        \tab| ALPHA\\
-        \tab;
-}
+\begin{lstlisting}
+ALPHANUM
+    : DIGIT
+    | ALPHA
+    ;
+\end{lstlisting}
 
 Alphanum are characters that are either part of the alphabet or are digits.
 
-\texttt{
-    INTEGER\\
-        \tab: DIGIT+\\
-        \tab;
-}
+\begin{lstlisting}
+INTEGER
+    : DIGIT+
+    ;
+\end{lstlisting}
 
 Integers are a single digit or more found sequentially without spaces. The integer sign is not represented here.
 
-\texttt{
-    FLOAT\\
-        \tab: DIGIT+ '.' DIGIT+\\
-        \tab;
-}
+\begin{lstlisting}
+FLOAT
+    : DIGIT+ "." DIGIT+
+    ;
+\end{lstlisting}
 
 Floats are like integers but require a dot followed by a digit or more, creating a decimal number.
 
-\texttt{
-    BOOL\\
-        \tab: 'true'\\
-        \tab| 'false'\\
-        \tab;
-}
+\begin{lstlisting}
+BOOL
+    : "true"
+    | "false"
+    ;
+\end{lstlisting}
 
 Bools are either 'true' or 'false', that are reserved words.
 
-\texttt{
-    STRING\\
-        \tab: '"' \# '"' \# '"'\\
-        \tab;
-}
+\begin{lstlisting}
+STRING
+    : '"' @'"' '"'
+    ;
+\end{lstlisting}
 
 Strings represent a character string with the possibility to escape '"' by using a '\textbackslash' as a prefix, more on that in the upcomming sections.
 
-\texttt{
-    IDENTIFIER\\
-        \tab: ALPHA ALPHANUM*\\
-        \tab;
-}
+\begin{lstlisting}
+IDENTIFIER
+    : ALPHA ALPHANUM*
+    ;
+\end{lstlisting}
 
 Identifiers are part an alpha character followed by an optional one or more alphanumeric character.
 
 \subsection{Syntax Grammar}
 
 \subsubsection{Program and Top Level Declarations}
+\label{sec:program_tld}
 
-\texttt{
-    program\\
-        \tab: top\_level\_declaration*\\
-        \tab;
-}
+\begin{lstlisting}
+program
+    : top_level_declaration*
+    ;
+\end{lstlisting}
 
 A Nuua program is a list of top level declarations.
 
-\texttt{
-    top\_level\_declaration\\
-        \tab: use\_declaration '\textbackslash n'\\
-        \tab| export\_declaration '\textbackslash n'\\
-        \tab| class\_declaration '\textbackslash n'\\
-        \tab| fun\_declaration '\textbackslash n'\\
-        \tab;
-}
+\begin{lstlisting}
+top_level_declaration
+    : use_declaration "\n"
+    | fun_declaration "\n"
+    | class_declaration "\n"
+    | export_declaration "\n"
+    ;
+\end{lstlisting}
 
 A top level delcaration can only be one of the specified rules. Top level declarations are a
 special type of declaration that can only be declared on the module and not inside other blocks.
 
-\texttt{
-    export\_declaration\\
-        \tab: "export" top\_level\_declaration\\
-        \tab;
-}
-
-An export declaration marks the following top level declaration as exported, making it available for other modules to import it using the
-use declaration.
-
-\texttt{
-    use\_declaration\\
-        \tab: "use" STRING\\
-        \tab| "use" IDENTIFIER ("," IDENTIFIER)* "from" STRING\\
-        \tab;
-}
+\begin{lstlisting}
+use_declaration
+    : "use" STRING
+    | "use" IDENTIFIER ("," IDENTIFIER)* "from" STRING
+    ;
+\end{lstlisting}
 
 A use declaration is used to import other top level declarations from other modules. By using the first rule, Nuua imports all the
 exported targets of the module pointed by STRING. Otherwise, Nuua imports the specified targets from the modules.
 
-\texttt{
-    class\_declaration\\
-        \tab: "use" STRING\\
-        \tab| "use" IDENTIFIER ("," IDENTIFIER)* "from" STRING\\
-        \tab;
-}
+\begin{lstlisting}
+fun_declaration
+    : "fun" IDENTIFIER "(" parameters? ")" (":" type)? fun_body;
+    ;
+parameters
+    : variable_declaration ("," variable_declaration)*
+    ;
+fun_body
+    : "->" expression "\n"
+    | "=>" statement
+    | "{" "\n" statement* "}" "\n"
+    ;
+\end{lstlisting}
+
+A function is defined using the reserved word "fun" followed by the function name, and a list of optional parameters enclosed in parentehsis.
+The function type is specified after the parameter list by using ":". The return type might not be present if the function have no return value.
+The function body is specified in three different ways depending on the type of the function body that is expected.
+
+\begin{lstlisting}
+class_declaration
+    : "class" "{" class_statement* "}"
+    ;
+class_statement
+    : variable_declaration
+    | fun_declaration
+    ;
+\end{lstlisting}
+
+A class uses a reserved word "class" and expects zero or more class statements.
+
+\begin{lstlisting}
+export_declaration
+    : "export" top_level_declaration
+    ;
+\end{lstlisting}
+
+An export declaration marks the following top level declaration as exported, making it available for other modules to import it using the
+use declaration.
+
+\begin{lstlisting}
+statement
+    : variable_declaration "\n"?
+    | if_statement "\n"
+    | while_statement "\n"
+    | for_statement "\n"
+    | return_statement "\n"
+    | print_statement "\n"
+    | expression_statement "\n"?
+    ;
+\end{lstlisting}
+
+Statements are used to change program's flow or indicate simple actions like declaring a variable.
+
+\begin{lstlisting}
+variable_declaration
+    : IDENTIFIER ":" type
+    | IDENTIFIER ":" type "=" expression
+    | IDENTIFIER ":" "=" expression
+    ;
+\end{lstlisting}
+
+A variable declaration may have a type assigned with it, or the declaration type will be inferred from the initializer.
+
+\begin{lstlisting}
+if_statement
+    : "if" expression if_body el_if* else?
+    ;
+if_body
+    : "=>" statement "\n"?
+    | "{" "\n" statement* "}"
+    ;
+el_if
+    : "elif" expression if_body
+    ;
+else
+    : "else" expression if_body
+    ;
+\end{lstlisting}
+
+An "if" statement is declared with the "if" reserved word followed by the expression of its condition.
+The "if" body may be declared in two different ways depending on the if body. The "elif" word may be used as a short
+hand to an "else" followed by an "if" inside. An optional "else" condition may be added at the end of the "if".
+
+\begin{lstlisting}
+while_statement
+    : "while" expression while_body
+    ;
+while_body
+    : "=>" statement "\n"?
+    | "{" "\n" statement* "}"
+    ;
+\end{lstlisting}
+
+A "while" statement uses the "while" reserved word followed by the expression of the condition and the "while" body, that can be specified
+in two different ways depending on the body contents.
+
+\begin{lstlisting}
+for_statement
+    : "for" IDENTIFIER ("," IDENTIFIER)? "in" expression for_body
+    ;
+for_body
+    : "=>" statement
+    | "{" "\n" statement* "}"
+    ;
+\end{lstlisting}
+
+A "for" statement acts as a "for in" loop in most modern high level languages. It gets declared by using the "for" reserved word followed by an
+identifier that will be used to store the element in the iterator. An optional second identifier may be given in case the loop index needs to be
+stored as well. Those values change in every iteration. After the identifiers, the "in" keyword is expected, followed by the iterator expression and the
+"for" body, that can be declared in two different ways depending on its content.
+
+\begin{lstlisting}
+return_statement
+    : "return" expression?
+    ;
+\end{lstlisting}
+
+A "return" statement uses the "return" reserved word and an optional expression to return.
+
+\begin{lstlisting}
+print_statement
+    : "print" expression?
+    ;
+\end{lstlisting}
+
+The "print" expression is a statement that outputs an expression to the screen. This is a temporary statement used while
+nuua is not able to properly read and write to files (stdout / stdin) in this specific case.
+
+\begin{lstlisting}
+expression_statement
+    : expression
+    ;
+\end{lstlisting}
+
+An expression statement may be used as an expression whose value is not used or no value is returned from it.
 
 \subsubsection{Expressions}
 
-\texttt{
-    LIST\\
-        \tab: "[" expression (',' expression)* "]"\\
-        \tab;
-}
+Expressions are grouped in different production rules depending on their precedence, this is done due the parsing strategy used and
+helps to visualize the precedence by reading the grammar.
+
+\begin{lstlisting}
+expression
+    : assignment
+    ;
+\end{lstlisting}
+
+An expression is reduced to an assignment.
+
+\begin{lstlisting}
+assignment
+    : range ("=" range)*
+    ;
+\end{lstlisting}
+
+An assignment expression is written by an expression on the left hand side and on the right hand side with a "=" in the middle.
+
+\begin{lstlisting}
+range
+    : logical_or ((".." | "...") logical_or)*
+    ;
+\end{lstlisting}
+
+A range expression is written by an expression on the left hand side and on the right hand side with a ".." or "..." in the middle. Depending
+if the range is exclusive or inclusive.
+
+\begin{lstlisting}
+logical_or
+    : logical_and ("or" logical_and)*
+    ;
+\end{lstlisting}
+
+A logical "or" is a binary operation with the reserved word "or" in the middle.
+
+\begin{lstlisting}
+logical_and
+    : equality ("and" equality)*
+    ;
+\end{lstlisting}
+
+A logical "and" is a binary operation with the reserved word "and" in the middle.
+
+\begin{lstlisting}
+equality
+    : comparison (("!=" | "==") comparison)*
+    ;
+\end{lstlisting}
+
+An equality comparison is a binary operation with a "!=" or "==" in the middle depending if the check needs to be negated or not.
+
+\begin{lstlisting}
+comparison
+    : addition ((">" | ">=" | "<" | "<=") addition)*
+    ;
+\end{lstlisting}
+
+A comparison is similar to equality but checks the values to determine if the left hand side is greater, greater than, lower and lower than the
+right hand side.
+
+\begin{lstlisting}
+addition
+    : multiplication (("-" | "+") multiplication)*
+    ;
+\end{lstlisting}
+
+An addition is used to perform an addition or substraction of two values.
+
+\begin{lstlisting}
+multiplication
+    : cast (("/" | "*") cast)*
+    ;
+\end{lstlisting}
+
+A multiplication is used to perform a multiplication or division of two values.
+
+\begin{lstlisting}
+cast
+    : unary_prefix ("as" type)*
+    ;
+\end{lstlisting}
+
+A cast performs a type cast of the values on the left hand side to the value of the right hand side by using the "as" reserved word.
+
+\begin{lstlisting}
+unary_prefix
+    : ("!" | "+" | "-") unary_prefix
+    | unary_postfix
+    ;
+\end{lstlisting}
+
+The unary prefixes are used to change a value state by prefixing the operation.
+
+\begin{lstlisting}
+unary_postfix
+    : primary unary_p*
+    ;
+unary\_p
+    : "[" expression "]"
+    | slice
+    | "(" arguments? ")"
+    | "." IDENTIFIER;
+    ;
+slice
+    : "[" expression? ":" expression? (":" expression?)? "]"
+    ;
+arguments
+    : expression ("," expression)*
+    ;
+\end{lstlisting}
+
+The unary postfixes are used to either access a value, to slice it's contents, to call a value or to call a value property.
+
+\begin{lstlisting}
+primary
+    : BOOL
+    | INTEGER
+    | FLOAT
+    | STRING
+    | IDENTIFIER
+    | LIST
+    | DICTIONARY
+    | OBJECT
+    | "(" expression ")"
+    ;
+\end{lstlisting}
+
+Primary expressions have the highest precedence and are mostly native types, with the exception of the expression group.
+
+\begin{lstlisting}
+OBJECT
+    : IDENTIFIER "{" object_args? "}"
+    ;
+object_args
+    : IDENTIFIER ":" expression ("," IDENTIFIER ":" expression)*
+    ;
+\end{lstlisting}
+
+An object is defined by an identifier containing the class name, followed by optional arguments surrounded by "\{" and "\}" to
+initialize the class properties.
+
+\begin{lstlisting}
+LIST
+    : "[" expression ("," expression)* "]"
+    ;
+\end{lstlisting}
 
 Lists can't be empty, so a at least one expression must be provided.
 
-\texttt{
-    DICTIONARY\\
-        \tab: "\{" IDENTIFIER ':' expression (',' IDENTIFIER ':' expression)* "\}"\\
-        \tab;
-}
+\begin{lstlisting}
+DICTIONARY
+    : "{" IDENTIFIER ":" expression ("," IDENTIFIER ":" expression)* "}"
+    ;
+\end{lstlisting}
 
 Dictionaries, as lists, can't be empty, so a at least one expression must be provided.
 
-\subsection{Operator precedence}
+\subsection{Operator Precedence}
+
+Given that expressions are grouped by their precedence, the operator precedence table of Nuua is as follows:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l l l }
+        \textbf{Level} & \textbf{Operators} & \textbf{Associativity} \\
+        \texttt{1} & \texttt{A[B], A[B:C:D], A(B, C, D, ...), A.B} & Left-to-right \\
+        \texttt{2} & \texttt{!A, +A, -A} & Right-to-left \\
+        \texttt{3} & \texttt{A as B} & Left-to-right \\
+        \texttt{4} & \texttt{A/B, A*B} & Left-to-right \\
+        \texttt{5} & \texttt{+A, -A} & Left-to-right \\
+        \texttt{6} & \texttt{A\textgreater B, A\textgreater =B, A\textless B, A\textless =B} & Left-to-right \\
+        \texttt{7} & \texttt{A!=B, A==B} & Left-to-right \\
+        \texttt{8} & \texttt{A and B} & Left-to-right \\
+        \texttt{9} & \texttt{A or B} & Left-to-right \\
+        \texttt{10} & \texttt{A..B, A...B} & Left-to-right \\
+        \texttt{11} & \texttt{A=B} & Right-to-left \\
+    \end{tabular}
+    \caption{Nuua operator precedence from highest to lowest with the associativity}
+    \label{fig:nuua_operator_precedence}
+\end{table}
+
+\section{Data types}
+
+This section defines all the Nuua data types that are supported. Each value in Nuua
+has a type associated with it, meaning that each value must belong to a certain data type.
+A value can't belong to multiple data types at once but can be casted to others if a change is required.
+
+\subsection{Integers}
+
+Integers are named as \texttt{int} and they are a subset of numbers represented by $\mathbb{Z}$. It includes 0
+and the integers are stored using $64$ bits. Meaning its range for a given integer $x$ is:
+
+\begin{center}
+$\frac{2^{64}}{2} < x < \frac{2^{64}}{2} - 1$
+\end{center}
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+0
+25
+81237
+-6378
+-1
+\end{lstlisting}
+
+\subsection{Floats}
+
+Floats are named as \texttt{float} and they are double precision points that uses a total of $64$ bits. $52$ fraction bits, $11$ bits
+of exponent and $1$ sign bit.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+0.0
+25.5
+81237.11111
+-6378.673
+-1.9
+\end{lstlisting}
+
+\subsection{Booleans}
+
+Booleans are named as \texttt{bool} and they are simple booleans, they can be either \texttt{true} or \texttt{false}.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+true
+false
+\end{lstlisting}
+
+\subsection{Strings}
+
+Strings are named as \texttt{string} and they are used to manipulate arrays of chars. It's implementation uses
+a C++ \texttt{std::string}. It can store any text that's surrounded by \texttt{'"'}.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+"A string is represented like this"
+"Another string example"
+\end{lstlisting}
+
+\subsection{Lists}
+
+Lists are named as \texttt{[type]} and they are used to manipulate a list of other values. They can only have a single
+type as the inner list items, so all the list items need to be of the same type.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+["this", "is", "a", "valid", "list", "of", "strings"]
+\end{lstlisting}
+
+\subsection{Dictionaries}
+
+Dictionaries are named as \texttt{\{type\}} and they are used to store values of the same type. However, unlike lists, they
+use a string-based mapping, allowing each value to be bound to a specific string key, instead of an integer index as the key.
+Dictionaries, as lists, can only store 1 type of values. So each key can only store the same type.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+{name: "Erik", occupation: "Student", color: "#ff0000"}
+\end{lstlisting}
+
+\subsection{Functions}
+
+The only way to define a function is by using the "fun" reserved word as noted in \autoref{sec:program_tld}. However, functions in Nuua
+act as first class values, meaning that a value can contain a function, allowing the function to change without actually changing it's type.
+The function type needs to be consisten. So even if the function changes, it will always accept the same arguments and it will return the same data type.
+Function types are named as \texttt{(T1, T2, ..., TN -> TR)}. where \texttt{T1} to \texttt{TN} are the types of the function parameters.
+If the function have a return type, say \texttt{TR}, it needs to be specified with a simple arrow pointing at it the end of the function type.
+
+To see how functions are declared head to \autoref{sec:statements_function}
+
+\subsubsection{Examples}
+
+Function without parameters nor return type.
+\begin{lstlisting}
+()
+\end{lstlisting}
+Function with 2 parameters of type int and a float return type.
+\begin{lstlisting}
+(int, int -> float)
+\end{lstlisting}
+Function without parameters and a return type of a list of strings.
+\begin{lstlisting}
+(-> [string])
+\end{lstlisting}
+Function with two parameters of type int and bool and no return type.
+\begin{lstlisting}
+(int, bool)
+\end{lstlisting}
+
+\subsection{Objects}
+
+Objects are named acording to the class they represent. If a class is named \texttt{Person} the type name is \texttt{Person}.
+
+\section{Statements}
+
+This section explains and gives examples to all statements found in Nuua.
+
+Some of the statements may have already been mentioned briefly in \autoref{sec:program_tld}.
+
+\subsection{Use Declaration}
+
+The use declaration is used when a module needs to use a top level declaration
+that is found in another module. The target module is the string given in the use declaration.A path system is used to search for the file,
+first trying to find it relatively from the current module path, ending at the standard library folder that comes with Nuua.
+
+The use declaration comes in two different shapes. By using the use declaration with a single string it imports all the top level
+declarations that are exported in the target module. Instead, by determining the the use identifiers, you may import only selected top level
+declarations.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The target module path given in the use declaration can use a relative or absolute path.
+    \item If the target module path does not have the \texttt{".nu"} extension, it will be added automatically.
+    \item If the target module is not find, an error is thrown before any execution starts.
+    \item If a target top level declaration is not found in the target module an error is thrown before any execution starts.
+    \item If the top level declaration is not exported another error will be thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Import all exported targets in a relative file path named "test.nu"
+\begin{lstlisting}
+use "test"
+\end{lstlisting}
+Import \texttt{a} and \texttt{b} from a relative file path named "test.nu"
+\begin{lstlisting}
+use a, b from "./test.nu"
+\end{lstlisting}
+Import \texttt{a} from an absolute file path in "C:/Nuua/test.nu"
+\begin{lstlisting}
+use a from "C:/Nuua/test.nu"
+\end{lstlisting}
+
+\subsection{Function Declaration}
+
+A function declaration creates a function value and a data type given the function parameters and return value.
+Once the function value is created, it's then added in a new variable with the function name. That variable can be
+modified since functions are first class values in Nuua. The variations in a function body exists to minimize the
+code length in certain situations (When a function is a single return expression, a single statement or a block of statements).
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Function overloading is not implemented in the latest version of Nuua as for \today. The current plan is to have
+        function overloading in a future version.
+    \item Function parameters do not allow default values.
+    \item If the function returns a value, you are expected to, at least, write a single return statement in the top level of the
+        function block.
+    \item Functions without return type can't be used as regular expressions since they contain no values.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Function without parameters and no return type.
+\begin{lstlisting}
+fun a() {
+    print "Hello, World"
+}
+\end{lstlisting}
+Function without parameters and return type.
+\begin{lstlisting}
+fun b(): string {
+    return "Hello, World"
+}
+\end{lstlisting}
+Function with parameters and no return type.
+\begin{lstlisting}
+fun c(x: string) {
+    print "Hello, " + x
+}
+\end{lstlisting}
+Function with parameters and return type.
+\begin{lstlisting}
+fun d(x: string): string {
+    return "Hello, " + x
+}
+\end{lstlisting}
+Single statement function.
+\begin{lstlisting}
+fun d(x: string): string => return "Hello, " + x
+\end{lstlisting}
+Single expression function.
+\begin{lstlisting}
+fun d(x: string): string -> "Hello, " + x
+\end{lstlisting}
+
+\subsection{Class Declaration}
+
+A class declaration creates a data type of the given class structure. This type can then be used as a regular type
+to specify values of the given class. To create an object of a given class you can use the Object expression \autocite{sec:object_expression}.
+Classes act as structs with the fact that they can also contain methods bound to them. Class methods have a variable called \texttt{"self"}
+as a self reference to the object to mutate its state.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Class properties can't have default values. Values are defined when creating the object using an object expression.
+    \item Self references to the same type are allowed.
+    \item There is no class inheritance.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Simple class to represent a person.
+\begin{lstlisting}
+class Person {
+    name: string
+    age: int
+    fun show() {
+        print self.name + ", " + self.age as int
+    }
+}
+\end{lstlisting}
+
+\subsection{Export Declaration}
+
+The export declaration is used when a module wants to make a top level declaration available to use for other
+modules. Marking a top level declaration as exported allows other modules to import and use it.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item You can't export another export.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Export a function
+\begin{lstlisting}
+export fun add(a: int, b: int): int {
+    return a + b
+}
+\end{lstlisting}
+Export a class.
+\begin{lstlisting}
+export class Person {
+    name: string
+    age: int
+}
+\end{lstlisting}
+
+\subsection{Variable Declaration}
+
+Variable declarations are scoped to the lexical block where they are declared. They can be used from the block they have been declared and
+on the lexical blocks that may exist inside of it. A variable with the same name can't be declared in the same lexical block but multiple lexical
+blocks may have the same variable name. When getting the value of a variable, the lookup starts from the current block and goes backwards to previous blocks.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Even if multiple blocks have the same variable name, they all point to different values.
+    \item If a variable is declared with an initializer, the type can be inferred by leaving the type empty.
+    \item If a variable is declared without an initializer, the value is default initialized to a zero-state.
+    \item If a variable is declared in a block that already contains a variable with the same name, an error is thrown before execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Simple variable declaration (defaults to \texttt{int}'s zero state, in this case 0).
+\begin{lstlisting}
+a: int
+\end{lstlisting}
+Variable declaration with an initializer.
+\begin{lstlisting}
+b: int = 10
+\end{lstlisting}
+Variable declaration with an inferred \texttt{int} type.
+\begin{lstlisting}
+b := 10
+\end{lstlisting}
+
+\section{Expressions}
+
+Expressions...
