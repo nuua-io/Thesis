@@ -1,32 +1,33 @@
 Programming languages are used every day by millions of engineers as part of their daily routine.
 A programming language is used to tell a computer what to do. When
-somebody wants a computer to do something, it needs to write a program using a programming language. Then
-a compiler needs to translate it into machine code for the computer to execute it.
+somebody wants a computer to do something, it needs to write a program using a programming language. Then,
+a compiler needs to translate it into machine code to be executed.
 
-To design a programming language it's important to understand the theory behind a compiler and learn about all the different
-steps involved to make a computer understand and execute a programming language.
+To design a programming language it's important to understand the theory behind a compiler and to learn about all the
+steps involved to make a computer understand and execute a program.
 
 \section{Objectives}
 
 The main objective of this thesis is to design an experimental programming language and implement an interpreter to execute
 any program written with it. The different challenges that are faced during the design and implementation process are also explained and
-solved in their respective chapters. The experimental language built in this thesis is called \textbf{Nuua}.
+solved in their respective chapters. The experimental language built in this thesis is called \emph{Nuua}.
 
 The objective can be partitioned into the following points.
 
 \begin{itemize}
-    \item Learn all the steps involved in a common compiler implementation and reproduce them acording to the project needs.
-    \item Design the Nuua Programming Language. This grammar must be simple, elegant and yet it needs to follow the most
-        common programming language's specifications to avoid confusion when learning it, allowing either mature programmers or newcomers to pick up the grammar quickly and efficiently.
-    \item Choose an efficient programming language to build the compiler with. Among other options, the languages that satisfy the previous
-    statement are low-level programming languages like C, C++, D, Rust, Go, Crystal, Zig or Nim.
-    \item Define a scalable software system to allow the compiler to grow efficiently. The software system that is chosen will be very important towards the scalability of the project.
-    \item Build a compiler for the Nuua programming language and a very simple standard library.
+    \item Learn all the steps involved in a common compiler implementation and reproduce them according to the project needs.
+    \item Design the Nuua Programming Language. The grammar must be simple, elegant and yet it needs to follow the most
+        common programming language's specifications to have a low learning curvature.
+    \item Choose an efficient programming language to build the compiler and the interpreter with. Among other options, the languages that
+    satisfy the previous statement are low-level programming languages like C \autocite{c_programming_language}, C++ \autocite{cpp_programming_language},
+    D \autocite{d_programming_language}, Rust \autocite{rust_programming_language} or Go \autocite{go_programming_language} among others.
+    \item Define a robust system architecture to design the compiler and the interpreter. The system architecture needs to be scalable.
+    \item Build a compiler and an interpreter for the Nuua programming language and a very simple standard library.
 \end{itemize}
 
 \section{Preliminary overview}
 
-This section details the most important aspects found in a compiler.
+This section briefly introduces some of the concepts found in this thesis, introducing preliminary concepts of language grammar, compilers and interpreters.
 This preliminary overview won't deal with details and only explains the basics to understand the whole system without deep knowledge.
 Further chapters contain expanded information respective to some of the details mentioned here.
 
@@ -43,8 +44,8 @@ in \autocite[Section~2.2]{compilers} a context-free grammar consists of four com
 \end{enumerate}
 
 This thesis will use the \emph{extended Backus-Naur form} also known as \emph{EBNF} to express the context-free grammar representation of Nuua.
-EBNF is often used in different ways due to the big ammount of variants that exists. To clarify the EBNF syntax that this thesis is going to use, the
-following table will be used to specify the production rules. More information may be found in the EBNF grammar article \autocite{EBNF_grammar}.
+EBNF is often used in different ways due to the big amount of variants that exist. To EBNF syntax that this thesis is uses is shown in the
+\autoref{fig:ebnf_syntax}. More information may be found in the EBNF grammar article \autocite{EBNF_grammar}.
 
 \begin{table}[H]
     \centering
@@ -65,7 +66,7 @@ following table will be used to specify the production rules. More information m
     \label{fig:ebnf_syntax}
 \end{table}
 
-As a simple example, to define a language that consists in a single integer, the following EBNF grammar could be used:\\
+As a simple example, to define a language that consists of a single integer, the following EBNF grammar could be used:\\
 
 \texttt{integer\\\tab: ("-" | "+")? digit+\\\tab;}\\
 \texttt{digit\\\tab: "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"\\\tab;}\\
@@ -75,12 +76,9 @@ write the language grammar.
 
 \subsection{Compilers}
 
-The job of a compiler is to take an input language and translate it into another as showin in \autoref{fig:compiler_overview}.
-Often, the compiler term is used to express a translation to a much different level of abstraction, that usually means
+The job of a compiler is to take an input program written in a programming language and translate it into another as shown in \autoref{fig:compiler_overview}.
+The compiler term is often used to express a translation to a much different level of abstraction, that usually means
 that the input is written in a high-level language and further translated into another low-level language.
-However, there are multiple types of compilers, and each one is used to implement different translation tasks.
-Nuua's system architecture built in this thesis, as described in \autoref{sec:sys_arch}, is based on a interpreter architecture, wich consists of a
-compiler that translates the Nuua language into an intermediate representation known as \emph{bytecode} and further interpreted by a virtual machine.
 
 \begin{figure}[H]
     \centering
@@ -88,9 +86,9 @@ compiler that translates the Nuua language into an intermediate representation k
         [node distance=1cm]
 
         % Nodes of the layered system
-        \node[block] (input) {Input language};
+        \node[block] (input) {Input};
         \node[block,right=of input] (compiler) {Compiler};
-        \node[block,right=of compiler] (output) {Output language};
+        \node[block,right=of compiler] (output) {Output};
 
         % Lines
         \draw[line] (input) -- (compiler);
@@ -103,7 +101,7 @@ compiler that translates the Nuua language into an intermediate representation k
     \label{fig:compiler_overview}
 \end{figure}
 
-\subsection{Phases of a compiler}
+\subsubsection{Phases of a compiler}
 
 A compiler can also be decoupled into different parts. Each part does a very different job but they are all connected to each other.
 In a typical compiler architecture, we may find all the different phases described in \autoref{fig:compiler_phases}.
@@ -121,7 +119,7 @@ section, a small introduction to each phase is needed to understand the Nuua's s
         \node[bigger_block,below=of input] (lexical) {Lexical analysis (Lexer or scanner)};
         \node[bigger_block,below=of lexical] (syntax) {Syntax analysis (Parser)};
         \node[bigger_block,below=of syntax] (semantic) {Semantic analysis};
-        \node[bigger_block,below=of semantic] (inter) {Intermediate code};
+        \node[bigger_block,below=of semantic] (inter) {Intermediate code generator};
         \node[bigger_block,below=of inter] (opt) {Optimization};
         \node[bigger_block,below=of opt] (codegen) {Code generation};
         \node[below=of codegen] (output) {Output};
@@ -149,38 +147,51 @@ section, a small introduction to each phase is needed to understand the Nuua's s
 \end{figure}
 
 \begin{itemize}
-    \item \textbf{Lexical analysis}: In this phase, the input source is transformed from a character string into a token list, this is also called
-        tokenization. Tokens are known and have certain attributes. For example, some tokens might include integers, symbols (+, -, *, etc.) or identifiers among others. Lexemes are also evaluated as individual tokens, making a single token for identifiers matched as language keywords
-        (like 'if', 'while', etc.). This phase is also called a lexer or scanner.
-    \item \textbf{Syntax analysis}: In this phase, the implementation may vary among compilers, some of them work close to the lexical analysis since they
-        can work together. However, its purpose is to perform operations to the token list to parse the input and create an Abstract Syntax Tree
-        (AST\footnote{\href{https://en.wikipedia.org/wiki/Abstract_syntax_tree}{Abstract Syntax Tree (Wikipedia)}}). An AST is already a structural representation that represents your input source. This stage determines if it is a valid program based on the language grammar and the specified rules. There are also scanner-less parsers that takes the lexical analysis and the syntax analysis into a single step. It is harder to understand and build but it often leads to faster parsing and less memory usage.
-    \item \textbf{Semantic analysis}: This phase analyzes the AST and creates a symbol table while analyzes the input source with things like type checking or
-        variable declarations, if some operations can be performed (for example adding a number with a string). A symbol table is a structure used by further phases to see information attached to specific source code parts. For example, it can store information about a variable (if it's global, exported, etc.).
-    \item \textbf{Intermidiate code}: An intermediate representation (IR) can be avoided but it's often used to have a platform independent optimizer. Usually
-        the code generation targets a specific architecture and would require different optimizers depending on each architecture. However, by having an IR it's possible to have a single optimizer. A much used IR is Three Adress Code (TAC\footnote{\href{https://en.wikipedia.org/wiki/Three-address_code}{Three Address Code (Wikipedia)}})
-        that can be organized in quadruples or triples.
-    \item \textbf{Optimization}: This optimization is often performed on the IR and performs different tasks to allow a faster and smaller output. For example, it may
+    \item \emph{Lexical analysis}: In this phase, the input source is transformed from a character string into a token list, this is also called
+        tokenization. Lexemes found in the source program are translated into individual tokens using different patterns. For example, some tokens
+        might include integers, symbols (+, -, *, etc.), identifiers or keywords ('if', 'while', etc.).
+    \item \emph{Syntax analysis}: In this phase, the implementation may vary among compilers, some of them work close to the lexical analysis since they
+        can work together. However, its purpose is to perform operations given the token list to parse the input and create an Abstract Syntax Tree
+        (AST). As seen in \autocite[Section~5.2.1]{engineering_a_compiler}, an AST is a data structure that represents the input program.
+        (AST). As seen in \autocite[Section~5.2.1]{engineering_a_compiler}, an AST is a data structure that represents the input program.
+        This stage determines if it's a valid program based on the language grammar and the specified rules.
+        There are also scanner-less parsers that take the lexical analysis and the syntax analysis into a single step. It is harder to understand and
+        debug compared to the modularity of splitting these two phases but it has some advantages like removing the token classification as mentioned
+        in \autocite{scannerless_parsing}.
+    \item \emph{Semantic analysis}: This phase analyzes the AST and creates a symbol table while analyzes the input source with things like type checking or
+        variable declarations, if some operations can be performed (for example adding a number with a string). A symbol table is a structure used
+        by further phases to see information attached to specific source code parts. For example, it can store information about a variable
+        (if it's global, exported, etc.).
+    \item \emph{Intermediate code generator}: An Intermediate representation (IR) can be avoided but it's often used to have a platform independent
+        optimizer. Usually the code generation targets a specific architecture and would require different optimizers depending on each architecture.
+        However, by having an IR it's possible to have a single optimizer. A much used IR is Three Address Code
+        (TAC) that can be organized in quadruples or triples as seen by some examples in \autocite{three_address_code_examples}.
+    \item \emph{Optimization}: This optimization is often performed on the IR and performs different tasks to allow a faster and smaller output. For example, it may
         remove dead code, perform loop optimizations, etc.
-    \item \textbf{Code generation}: This is where the real translation takes place, it translates the IR into a different language output. For example machine code.
+    \item \emph{Code generation}: This is where the real translation takes place, it translates the IR into a different language output. For example machine code.
         This phase often has to deal with instruction scheduling or register allocation while they have to output a fully working program.
 \end{itemize}
 
-\section{Interpreters}
+\subsection{Interpreters}
 
-There are different ways to interpret a language. This thesis implements a bytecode virtual machine (register-based) where the bytecode is the
-intermidiate representation generated by the Nuua compiler. Among the most common interpreters built for programming languages, we may find the
-following types of interpreters:
+There are different ways to interpret a program. Among the most popular options we can find a bytecode interpreter and an AST interpreter.
 
 \begin{itemize}
-    \item \textbf{Bytecode interpreter}: The programming language is first compiled into an intermediate bytecode representation and further executed
-        by this virtual machine. A very famous example of a programming language interpreted by virtual machine is the Lua virtual machine \autocite{the_implementation_of_lua}
-    \item \textbf{Abstract syntax tree interpreter}: This kind of interpreters just need the AST to work with, so no extra compilation to an intermediate
-        representation is needed and therefore, easier to implement. However, due it's nature, they are much slower to execute and debug due the recursiveness
-        of working with tree structures.
-    \item \textbf{Just-in-time compiler}: Just-in-time compilers (often called JIT compilers) are an intermediate approach between a compiler that generates
-    machine code and an interpreter. JIT compilers compile chunks of code at a specific moments while the program run to speed up portions of the code that is beeing interpreted (for example functions that are called frequently). Essentially, the JIT compiler needs to decide when to compile a specific part of the code at runtime and adds a small overhead in exchange for a machine-language performance on specific parts.
+    \item \emph{Bytecode interpreter}: The program is first compiled to bytecode instructions and further interpreted. Bytecode interpreters are often
+        implemented as virtual machines since most of the times bytecode instructions are very similar to real hardware instructions.
+        The usual choices are stack or register machines. There have been many discussions on the advantages and the inconveniences of both of them, more information may be seen at \autocite{stack_vs_register}. An example of a virtual machine is the Lua virtual machine \autocite{the_implementation_of_lua}.
+    \item \emph{Abstract syntax tree interpreter}: This kind of interpreters just need the AST to work with, so no extra compilation to bytecode
+        is needed and therefore, they are easier to implement. However, due it's nature, they are much slower to execute and debug due to the recursiveness of working with tree data structures.
 \end{itemize}
+
+\subsection{Just-in-time compilers}
+
+Just-in-time compilers (often called JIT compilers) are an intermediate approach between a compiler that generates machine code and an interpreter.
+JIT compilers compile chunks of code at specific moments while the program run to speed up portions of the code that is being interpreted
+(for example functions that are called frequently). Essentially, the JIT compiler needs to decide when to compile a specific part of the code at
+runtime and adds a small overhead in exchange for a machine-language performance on specific parts of the program.
+
+More information about JIT compilers and the tools that can be used can be found at \autocite{jit_compilation}.
 
 \section{System architecture}
 \label{sec:sys_arch}
@@ -194,7 +205,7 @@ or layered systems. Nuua's architecture is based on a \emph{layered system} \aut
 A layered system has specific requirements regarding code communication. Specifically, a layered system consists
 of different layers arranged vertically. Those layers have a specific criterion that needs to be met. As a matter of fact,
 each layer can only use the layer below and gives an API for the layer above (if any) to use its functions. For example,
-the \autoref{fig:layered_system} contains a simple 3-tier layered system. Layer 3 can only use Layer 2, and the output comes
+the \autoref{fig:layered_system} shows a simple 3-tier layered system. Layer 3 can only use Layer 2, and the output comes
 from Layer 2. Layer 3 cannot use Layer 1 nor expect any outputs from it. It's the Layer 2 responsibility to use the Layer 1
 and process its output before it can give its own output.
 
@@ -223,16 +234,18 @@ and process its output before it can give its own output.
     \label{fig:layered_system}
 \end{figure}
 
-This system is known to be robust and scalable at a very low-performance cost. It's very easy to understand and yet very powerful
-for software systems like this one. These systems are also used for other complex software systems, such as operating
-systems or complex protocols like TCP/IP.
+This system is known to be robust, easy to test and with a high ease of development as mentioned in \autocite{software_architecture_patterns}.
+It's very easy to understand and a widely used system. This system is also used for other complex software systems,
+such as operating systems or complex protocols like TCP/IP.
 
 By using a layered system each layer gets completely isolated and works independently by just using the layer below,
-creating a very impressive way to scale-up or upgrade existing parts of the system without damaging the others.
-However, a consistent API should, in fact, be established from the ground up to avoid breaking changes.
+creating a way to scale-up or upgrade existing parts of the system without damaging the others. This introduces a
+very powerful \emph{separation of concerns} among all the system layers since each layer has a specific role and only deals
+with the logic that pertains to it.
+However, a consistent API should, in fact, be established from the ground up to avoid backward incompatible changes.
 If the API is maintained, the individual layers may be upgraded independently without the need for extra work.
 
-The Nuua architecture is shown at \autoref{fig:nuua_system}. An independent module called Logger is found
+\autoref{fig:nuua_system} shows the Nuua architecture. An independent module called Logger is found
 on the left side of the figure. This module is a logger used by all layers to output messages if needed (for example error reporting).
 
 \begin{figure}[p]
@@ -293,16 +306,16 @@ on the left side of the figure. This module is a logger used by all layers to ou
 \end{figure}
 
 \begin{itemize}
-    \item \textbf{Logger}: Used by all layers to debug or log errors. In case of a fatal error, the logger outputs
+    \item \emph{Logger}: Used by all layers to debug or log errors. In case of a fatal error, the logger outputs
         an error stack in a fancy way and terminates the application.
-    \item \textbf{Application}: This layer is used to decode the command line arguments and fire up the compiler toolchain. In short,
+    \item \emph{Application}: This layer is used to decode the command line arguments and fire up the compiler toolchain. In short,
         the purpose is to analyze the command line arguments and fire the application accordingly.
-    \item \textbf{Virtual Machine}: The virtual machine is the interpreter that runs Nuua. It's a register-based virtual machine that
+    \item \emph{Virtual Machine}: The virtual machine is the interpreter that runs Nuua. It's a register-based virtual machine that
         acts as the Nuua runtime environment.
-    \item \textbf{Code generator}: Is responsible for the translation of the AST to the virtual machine bytecode. This acts as the code generation
+    \item \emph{Code generator}: Is responsible for the translation of the AST to the virtual machine bytecode. This acts as the code generation
         part of a compiler architecture.
-    \item \textbf{Semantic analyzer}: Does all the semantic analysis of the compiler and optimizes the AST for faster and smaller output.
-    \item \textbf{Parser}: Acts as the syntax analyzer, it uses a list of tokens and generates a fully valid AST.
-    \item \textbf{Lexer}: Scans the source code and translates the characters to tokens, creating a list of tokens representing
+    \item \emph{Semantic analyzer}: Does all the semantic analysis of the compiler and optimizes the AST for faster and smaller output.
+    \item \emph{Parser}: Acts as the syntax analyzer, it uses a list of tokens and generates a fully valid AST.
+    \item \emph{Lexer}: Scans the source code and translates the characters to tokens, creating a list of tokens representing
         the original source code.
 \end{itemize}

@@ -27,6 +27,9 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 
+% Horizontal lists
+\usepackage{tasks}
+
 % Code listings
 \usepackage{listings}
 \lstset{
@@ -54,7 +57,11 @@
 \setlength{\skip\footins}{1cm}
 
 % Bibliography
-\usepackage[backend=bibtex,style=ieee]{biblatex}
+\usepackage[
+    backend=bibtex,
+    style=alphabetic,
+    citestyle=alphabetic
+]{biblatex}
 \addbibresource{references}
 \nocite{*}
 
@@ -93,13 +100,13 @@
 \subtitle{The Nuua Programming Language}
 \author{Èrik Campobadal Forés}
 \intro{
-    A bachelor thesis submmited to fulfill the degree of\\
+    Bachelor thesis submitted as partial fulfillment\\
+    of the requirements for the degree of\\
     ICT Systems Engineer
 }
 \meta{
-    Department of Mining, Industrial and ICT Engineering\\
     Advisor: Sebastia Vila Marta\\
-    Polytechnic University of Catalonia\\
-    Catalonia, Spain\\
-    June 2019
+    Department of Mining, Industrial and ICT Engineering\\
+    Technical University of Catalonia\\
+    \today
 }

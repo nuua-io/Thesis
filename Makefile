@@ -10,13 +10,14 @@ $(DOC).pdf: *.tex chapters/*.tex references.bib
 	@bibtex $(DOC)
 	@pdflatex thesis.tex -job-name=$(DOC) -shell-escape
 	@bibtex $(DOC)
+	@$(MAKE) -s clean
 	@echo " -> PDF created!"
 	@echo ""
 	@echo ""
 
 clean:
 	@echo " -> Removing temp documents..."
-	@rm -f *.toc *.out *.log *.aux *.lof *.bbl *blg *.xml *blx.bib
+	@rm -f *.toc *.out *.log *.aux *.lof *.bbl *blg *.xml *blx.bib *.bcf
 	@echo " -> Temp documents removed!"
 
 clean_pdf:

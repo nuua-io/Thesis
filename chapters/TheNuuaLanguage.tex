@@ -1,13 +1,18 @@
-This chapter defines the Nuua programming language. The language is set to be of a general purpose usage, with an inperative
-paradigm and a statically typed system. The official Nuua compiler is written in C++ with a zero-dependency policy and it's
-implemented as an interpreter using a register-based virtual machine.
+This chapter defines the Nuua programming language. Nuua is a general purpose programming language with an imperative
+paradigm and a statically typed system. The Nuua compiler and virtual machine explained in this thesis are written in C++
+with a zero-dependency policy. The interpreter is a register-based bytecode virtual machine.
+
+Nuua's system architecture built in this thesis, as described in \autoref{sec:sys_arch}, consists of a compiler that translates a program written
+in Nuua into bytecode instructions and of a virtual machine interpreter that executes those bytecode instructions.
 
 \section{Grammar}
 
 Nuua's grammar is inspired by other existing programming languages by taking advantage of some of the best features some of them offer.
-Inspiration comes specially from Python, Rust and Go.
+Inspiration comes especially from Python \autocite{python_programming_language}, Rust \autocite{rust_programming_language} and
+Go \autocite{go_programming_language}.
 
-The precedence relationship between expressions is heavily inspired by C, D, Rust and Dart. The official documentation for those languages
+The precedence relationship between expressions is heavily inspired by C \autocite{c_programming_language}, D \autocite{d_programming_language},
+Rust \autocite{rust_programming_language}, and Dart \autocite{dart_programming_language}. The official documentation for those languages
 exposes similar tables for operator precedences and Nuua has taken akin levels of precedence as those.
 
 Nuua does not make use of the \texttt{";"} to separate statements, instead, it uses the same separator as Go. Statements can be separated by
@@ -16,30 +21,28 @@ block separator \texttt{"\{" ... "\}"}.
 
 \subsection{Lexical Grammar}
 
-The lexical grammar is used by the lowest layer of the Nuua system to scan the source language and identify different terminal symbols.
-The main difference with the syntax grammar, as exposed in \autocite[Appendix~I]{crafting_interpreters} is that the syntax grammar is a
-context free grammar and the lexical grammar is a regular grammar.
+Lexical grammar is used by the lowest layer of the Nuua system to scan the source language and identify different terminal symbols.
+The main difference with the syntax grammar, as exposed in \autocite[Appendix~I]{crafting_interpreters}, is that the syntax grammar is a context-free grammar and lexical grammar is a regular grammar.
 
-Nuua's lexical rules are as follors:
+Nuua's lexical rules are as follows:
 
 \begin{lstlisting}
 DIGIT
-    : "0" ... "9"
+    : "0" | ... | "9"
     ;
 \end{lstlisting}
 
-Digits are any character from '0' to '9', given that the ASCII table \footnote{\href{https://en.wikipedia.org/wiki/ASCII}{ASCII table (Wikipedia)}} uses
-a sequential enumeration for the table items it's very easy to determine what characters are between '0' and '9'.
+Digits are any character from '0' to '9'.
 
 \begin{lstlisting}
 ALPHA
-    : "a" ... "z"
-    | "A" ... "Z"
+    : "a" | ... | "z"
+    | "A" | ... | "Z"
     | "_"
     ;
 \end{lstlisting}
 
-Alpha are characters that are part of the english alphabet in lower or upper case. It also includes '\_' as a special character.
+Alpha are characters that are part of the English alphabet in lower or upper case. It also includes '\_' as a special character.
 
 \begin{lstlisting}
 ALPHANUM
@@ -51,7 +54,7 @@ ALPHANUM
 Alphanum are characters that are either part of the alphabet or are digits.
 
 \begin{lstlisting}
-INTEGER
+INTEGER_EXPR
     : DIGIT+
     ;
 \end{lstlisting}
@@ -59,7 +62,7 @@ INTEGER
 Integers are a single digit or more found sequentially without spaces. The integer sign is not represented here.
 
 \begin{lstlisting}
-FLOAT
+FLOAT_EXPR
     : DIGIT+ "." DIGIT+
     ;
 \end{lstlisting}
@@ -67,21 +70,21 @@ FLOAT
 Floats are like integers but require a dot followed by a digit or more, creating a decimal number.
 
 \begin{lstlisting}
-BOOL
+BOOL_EXPR
     : "true"
     | "false"
     ;
 \end{lstlisting}
 
-Bools are either 'true' or 'false', that are reserved words.
+Bools are either 'true' or 'false', that are keywords.
 
 \begin{lstlisting}
-STRING
+STRING_EXPR
     : '"' @'"' '"'
     ;
 \end{lstlisting}
 
-Strings represent a character string with the possibility to escape '"' by using a '\textbackslash' as a prefix, more on that in the upcomming sections.
+Strings represent a character string with the possibility to escape '"' by using a '\textbackslash' as a prefix, more on that in the upcoming sections.
 
 \begin{lstlisting}
 IDENTIFIER
@@ -89,9 +92,12 @@ IDENTIFIER
     ;
 \end{lstlisting}
 
-Identifiers are part an alpha character followed by an optional one or more alphanumeric character.
+Identifiers are an alpha character followed by an optional one or more alphanumeric character.
 
 \subsection{Syntax Grammar}
+
+The syntax grammar is used by the parser to build the abstract syntax tree that determines the program's execution flow.
+These rules include all top-level declarations, statements, and expressions.
 
 \subsubsection{Program and Top Level Declarations}
 \label{sec:program_tld}
@@ -102,7 +108,7 @@ program
     ;
 \end{lstlisting}
 
-A Nuua program is a list of top level declarations.
+A Nuua program is a list of top-level declarations.
 
 \begin{lstlisting}
 top_level_declaration
@@ -113,18 +119,18 @@ top_level_declaration
     ;
 \end{lstlisting}
 
-A top level delcaration can only be one of the specified rules. Top level declarations are a
-special type of declaration that can only be declared on the module and not inside other blocks.
+A top-level declaration can only be one of the specified rules. Top-level declarations are
+a special type of declaration that can only be declared on the module and not inside other blocks.
 
 \begin{lstlisting}
 use_declaration
-    : "use" STRING
-    | "use" IDENTIFIER ("," IDENTIFIER)* "from" STRING
+    : "use" STRING_EXPR
+    | "use" IDENTIFIER ("," IDENTIFIER)* "from" STRING_EXPR
     ;
 \end{lstlisting}
 
-A use declaration is used to import other top level declarations from other modules. By using the first rule, Nuua imports all the
-exported targets of the module pointed by STRING. Otherwise, Nuua imports the specified targets from the modules.
+A use declaration is used to import other top-level declarations from other modules. By using the first rule, Nuua imports all the
+exported targets of the module pointed by STRING\_EXPR. Otherwise, Nuua imports the specified targets from the modules.
 
 \begin{lstlisting}
 fun_declaration
@@ -140,8 +146,8 @@ fun_body
     ;
 \end{lstlisting}
 
-A function is defined using the reserved word "fun" followed by the function name, and a list of optional parameters enclosed in parentehsis.
-The function type is specified after the parameter list by using ":". The return type might not be present if the function have no return value.
+A function is defined using the keyword \texttt{fun} followed by the function name, and a list of optional parameters enclosed in parentheses.
+The function type is specified after the parameter list by using \texttt{:}. The return type might not be present if the function has no return value.
 The function body is specified in three different ways depending on the type of the function body that is expected.
 
 \begin{lstlisting}
@@ -154,7 +160,7 @@ class_statement
     ;
 \end{lstlisting}
 
-A class uses a reserved word "class" and expects zero or more class statements.
+A class uses a keyword \texttt{class} and expects zero or more class statements.
 
 \begin{lstlisting}
 export_declaration
@@ -162,22 +168,22 @@ export_declaration
     ;
 \end{lstlisting}
 
-An export declaration marks the following top level declaration as exported, making it available for other modules to import it using the
+An export declaration marks the following top-level declaration as exported, making it available for other modules to import it using the
 use declaration.
 
 \begin{lstlisting}
 statement
-    : variable_declaration "\n"?
+    : variable_declaration "\n"
     | if_statement "\n"
     | while_statement "\n"
     | for_statement "\n"
     | return_statement "\n"
     | print_statement "\n"
-    | expression_statement "\n"?
+    | expression_statement "\n"
     ;
 \end{lstlisting}
 
-Statements are used to change program's flow or indicate simple actions like declaring a variable.
+Statements are used to change the program's flow or indicate simple actions like declaring a variable.
 
 \begin{lstlisting}
 variable_declaration
@@ -194,7 +200,7 @@ if_statement
     : "if" expression if_body el_if* else?
     ;
 if_body
-    : "=>" statement "\n"?
+    : "=>" statement "\n"
     | "{" "\n" statement* "}"
     ;
 el_if
@@ -205,21 +211,21 @@ else
     ;
 \end{lstlisting}
 
-An "if" statement is declared with the "if" reserved word followed by the expression of its condition.
-The "if" body may be declared in two different ways depending on the if body. The "elif" word may be used as a short
-hand to an "else" followed by an "if" inside. An optional "else" condition may be added at the end of the "if".
+An \texttt{if} statement is declared with the \texttt{if} keyword followed by the expression of its condition.
+The \texttt{if} body may be declared in two different ways depending on the if body. The \texttt{elif} word may be used as a shorthand
+to an \texttt{else} followed by an "if" inside. An optional \texttt{else} condition may be added at the end of the \texttt{if}.
 
 \begin{lstlisting}
 while_statement
     : "while" expression while_body
     ;
 while_body
-    : "=>" statement "\n"?
+    : "=>" statement "\n"
     | "{" "\n" statement* "}"
     ;
 \end{lstlisting}
 
-A "while" statement uses the "while" reserved word followed by the expression of the condition and the "while" body, that can be specified
+A \texttt{while} statement uses the \texttt{while} keyword followed by the expression of the condition and the \texttt{while} body, that can be specified
 in two different ways depending on the body contents.
 
 \begin{lstlisting}
@@ -232,10 +238,11 @@ for_body
     ;
 \end{lstlisting}
 
-A "for" statement acts as a "for in" loop in most modern high level languages. It gets declared by using the "for" reserved word followed by an
-identifier that will be used to store the element in the iterator. An optional second identifier may be given in case the loop index needs to be
-stored as well. Those values change in every iteration. After the identifiers, the "in" keyword is expected, followed by the iterator expression and the
-"for" body, that can be declared in two different ways depending on its content.
+A \texttt{for} statement acts is a way to interate a nuua iterator \autoref{fig:nuua_iterators}.
+It gets declared by using the \texttt{for} keyword followed by an identifier that will be used to store the element
+in the iterator. An optional second identifier may be given in case the loop index needs to be stored as well.
+Those values change in every iteration. After the identifiers, the \texttt{in} keyword is expected, followed by the iterator expression and the
+\texttt{for} body, that can be declared in two different ways depending on its content.
 
 \begin{lstlisting}
 return_statement
@@ -243,7 +250,7 @@ return_statement
     ;
 \end{lstlisting}
 
-A "return" statement uses the "return" reserved word and an optional expression to return.
+A \texttt{return} statement uses the \texttt{return} keyword and an optional expression to return.
 
 \begin{lstlisting}
 print_statement
@@ -251,8 +258,8 @@ print_statement
     ;
 \end{lstlisting}
 
-The "print" expression is a statement that outputs an expression to the screen. This is a temporary statement used while
-nuua is not able to properly read and write to files (stdout / stdin) in this specific case.
+The \texttt{print} expression is a statement that outputs an expression to the screen. This is a temporary statement used while
+Nuua is not able to properly read and write to files (stdout / stdin) in this specific case.
 
 \begin{lstlisting}
 expression_statement
@@ -263,8 +270,9 @@ expression_statement
 An expression statement may be used as an expression whose value is not used or no value is returned from it.
 
 \subsubsection{Expressions}
+\label{sec:grammar_expressions}
 
-Expressions are grouped in different production rules depending on their precedence, this is done due the parsing strategy used and
+Expressions are grouped in different production rules depending on their precedence, this is done due to the parsing strategy used and
 helps to visualize the precedence by reading the grammar.
 
 \begin{lstlisting}
@@ -281,7 +289,7 @@ assignment
     ;
 \end{lstlisting}
 
-An assignment expression is written by an expression on the left hand side and on the right hand side with a "=" in the middle.
+An assignment expression is written by an expression on the left-hand side and on the right-hand side with a \texttt{=} in the middle.
 
 \begin{lstlisting}
 range
@@ -289,7 +297,7 @@ range
     ;
 \end{lstlisting}
 
-A range expression is written by an expression on the left hand side and on the right hand side with a ".." or "..." in the middle. Depending
+A range expression is written by an expression on the left-hand side and on the right-hand side with a \texttt{..} or \texttt{...} in the middle. Depending
 if the range is exclusive or inclusive.
 
 \begin{lstlisting}
@@ -298,7 +306,7 @@ logical_or
     ;
 \end{lstlisting}
 
-A logical "or" is a binary operation with the reserved word "or" in the middle.
+A logical \texttt{or} is a binary operation with the keyword \texttt{or} in the middle.
 
 \begin{lstlisting}
 logical_and
@@ -306,7 +314,7 @@ logical_and
     ;
 \end{lstlisting}
 
-A logical "and" is a binary operation with the reserved word "and" in the middle.
+A logical \texttt{and} is a binary operation with the keyword \texttt{and} in the middle.
 
 \begin{lstlisting}
 equality
@@ -314,7 +322,7 @@ equality
     ;
 \end{lstlisting}
 
-An equality comparison is a binary operation with a "!=" or "==" in the middle depending if the check needs to be negated or not.
+An equality comparison is a binary operation with a \texttt{!=} or \texttt{==} in the middle depending if the check needs to be negated or not.
 
 \begin{lstlisting}
 comparison
@@ -322,8 +330,8 @@ comparison
     ;
 \end{lstlisting}
 
-A comparison is similar to equality but checks the values to determine if the left hand side is greater, greater than, lower and lower than the
-right hand side.
+A comparison is similar to equality but checks the values to determine if the left-hand side is greater, greater than, lower and lower than the
+right-hand side.
 
 \begin{lstlisting}
 addition
@@ -331,7 +339,7 @@ addition
     ;
 \end{lstlisting}
 
-An addition is used to perform an addition or substraction of two values.
+An addition is used to perform an addition or subtraction of two values.
 
 \begin{lstlisting}
 multiplication
@@ -339,7 +347,7 @@ multiplication
     ;
 \end{lstlisting}
 
-A multiplication is used to perform a multiplication or division of two values.
+Multiplication is used to perform multiplication or division of two values.
 
 \begin{lstlisting}
 cast
@@ -347,7 +355,7 @@ cast
     ;
 \end{lstlisting}
 
-A cast performs a type cast of the values on the left hand side to the value of the right hand side by using the "as" reserved word.
+A cast performs a type cast of the values on the left-hand side to the value of the right-hand side by using the \texttt{as} keyword.
 
 \begin{lstlisting}
 unary_prefix
@@ -362,7 +370,7 @@ The unary prefixes are used to change a value state by prefixing the operation.
 unary_postfix
     : primary unary_p*
     ;
-unary\_p
+unary_p
     : "[" expression "]"
     | slice
     | "(" arguments? ")"
@@ -376,18 +384,18 @@ arguments
     ;
 \end{lstlisting}
 
-The unary postfixes are used to either access a value, to slice it's contents, to call a value or to call a value property.
+The unary postfixes are used to either access a value or mutate it's content, to slice it's contents, to call a value or to access a value property.
 
 \begin{lstlisting}
 primary
-    : BOOL
-    | INTEGER
-    | FLOAT
-    | STRING
+    : BOOL_EXPR
+    | INTEGER_EXPR
+    | FLOAT_EXPR
+    | STRING_EXPR
     | IDENTIFIER
-    | LIST
-    | DICTIONARY
-    | OBJECT
+    | LIST_EXPR
+    | DICTIONARY_EXPR
+    | OBJECT_EXPR
     | "(" expression ")"
     ;
 \end{lstlisting}
@@ -395,7 +403,7 @@ primary
 Primary expressions have the highest precedence and are mostly native types, with the exception of the expression group.
 
 \begin{lstlisting}
-OBJECT
+OBJECT_EXPR
     : IDENTIFIER "{" object_args? "}"
     ;
 object_args
@@ -403,24 +411,24 @@ object_args
     ;
 \end{lstlisting}
 
-An object is defined by an identifier containing the class name, followed by optional arguments surrounded by "\{" and "\}" to
+An object is defined by an identifier containing the class name, followed by optional arguments surrounded by \texttt{\{} and \texttt{\}} to
 initialize the class properties.
 
 \begin{lstlisting}
-LIST
+LIST_EXPR
     : "[" expression ("," expression)* "]"
     ;
 \end{lstlisting}
 
-Lists can't be empty, so a at least one expression must be provided.
+Lists can't be empty, so at least one expression must be provided.
 
 \begin{lstlisting}
-DICTIONARY
+DICTIONARY_EXPR
     : "{" IDENTIFIER ":" expression ("," IDENTIFIER ":" expression)* "}"
     ;
 \end{lstlisting}
 
-Dictionaries, as lists, can't be empty, so a at least one expression must be provided.
+Dictionaries, like lists, can't be empty, so at least one expression must be provided.
 
 \subsection{Operator Precedence}
 
@@ -446,49 +454,108 @@ Given that expressions are grouped by their precedence, the operator precedence 
     \label{fig:nuua_operator_precedence}
 \end{table}
 
+\subsection{Keywords and Reserved Words}
+
+Keywords are a special subset of identifiers that have a special meaning in a Nuua program.
+A reserved word is an identifier that can't be used as such, and in Nuua, no keywords can be used as identifiers therefore
+making all keywords reserved words at the same time.
+All keywords can already be identified by looking at the grammar rules, the following list shows
+all of the keywords in Nuua.\\
+
+\begin{tasks}[counter-format = (tsk[r]), label-width = 2.5cm](4)
+        \task \texttt{true}
+        \task \texttt{false}
+        \task \texttt{as}
+        \task \texttt{or}
+        \task \texttt{and}
+        \task \texttt{if}
+        \task \texttt{else}
+        \task \texttt{for}
+        \task \texttt{in}
+        \task \texttt{while}
+        \task \texttt{return}
+        \task \texttt{print}
+        \task \texttt{class}
+        \task \texttt{fun}
+        \task \texttt{use}
+        \task \texttt{from}
+        \task \texttt{elif}
+        \task \texttt{export}\\
+\end{tasks}
+
+More information about the \texttt{print} keyword and why it does exist can be found in \autoref{sec:print_statement}.
+
+\section{Scopes}
+\label{sec:nuua_scopes}
+
+Scopes refer to the visible area of the variables, in other words, it determines where the association between a variable name
+and its value (known as name binding) is valid. This area is known as a scope block.
+
+Nuua have two levels of scope blocks:
+
+\begin{enumerate}
+    \item \emph{Module scope}: Any top-level declaration found in Nuua is bound to the module scope. Any other module won't see that
+        top-level declaration unless it is exported and the module is trying to use it.
+    \item \emph{Block scope}: Any declaration found in any statement that contains blocks (statements found in \autoref{fig:nuua_blocks})
+        is only valid inside of the block.
+\end{enumerate}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l l }
+        \textbf{Statement} & \textbf{Blocks} \\
+        Function declaration & Body \\
+        Class declaration & Body \\
+        If statement & Then and Else \\
+        While statement & Body \\
+        For statement & Body \\
+    \end{tabular}
+    \caption{Nuua statements with scope blocks}
+    \label{fig:nuua_blocks}
+\end{table}
+
+\section{Entry point}
+
+A Nuua program requires an entry point to start executing the instructions. The entry point in a Nuua program is a
+function that must be called \texttt{main}. This function must exists in the initial module. If the function does not
+exist an error is thrown prior to execution. The \texttt{main} function needs at least one argument of type \texttt{[string]}
+that does contain the command line arguments.
+
+The Nuua virtual machine does automatically call the \texttt{main} function upon starting executing the bytecode with the command
+line arguments of the call.
+
+An example \texttt{main} may be as follows:
+
+\begin{lstlisting}
+fun main(argv: [string]) {
+    // ...
+}
+\end{lstlisting}
+
 \section{Data types}
 
 This section defines all the Nuua data types that are supported. Each value in Nuua
 has a type associated with it, meaning that each value must belong to a certain data type.
-A value can't belong to multiple data types at once but can be casted to others if a change is required.
+A value can't belong to multiple data types at once but can be cast to others if a change is required.
 
 \subsection{Integers}
 
-Integers are named as \texttt{int} and they are a subset of numbers represented by $\mathbb{Z}$. It includes 0
-and the integers are stored using $64$ bits. Meaning its range for a given integer $x$ is:
+Integers are named as \texttt{int} and they are a subset of $\mathbb{Z}$. It includes 0
+and the integers are stored using $64$ bits using two's complement. Meaning its range for a given integer $x$ is:
 
 \begin{center}
-$\frac{2^{64}}{2} < x < \frac{2^{64}}{2} - 1$
+$-2^{64 - 1} < x < 2^{64 - 1} - 1$
 \end{center}
-
-\subsubsection{Examples}
-
-\begin{lstlisting}
-0
-25
-81237
--6378
--1
-\end{lstlisting}
 
 \subsection{Floats}
 
-Floats are named as \texttt{float} and they are double precision points that uses a total of $64$ bits. $52$ fraction bits, $11$ bits
+Floats are named as \texttt{float} and they are C++ \texttt{double} precision points that use a total of $64$ bits. $52$ fraction bits, $11$ bits
 of exponent and $1$ sign bit.
-
-\subsubsection{Examples}
-
-\begin{lstlisting}
-0.0
-25.5
-81237.11111
--6378.673
--1.9
-\end{lstlisting}
 
 \subsection{Booleans}
 
-Booleans are named as \texttt{bool} and they are simple booleans, they can be either \texttt{true} or \texttt{false}.
+Booleans are named as \texttt{bool} and they are simple booleans, they can be either \texttt{true} or \texttt{false} and they are stored in
+a C++ \texttt{bool} type, usually using 8 bits to store it.
 
 \subsubsection{Examples}
 
@@ -500,45 +567,26 @@ false
 \subsection{Strings}
 
 Strings are named as \texttt{string} and they are used to manipulate arrays of chars. It's implementation uses
-a C++ \texttt{std::string}. It can store any text that's surrounded by \texttt{'"'}.
-
-\subsubsection{Examples}
-
-\begin{lstlisting}
-"A string is represented like this"
-"Another string example"
-\end{lstlisting}
+a C++ \texttt{std::string} and it's planned to support wider characters as mentioned in \autoref{sec:forthcomming}. It can store any text that's surrounded by \texttt{'"'}.
 
 \subsection{Lists}
 
 Lists are named as \texttt{[type]} and they are used to manipulate a list of other values. They can only have a single
 type as the inner list items, so all the list items need to be of the same type.
 
-\subsubsection{Examples}
-
-\begin{lstlisting}
-["this", "is", "a", "valid", "list", "of", "strings"]
-\end{lstlisting}
-
 \subsection{Dictionaries}
 
 Dictionaries are named as \texttt{\{type\}} and they are used to store values of the same type. However, unlike lists, they
 use a string-based mapping, allowing each value to be bound to a specific string key, instead of an integer index as the key.
-Dictionaries, as lists, can only store 1 type of values. So each key can only store the same type.
-
-\subsubsection{Examples}
-
-\begin{lstlisting}
-{name: "Erik", occupation: "Student", color: "#ff0000"}
-\end{lstlisting}
+Dictionaries, like lists, can only store 1 type of values. So each key can only store the same type.
 
 \subsection{Functions}
 
-The only way to define a function is by using the "fun" reserved word as noted in \autoref{sec:program_tld}. However, functions in Nuua
-act as first class values, meaning that a value can contain a function, allowing the function to change without actually changing it's type.
-The function type needs to be consisten. So even if the function changes, it will always accept the same arguments and it will return the same data type.
+The only way to define a function is by using the "fun" keyword as noted in \autoref{sec:program_tld}. However, functions in Nuua
+act as first-class values, meaning that values can contain a function, allowing the function to change without actually changing its type.
+The function type needs to be consistent. So even if the function changes, it will always accept the same arguments and it will return the same data type.
 Function types are named as \texttt{(T1, T2, ..., TN -> TR)}. where \texttt{T1} to \texttt{TN} are the types of the function parameters.
-If the function have a return type, say \texttt{TR}, it needs to be specified with a simple arrow pointing at it the end of the function type.
+If the function has a return type, say \texttt{TR}, it needs to be specified with a simple arrow pointing at it the end of the function type.
 
 To see how functions are declared head to \autoref{sec:statements_function}
 
@@ -563,7 +611,7 @@ Function with two parameters of type int and bool and no return type.
 
 \subsection{Objects}
 
-Objects are named acording to the class they represent. If a class is named \texttt{Person} the type name is \texttt{Person}.
+Objects are named according to the class they represent. If a class is named \texttt{Person} the type name is \texttt{Person}.
 
 \section{Statements}
 
@@ -573,12 +621,12 @@ Some of the statements may have already been mentioned briefly in \autoref{sec:p
 
 \subsection{Use Declaration}
 
-The use declaration is used when a module needs to use a top level declaration
-that is found in another module. The target module is the string given in the use declaration.A path system is used to search for the file,
+The use declaration is used when a module needs to use a top-level declaration
+that is found in another module. The target module is the string given in the use declaration. A path system is used to search for the file,
 first trying to find it relatively from the current module path, ending at the standard library folder that comes with Nuua.
 
 The use declaration comes in two different shapes. By using the use declaration with a single string it imports all the top level
-declarations that are exported in the target module. Instead, by determining the the use identifiers, you may import only selected top level
+declarations that are exported in the target module. Instead, by determining the "use" identifiers, you may import only selected top-level
 declarations.
 
 \subsubsection{Caveats}
@@ -586,8 +634,8 @@ declarations.
 \begin{itemize}
     \item The target module path given in the use declaration can use a relative or absolute path.
     \item If the target module path does not have the \texttt{".nu"} extension, it will be added automatically.
-    \item If the target module is not find, an error is thrown before any execution starts.
-    \item If a target top level declaration is not found in the target module an error is thrown before any execution starts.
+    \item If the target module is not found in any path, an error is thrown before any execution starts.
+    \item If a target top-level declaration is not found in the target module an error is thrown before any execution starts.
     \item If the top level declaration is not exported another error will be thrown prior to execution.
 \end{itemize}
 
@@ -607,21 +655,21 @@ use a from "C:/Nuua/test.nu"
 \end{lstlisting}
 
 \subsection{Function Declaration}
+\label{sec:statements_function}
 
 A function declaration creates a function value and a data type given the function parameters and return value.
 Once the function value is created, it's then added in a new variable with the function name. That variable can be
-modified since functions are first class values in Nuua. The variations in a function body exists to minimize the
+modified since functions are first-class values in Nuua. The variations in a function body exist to minimize the
 code length in certain situations (When a function is a single return expression, a single statement or a block of statements).
 
 \subsubsection{Caveats}
 
 \begin{itemize}
-    \item Function overloading is not implemented in the latest version of Nuua as for \today. The current plan is to have
-        function overloading in a future version.
+    \item No function overloading is allowed.
     \item Function parameters do not allow default values.
     \item If the function returns a value, you are expected to, at least, write a single return statement in the top level of the
         function block.
-    \item Functions without return type can't be used as regular expressions since they contain no values.
+    \item Functions without return type can't be used as formal expressions since they contain no values.
 \end{itemize}
 
 \subsubsection{Examples}
@@ -652,11 +700,11 @@ fun d(x: string): string {
 \end{lstlisting}
 Single statement function.
 \begin{lstlisting}
-fun d(x: string): string => return "Hello, " + x
+fun e(x: string): string => return "Hello, " + x
 \end{lstlisting}
 Single expression function.
 \begin{lstlisting}
-fun d(x: string): string -> "Hello, " + x
+fun f(x: string): string -> "Hello, " + x
 \end{lstlisting}
 
 \subsection{Class Declaration}
@@ -664,13 +712,13 @@ fun d(x: string): string -> "Hello, " + x
 A class declaration creates a data type of the given class structure. This type can then be used as a regular type
 to specify values of the given class. To create an object of a given class you can use the Object expression \autocite{sec:object_expression}.
 Classes act as structs with the fact that they can also contain methods bound to them. Class methods have a variable called \texttt{"self"}
-as a self reference to the object to mutate its state.
+as a self-reference to the object to mutate its state.
 
 \subsubsection{Caveats}
 
 \begin{itemize}
     \item Class properties can't have default values. Values are defined when creating the object using an object expression.
-    \item Self references to the same type are allowed.
+    \item Self-references to the same type are allowed.
     \item There is no class inheritance.
 \end{itemize}
 
@@ -689,8 +737,8 @@ class Person {
 
 \subsection{Export Declaration}
 
-The export declaration is used when a module wants to make a top level declaration available to use for other
-modules. Marking a top level declaration as exported allows other modules to import and use it.
+The export declaration is used when a module wants to make a top-level declaration available to use for other
+modules. Marking a top-level declaration as exported allows other modules to import and use it.
 
 \subsubsection{Caveats}
 
@@ -716,9 +764,10 @@ export class Person {
 
 \subsection{Variable Declaration}
 
-Variable declarations are scoped to the lexical block where they are declared. They can be used from the block they have been declared and
-on the lexical blocks that may exist inside of it. A variable with the same name can't be declared in the same lexical block but multiple lexical
-blocks may have the same variable name. When getting the value of a variable, the lookup starts from the current block and goes backwards to previous blocks.
+Variable declarations are scoped to the block where they are declared as mentioned in \autoref{sec:nuua_scopes}.
+They can be used from the block they have been declared and on the lexical blocks that may exist inside of it.
+A variable with the same name can't be declared in the same lexical block but multiple lexical
+blocks may have the same variable name. When getting the value of a variable, the lookup starts from the current block and goes back to previous blocks.
 
 \subsubsection{Caveats}
 
@@ -741,9 +790,494 @@ b: int = 10
 \end{lstlisting}
 Variable declaration with an inferred \texttt{int} type.
 \begin{lstlisting}
-b := 10
+c := 10
+\end{lstlisting}
+
+\subsection{If Statement}
+
+An "if" statement is used to execute a block of code when a certain expression (known as condition) evaluates to \texttt{true} known as the \texttt{then} block.
+The if statement can also execute another block if the condition is \texttt{false} known as the \texttt{else} block.
+The \texttt{else} block can be defined using the \texttt{"else"} keyword.
+An if statement has a shorthand for defining another if inside the \texttt{else} block, making nested if statements easier to write.
+This syntax uses the \texttt{"elif"} keyword and acts the same way as defining an \texttt{else} block with another if statement inside.
+Additionally, the if statement body may be defined in different ways depending on the body type. If the body consists of a single statement,
+a shorthand can be used to minimize the lines of code.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The condition must always be a boolean. Explicit casting is needed.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Simple if statement.
+\begin{lstlisting}
+if condition {
+    print "Condition is true"
+}
+\end{lstlisting}
+If statement with an else block.
+\begin{lstlisting}
+if condition {
+    print "Condition is true"
+} else {
+    print "Condition is false"
+}
+\end{lstlisting}
+If statement with multiple nested conditions.
+\begin{lstlisting}
+if number == 0 {
+    print "The number is 0"
+} elif number == 1 {
+    print "The number is 1"
+} else {
+    print "The number is not 0 nor 1"
+}
+\end{lstlisting}
+If statement with the shorthand body.
+\begin{lstlisting}
+if number == 0 => print "The number is 0"
+elif number == 1 => print "The number is 1"
+else => print "The number is not 0 nor 1"
+\end{lstlisting}
+
+\subsection{While Statement}
+
+A while statement is used to repeat a block of code while a certain expression (known as condition) evaluates to \texttt{true}.
+The condition is evaluated every time the loop is about to begin. If the while block is executed the program counter jumps back
+to the condition to evaluate it again. When the condition is no longer true, the program counter skips the block and continues execution.
+The while statement also has a shorthand to define its body when it only consists of a single statement.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The condition must be a value of \texttt{bool} type. Explicit casting is needed.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Simple while statement.
+\begin{lstlisting}
+while condition {
+    print "Condition is true"
+}
+\end{lstlisting}
+Using the shorthand for single statements.
+\begin{lstlisting}
+while condition => print "Condition is true"
+\end{lstlisting}
+Real world while example
+\begin{lstlisting}
+a: int = 0
+while a < 10 => print a
+\end{lstlisting}
+
+\subsection{For Statement}
+
+A for statement is very similar to a while statement but instead of working with a condition it works with an iterator.
+An iterator is a data type that supports indexation and therefore, can be iterated. Nuua iterators are:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l l l }
+        \textbf{Data type} & \textbf{Value Type} & \textbf{Index Type} \\
+        \texttt{string} & \texttt{string} (a single character) & \texttt{int} \\
+        \texttt{[T]}& \texttt{T} & \texttt{int} \\
+        \texttt{\{T\}} & \texttt{T} & \texttt{string} \\
+    \end{tabular}
+    \caption{Nuua iterators}
+    \label{fig:nuua_iterators}
+\end{table}
+
+Indexation is done with the \emph{Access} expression.
+The for loop defines up to two variables to its block. One containing the current value of the indexed item and
+another optional variable containing the current index being used.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The value and the index are variables that are automatically declared with their respective types in the "for" block.
+    \item The value and the index types are automatically inferred according to \autoref{fig:nuua_iterators}.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Simple for statement.
+\begin{lstlisting}
+for char in "string" {
+    print char
+}
+\end{lstlisting}
+For statement with the index.
+\begin{lstlisting}
+for letter, index in ["A", "B", "C"] {
+    print index as string + ": " + letter
+}
+\end{lstlisting}
+For statement with the shorthand.
+\begin{lstlisting}
+for num in 0..10 => print num
+\end{lstlisting}
+
+\subsection{Return Statement}
+
+A return statement is used inside the function to determine its execution should end, and optionally return a value as the result.
+Return statements are mandatory in functions that have a return type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item If the function has a return type, at least one return at the top level of the function block is required. Otherwise, an error
+        is thrown prior to execution.
+    \item Return expression type must match the function's return type.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A simple return statement.
+\begin{lstlisting}
+fun a() {
+    return
+    print "Never executed"
+}
+\end{lstlisting}
+A return statement returning a value.
+\begin{lstlisting}
+fun b(): int {
+    return 10
+}
+\end{lstlisting}
+
+\subsection{Print Statement}
+\label{sec:print_statement}
+
+The print statement is used to write a register to the \texttt{stdout} file.
+This statement will be finally deleted alongside the keyword when a propper I/O is added into the language as mentioned in \autoref{sec:forthcomming}.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Any data type can be printed with this statement. Even functions and objects.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A simple print statement.
+\begin{lstlisting}
+print "Hello, World"
+\end{lstlisting}
+A print of a function
+\begin{lstlisting}
+fun a(): int {
+    print a
+    return 10
+}
 \end{lstlisting}
 
 \section{Expressions}
 
-Expressions...
+Expressions can always be reduced up to a value of a single data type. This section explains all the expressions that can be found
+in Nuua.
+
+Some of the expressions may have already been mentioned briefly in \autoref{sec:grammar_expressions}.
+
+\subsection{Integer Expression}
+
+The integer expressions can be written as an integer number directly in the source code.
+Integer expressions return a value with the \texttt{int} data type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item There are no prefix/postfix indicators to change the integer bit size or base (Like LL, 0x, etc.).
+\end{itemize}
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+0
+25
+81237
+-6378
+-1
+\end{lstlisting}
+
+\subsection{Float Expression}
+
+The float expressions can be written as any floating point number, using a \texttt{"."} as the decimal delimiter, directly in the source code.
+Float expressions return a value with the \texttt{float} data type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item An integer followed by a \texttt{"."} without any other number on the right-hand side, it's considered an error. An explicit number
+        must be written in the right-hand side to create a float expression, even to indicate \texttt{.0}.
+\end{itemize}
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+0.0
+25.5
+81237.11111
+-6378.673
+-1.9
+\end{lstlisting}
+
+\subsection{Boolean Expression}
+
+The boolean expressions can be written as either \texttt{true} or \texttt{false} directly in the source code.
+Boolean expressions return a value with the \texttt{bool} data type.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+true
+false
+\end{lstlisting}
+
+\subsection{String Expression}
+
+The string expressions can be written as any text enclosed between \texttt{'"'} directly in the source code.
+String expressions return a value with the \texttt{string} data type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item As for \today, the strings use a bare-bones C++ \texttt{std::string} to represent the string, that means that the string
+        is a list of single-byte characters (characters in the ASCII character table). A plan to support wider characters is mentioned
+        in \autoref{sec:forthcomming}.
+\end{itemize}
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+"A string is represented like this"
+\end{lstlisting}
+
+\subsection{List Expression}
+
+The list expressions can be written as list of expressions separated by comma enclosed between \texttt{"["} and \texttt{"]"}
+directly in the source code. A list inner type, say \texttt{T}, is determined by the type of the first expression of the list.
+List expressions return a value with the \texttt{[T]} data type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item List expression can't be empty due to an unknown type. Even when assigning them to a variable with a defined type. If there's the
+        need for an empty list of a given type, declare a variable with the type and don't initialize it.
+    \item Lists can only have a single type stored on it, therefore, if a list expression have more than one expression on it, the types
+        must match. If a type does not match the first type of the list, an error is thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A list expression that return a value of type \texttt{[string]}.
+\begin{lstlisting}
+["this", "is", "a", "valid", "list", "of", "strings"]
+\end{lstlisting}
+A list expression that return a value of type \texttt{[int]}.
+\begin{lstlisting}
+[1]
+\end{lstlisting}
+
+\subsection{Dictionary Expression}
+
+The dictionary expressions can be written as a list of comma-separated pairs of \texttt{key: expression}
+The key is an identifier representing the dictionary key willing to be used.
+directly in the source code. A dictionary inner type, say \texttt{T}, is determined by the type of the first expression of the list.
+Dictionary expressions return a value with the \texttt{\{T\}} data type.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Dictionary expression can't be empty due to an unknown type. Even when assigning them to a variable with a defined type. If there's the
+        need for an empty dictionary of a given type, declare a variable with the type and don't initialize it.
+    \item Dictionaries can only have a single type stored on it, therefore, if a dictionary expression have more than one expression on it, the types
+        must match. If a type does not match the first type of the dictionary, an error is thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A dictionary expression that return a value of type \texttt{\{string\}}.
+\begin{lstlisting}
+{name: "Erik", occupation: "Student", color: "#ff0000"}
+\end{lstlisting}
+A dictionary expression that return a value of type \texttt{\{int\}}.
+\begin{lstlisting}
+{left: 10, right: 20, sum: 30}
+\end{lstlisting}
+
+\subsection{Object Expression}
+
+The object expression is used to initialize an object of a given class. The object expression is used by writing the identifier of the class followed by
+a \texttt{!} and list of comma-separated pairs of \texttt{key: expression} (where the key is an identifier) enclosed between \texttt{\{} and \texttt{\}}.
+The keys in the argument list are the class properties willing to initialize and the expression is the value that the property is going to be assigned to.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The keys found in the arguments must exist in the class properties. If one of the keys does not correspond to an existing class property an
+        error is thrown prior to execution.
+    \item The expressions of the keys in the argument list must match the class property type they want to initialize. If there's a type mismatch, an error
+        is thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+An example class to provide the examples.
+\begin{lstlisting}
+class Person {
+    name: string
+    born_at: int
+}
+\end{lstlisting}
+An object of class Person without arguments.
+\begin{lstlisting}
+Person!{}
+\end{lstlisting}
+An object of class Person with arguments.
+\begin{lstlisting}
+Person!{name: "Erik", born_at: 1997}
+\end{lstlisting}
+
+\subsection{Group Expression}
+
+The group expression is used to give certain operations priority over the default operator precedence.
+The group expression is an expression enclosed between \texttt{(} and \texttt{)}.
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+(1 + 2) * 3 // 9
+(1 + 4 - 3) * (2 * (2 + 2)) // 16
+\end{lstlisting}
+
+\subsection{Access Expression}
+
+The access expression is used to access an inner value of another expressions. In short, the access expression can be used in any
+Nuua iterator and the returned value is the inner value found on its index with the respective type as shown in \autoref{fig:nuua_iterators}.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Only nuua iterators can be accessed.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A string access.
+\begin{lstlisting}
+"Hello"[1] // e
+\end{lstlisting}
+A list access.
+\begin{lstlisting}
+["Hello", "World"][1] // "World"
+\end{lstlisting}
+A dictionary access.
+\begin{lstlisting}
+{key1: "Hello", key2: "World"}["key1"] // "Hello"
+\end{lstlisting}
+
+\subsection{Slice Expression}
+
+Slices acts the same way as python slices and this explanation can be found in \autocite{python_right_way}. Basically it's a way to
+get a range of inner values in a Nuua iterator (Only those that can be index with an \texttt{int} type).
+The supported parameters are:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l p{7.5cm} }
+        \textbf{Parameter} & \textbf{Explanation} \\
+        \texttt{start} & Starting index of the slice. Defaults to 0.\\
+        \texttt{end} & The last index of the slice or the number of items to get. Defaults to the length of the iterator\\
+        \texttt{step} & Optional. Extended slice syntax. Step value of the slice. Defaults to 1.\\
+    \end{tabular}
+    \caption{Slice parameters}
+    \label{fig:slice_parameters}
+\end{table}
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item Only Nuua iterators whose inner value can be accessed using an \texttt{int} type can be sliced.
+\end{itemize}
+
+\subsubsection{Examples}
+
+\begin{lstlisting}
+"Hello"[1:3] // el
+"Hello"[1:] // ello
+"Hello"[:3] // Hel
+"Hello"[::2] // Hlo
+"Hello"[::-1] // olleH
+\end{lstlisting}
+
+\subsection{Call Expression}
+
+The call expression is used to call a value. The value needs to be callable and Therefore the value must be a function.
+When a call expression is used, its return value is the value returned from the function. The call accepts the arguments
+that will be passed to the function as the function parameters.
+The call expression is the caller and the target function is the callee.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item If the callee has no return value, then the caller is banned from beeing treated as an expression, only beeing
+        able to be used where its value is not used.
+\end{itemize}
+
+\subsubsection{Examples}
+
+An example function acting as a callee.
+\begin{lstlisting}
+fun test(a: int): int -> a + 1
+\end{lstlisting}
+An example call.
+\begin{lstlisting}
+test(10) // 11
+\end{lstlisting}
+
+\subsection{Property Expression}
+
+The property expression is used to access a specific property in an object, meaning that the target expression can only be
+an object. The property name is the identifier used after the dot.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item If the object class has no property named as the identifier, an error is thrown prior to execution.
+    \item If the object is not initialized, a runtime segmentation fault error is thrown.
+\end{itemize}
+
+\subsubsection{Examples}
+
+An example class to work with.
+\begin{lstlisting}
+class Person {
+    name: string
+}
+\end{lstlisting}
+An example property expression.
+\begin{lstlisting}
+Person!{name: "Erik"}.name // Erik
+\end{lstlisting}
+
+\section{Comments}
+
+Comments in nuua can be written by using a double \texttt{\textbackslash\textbackslash} followed by the comment text.
+The comment text lasts till a \texttt{\textbackslash n} character is found. Therefore, multiline comments can be done
+by manually writting the double back slash on each differnt line.
+
+Comment blocks are not part of the language grammar and therefore they are totally discarded from the AST. When
+the lexer finds the double back slash, it proceed to discard the whole line.
+
+\begin{lstlisting}
+// Some comment here
+fun test() {
+    print "Hello"
+    // Some other comment here
+    print "Hello again"
+}
+\end{lstlisting}
