@@ -3,10 +3,43 @@
 \begin{document}
 \pagestyle{plain}
 
+% Cover
 \input{cover}
+
+% Abstract
+\newpage
+\hspace{0pt}
+\vfill
+\thispagestyle{empty}
+\centerline{\textbf{Abstract}}
+\input{abstract}
+\vfill
+\hspace{0pt}
+
+% Dedication
+\newpage
+\hspace{0pt}
+\vfill
+\thispagestyle{empty}
+\dictum[William Gibson, \textit{Zero History}]{
+    ``When you want to know how things really work, study them when they’re coming apart.''}
+\vfill
+\input{dedication}
+\hspace{0pt}
+
+% Quote
+\newpage
+\hspace{0pt}
+\vfill
+\thispagestyle{empty}
+\centerline{\textbf{Acknowledgements}}
+\input{acknowledgements}
+\vfill
+\hspace{0pt}
 
 \tableofcontents
 \listoffigures
+\listoftables
 
 \clearpage
 % \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
@@ -28,6 +61,9 @@
 }
 \chapter{The Nuua Language}
 \input{chapters/TheNuuaLanguage}
+
+\chapter{Logger}
+\input{chapters/Logger}
 
 \setchapterpreamble[ur]{
     \dictum[James Dyson]{

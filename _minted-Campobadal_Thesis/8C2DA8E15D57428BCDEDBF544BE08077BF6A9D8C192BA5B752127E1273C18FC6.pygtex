@@ -1,0 +1,63 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cm}{/**}
+\PYG{c+cm}{ * |\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}|}
+\PYG{c+cm}{ * | Nuua Error Logger |}
+\PYG{c+cm}{ * |\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}|}
+\PYG{c+cm}{ *}
+\PYG{c+cm}{ * Copyright 2019 Erik Campobadal \PYGZlt{}soc@erik.cat\PYGZgt{}}
+\PYG{c+cm}{ * https://nuua.io}
+\PYG{c+cm}{ */}
+\PYG{c+cp}{\PYGZsh{}ifndef LOGGER\PYGZus{}HPP}
+\PYG{c+cp}{\PYGZsh{}define LOGGER\PYGZus{}HPP}
+
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}string\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}vector\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}memory\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}utility\PYGZgt{}}
+
+\PYG{c+c1}{// Defines a max line length when printing file lengths.}
+\PYG{c+cp}{\PYGZsh{}define MAX\PYGZus{}LINE\PYGZus{}LENGTH 500}
+\PYG{c+c1}{// Defines the max chars to show when printing errors to prevent lines that are too long.}
+\PYG{c+cp}{\PYGZsh{}define MAX\PYGZus{}LINE\PYGZus{}CHARS 60}
+
+\PYG{k}{typedef} \PYG{k+kt}{uint32\PYGZus{}t} \PYG{n}{line\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{k+kt}{uint16\PYGZus{}t} \PYG{n}{column\PYGZus{}t}\PYG{p}{;}
+
+\PYG{c+c1}{// Represents a log entity.}
+\PYG{k}{class} \PYG{n+nc}{LoggerEntity} \PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the file where the log comes from.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{file}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the line of the log.}
+        \PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the column of the log.}
+        \PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the message of the log.}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{msg}\PYG{p}{;}
+        \PYG{n}{LoggerEntity}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{,} \PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{,} \PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{msg}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{file}\PYG{p}{(}\PYG{n}{file}\PYG{p}{),} \PYG{n}{line}\PYG{p}{(}\PYG{n}{line}\PYG{p}{),} \PYG{n}{column}\PYG{p}{(}\PYG{n}{column}\PYG{p}{),} \PYG{n}{msg}\PYG{p}{(}\PYG{n}{msg}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+c1}{// Represents the logger used in the whole toolchain.}
+\PYG{k}{class} \PYG{n+nc}{Logger}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores all the log entities.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{LoggerEntity}\PYG{o}{\PYGZgt{}} \PYG{n}{entities}\PYG{p}{;}
+    \PYG{c+c1}{// Displays a specific log entity.}
+    \PYG{k+kt}{void} \PYG{n+nf}{display\PYGZus{}log}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{uint16\PYGZus{}t} \PYG{n}{index}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{red}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the executable path.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{executable\PYGZus{}path}\PYG{p}{;}
+        \PYG{c+c1}{// Adds a new entity to the entity stack.}
+        \PYG{k+kt}{void} \PYG{n+nf}{add\PYGZus{}entity}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{,} \PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{,} \PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{msg}\PYG{p}{);}
+        \PYG{c+c1}{// Pops an entity from the entity stack.}
+        \PYG{k+kt}{void} \PYG{n+nf}{pop\PYGZus{}entity}\PYG{p}{();}
+        \PYG{c+c1}{// Crashes the program by emmiting the whole entity stack as an error.}
+        \PYG{k+kt}{int} \PYG{n+nf}{crash}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+
+\PYG{c+c1}{// logger will be a global class instance.}
+\PYG{k}{extern} \PYG{n}{Logger} \PYG{o}{*}\PYG{n}{logger}\PYG{p}{;}
+
+\PYG{c+cp}{\PYGZsh{}endif}
+\end{Verbatim}

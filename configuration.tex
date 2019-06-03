@@ -22,6 +22,12 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\renewcommand{\thesubtable}{\roman{subtable}}
+\renewcommand{\thesubfigure}{\roman{subfigure}}
 
 % Symbols and Math
 \usepackage{amssymb}
@@ -38,6 +44,8 @@
 }
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
 \usepackage{minted}
+\usemintedstyle{pastie}
+\setminted{linenos, breaklines=true}
 
 % References and links
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}

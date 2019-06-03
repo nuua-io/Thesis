@@ -1,0 +1,35 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}if defined(\PYGZus{}WIN32) || defined(\PYGZus{}WIN64)}
+    \PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}windows.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}endif}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdio.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}stdarg.h\PYGZgt{}}
+\PYG{c+cp}{\PYGZsh{}include} \PYG{c+cpf}{\PYGZlt{}cstdlib\PYGZgt{}}
+
+\PYG{k}{static} \PYG{k+kt}{int} \PYG{n+nf}{red\PYGZus{}printf}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{format}\PYG{p}{,} \PYG{p}{...)}
+\PYG{p}{\PYGZob{}}
+    \PYG{k+kt}{va\PYGZus{}list} \PYG{n}{arg}\PYG{p}{;}
+    \PYG{k+kt}{int} \PYG{n}{result}\PYG{p}{;}
+    \PYG{n}{va\PYGZus{}start}\PYG{p}{(}\PYG{n}{arg}\PYG{p}{,} \PYG{n}{format}\PYG{p}{);}
+    \PYG{c+cp}{\PYGZsh{}if defined(\PYGZus{}WIN32) || defined(\PYGZus{}WIN64)}
+        \PYG{n}{HANDLE} \PYG{n}{hConsole} \PYG{o}{=} \PYG{n}{GetStdHandle}\PYG{p}{(}\PYG{n}{STD\PYGZus{}OUTPUT\PYGZus{}HANDLE}\PYG{p}{);}
+        \PYG{n}{CONSOLE\PYGZus{}SCREEN\PYGZus{}BUFFER\PYGZus{}INFO} \PYG{n}{consoleInfo}\PYG{p}{;}
+        \PYG{n}{WORD} \PYG{n}{saved\PYGZus{}attributes}\PYG{p}{;}
+        \PYG{n}{GetConsoleScreenBufferInfo}\PYG{p}{(}\PYG{n}{hConsole}\PYG{p}{,} \PYG{o}{\PYGZam{}}\PYG{n}{consoleInfo}\PYG{p}{);}
+        \PYG{n}{saved\PYGZus{}attributes} \PYG{o}{=} \PYG{n}{consoleInfo}\PYG{p}{.}\PYG{n}{wAttributes}\PYG{p}{;}
+        \PYG{n}{SetConsoleTextAttribute}\PYG{p}{(}\PYG{n}{hConsole}\PYG{p}{,} \PYG{n}{FOREGROUND\PYGZus{}RED}\PYG{p}{);}
+        \PYG{n}{result} \PYG{o}{=} \PYG{n}{vfprintf}\PYG{p}{(}\PYG{n}{stderr}\PYG{p}{,} \PYG{n}{format}\PYG{p}{,} \PYG{n}{arg}\PYG{p}{);}
+        \PYG{n}{SetConsoleTextAttribute}\PYG{p}{(}\PYG{n}{hConsole}\PYG{p}{,} \PYG{n}{saved\PYGZus{}attributes}\PYG{p}{);}
+    \PYG{c+cp}{\PYGZsh{}else}
+        \PYG{c+c1}{// \PYGZbs{}x1b[31m\PYGZbs{}x1b[0m = (9 + \PYGZsq{}\PYGZbs{}0\PYGZsq{})}
+        \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{fmt} \PYG{o}{=} \PYG{n}{malloc}\PYG{p}{(}\PYG{k}{sizeof}\PYG{p}{(}\PYG{k+kt}{char}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{strlen}\PYG{p}{(}\PYG{n}{format}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{10}\PYG{p}{));}
+        \PYG{n}{strcpy}\PYG{p}{(}\PYG{n}{fmt}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}x1b}\PYG{l+s}{[31m\PYGZdq{}}\PYG{p}{);}
+        \PYG{n}{strcat}\PYG{p}{(}\PYG{n}{fmt}\PYG{p}{,} \PYG{n}{format}\PYG{p}{);}
+        \PYG{n}{strcat}\PYG{p}{(}\PYG{n}{fmt}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}}\PYG{l+s+se}{\PYGZbs{}x1b}\PYG{l+s}{[0m\PYGZdq{}}\PYG{p}{);}
+        \PYG{n}{result} \PYG{o}{=} \PYG{n}{vfprintf}\PYG{p}{(}\PYG{n}{stderr}\PYG{p}{,} \PYG{n}{fmt}\PYG{p}{,} \PYG{n}{arg}\PYG{p}{);}
+        \PYG{n}{free}\PYG{p}{(}\PYG{n}{fmt}\PYG{p}{);}
+    \PYG{c+cp}{\PYGZsh{}endif}
+    \PYG{n}{va\PYGZus{}end}\PYG{p}{(}\PYG{n}{arg}\PYG{p}{);}
+    \PYG{k}{return} \PYG{n}{result}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

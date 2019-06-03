@@ -517,7 +517,7 @@ Nuua have two levels of scope blocks:
 \section{Entry point}
 
 A Nuua program requires an entry point to start executing the instructions. The entry point in a Nuua program is a
-function that must be called \texttt{main}. This function must exists in the initial module. If the function does not
+function that must be called \texttt{main}. This function must exist in the initial module. If the function does not
 exist an error is thrown prior to execution. The \texttt{main} function needs at least one argument of type \texttt{[string]}
 that does contain the command line arguments.
 
@@ -710,7 +710,7 @@ fun f(x: string): string -> "Hello, " + x
 \subsection{Class Declaration}
 
 A class declaration creates a data type of the given class structure. This type can then be used as a regular type
-to specify values of the given class. To create an object of a given class you can use the Object expression \autocite{sec:object_expression}.
+to specify values of the given class. To create an object of a given class you can use the object expression as explained in \autoref{sec:object_expression}.
 Classes act as structs with the fact that they can also contain methods bound to them. Class methods have a variable called \texttt{"self"}
 as a self-reference to the object to mutate its state.
 
@@ -795,13 +795,14 @@ c := 10
 
 \subsection{If Statement}
 
-An "if" statement is used to execute a block of code when a certain expression (known as condition) evaluates to \texttt{true} known as the \texttt{then} block.
-The if statement can also execute another block if the condition is \texttt{false} known as the \texttt{else} block.
+An \texttt{if} statement is used to execute a block of code when a certain expression (known as condition) evaluates
+to \texttt{true} known as the \texttt{then} block.
+The \texttt{if} statement can also execute another block if the condition is \texttt{false} known as the \texttt{else} block.
 The \texttt{else} block can be defined using the \texttt{"else"} keyword.
 An if statement has a shorthand for defining another if inside the \texttt{else} block, making nested if statements easier to write.
 This syntax uses the \texttt{"elif"} keyword and acts the same way as defining an \texttt{else} block with another if statement inside.
 Additionally, the if statement body may be defined in different ways depending on the body type. If the body consists of a single statement,
-a shorthand can be used to minimize the lines of code.
+shorthands can be used to minimize the lines of code.
 
 \subsubsection{Caveats}
 
@@ -844,7 +845,7 @@ else => print "The number is not 0 nor 1"
 
 \subsection{While Statement}
 
-A while statement is used to repeat a block of code while a certain expression (known as condition) evaluates to \texttt{true}.
+A while statement is used to repeat a block of code while a certain expression (known as a condition) evaluates to \texttt{true}.
 The condition is evaluated every time the loop is about to begin. If the while block is executed the program counter jumps back
 to the condition to evaluate it again. When the condition is no longer true, the program counter skips the block and continues execution.
 The while statement also has a shorthand to define its body when it only consists of a single statement.
@@ -870,7 +871,10 @@ while condition => print "Condition is true"
 Real world while example
 \begin{lstlisting}
 a: int = 0
-while a < 10 => print a
+while a < 10 => {
+    print a
+    a = a + 1
+}
 \end{lstlisting}
 
 \subsection{For Statement}
@@ -1110,6 +1114,7 @@ A dictionary expression that return a value of type \texttt{\{int\}}.
 \end{lstlisting}
 
 \subsection{Object Expression}
+\label{sec:object_expression}
 
 The object expression is used to initialize an object of a given class. The object expression is used by writing the identifier of the class followed by
 a \texttt{!} and list of comma-separated pairs of \texttt{key: expression} (where the key is an identifier) enclosed between \texttt{\{} and \texttt{\}}.
@@ -1169,7 +1174,7 @@ Nuua iterator and the returned value is the inner value found on its index with 
 
 A string access.
 \begin{lstlisting}
-"Hello"[1] // e
+"Hello"[1] // "e"
 \end{lstlisting}
 A list access.
 \begin{lstlisting}
@@ -1182,7 +1187,7 @@ A dictionary access.
 
 \subsection{Slice Expression}
 
-Slices acts the same way as python slices and this explanation can be found in \autocite{python_right_way}. Basically it's a way to
+Slices act the same way as python slices and this explanation can be found in \autocite{python_right_way}. Basically, it's a way to
 get a range of inner values in a Nuua iterator (Only those that can be index with an \texttt{int} type).
 The supported parameters are:
 
@@ -1207,11 +1212,11 @@ The supported parameters are:
 \subsubsection{Examples}
 
 \begin{lstlisting}
-"Hello"[1:3] // el
-"Hello"[1:] // ello
-"Hello"[:3] // Hel
-"Hello"[::2] // Hlo
-"Hello"[::-1] // olleH
+"Hello"[1:3] // "el"
+"Hello"[1:] // "ello"
+"Hello"[:3] // "Hel"
+"Hello"[::2] // "Hlo"
+"Hello"[::-1] // "olleH"
 \end{lstlisting}
 
 \subsection{Call Expression}
@@ -1224,7 +1229,7 @@ The call expression is the caller and the target function is the callee.
 \subsubsection{Caveats}
 
 \begin{itemize}
-    \item If the callee has no return value, then the caller is banned from beeing treated as an expression, only beeing
+    \item If the callee has no return value, then the caller is banned from being treated as an expression, only being
         able to be used where its value is not used.
 \end{itemize}
 
@@ -1261,17 +1266,336 @@ class Person {
 \end{lstlisting}
 An example property expression.
 \begin{lstlisting}
-Person!{name: "Erik"}.name // Erik
+Person!{name: "Erik"}.name // "Erik"
+\end{lstlisting}
+
+\subsection{Unary Expression}
+
+The unary expression is an expression that has an operation attached to it. Prefix notation is used to specify the operation
+to the expression. The list of available unary operations is found in \autoref{fig:unary_ops}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l p{7.5cm} }
+        \textbf{Operation symbol} & \textbf{Operation} \\
+        \texttt{-} & Unary negation of the expression on the right. The right expression must be an \texttt{int}, a \texttt{float} or a \texttt{bool}\\
+        \texttt{+} & Positive version of the \texttt{-}. Can be used to cast a \texttt{bool} to an \texttt{int}.
+            The right expression must be an \texttt{int}, a \texttt{float} or a \texttt{bool}\\
+        \texttt{!} & Logical negation, the right expression must be a \texttt{bool}.\\
+    \end{tabular}
+    \caption{Unary operations}
+    \label{fig:unary_ops}
+\end{table}
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item A positive sign can be used to cast a \texttt{bool} to an int, although conventional casting can be used.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Example unary operations
+\begin{lstlisting}
+-10 // -10
+-(10 + 2) // -12
+!false // true
++true // 1
+\end{lstlisting}
+
+\subsection{Cast Expression}
+
+The cast expression is used to perform type conversion on values. The casts are checked prior to execution, and the supported list
+of casts is show in \autoref{fig:nuua_casts}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ l l p{9.5cm} }
+        \textbf{Input type} & \textbf{Cast type} & \textbf{Notes} \\
+        \texttt{int} & \texttt{float} & Possible data loss.\\
+        \texttt{int} & \texttt{bool} & \texttt{false} when the value is \texttt{0}, otherwise \texttt{true}.\\
+        \texttt{int} & \texttt{string} & Conversion to a string representation.\\
+        \texttt{float} & \texttt{int} & Decimals are truncated. Possible data loss.\\
+        \texttt{float} & \texttt{bool} & \texttt{false} when the value is \texttt{0.0}, otherwise \texttt{true}.\\
+        \texttt{float} & \texttt{string} & Conversion to a string representation.\\
+        \texttt{bool} & \texttt{int} & \texttt{0} when the value is \texttt{false}, otherwise \texttt{1}.\\
+        \texttt{bool} & \texttt{float} & \texttt{0.0} when the value is \texttt{false}, otherwise \texttt{1.0}.\\
+        \texttt{bool} & \texttt{string} & Conversion to a string representation.\\
+        \texttt{string} & \texttt{bool} & \texttt{false} when the string length is \texttt{0}, otherwise \texttt{true}\\
+        \texttt{string} & \texttt{int} & Returns the string length.\\
+        \texttt{[T]} & \texttt{string} & Conversion to a string representation.\\
+        \texttt{[T]} & \texttt{bool} & \texttt{false} when the list length is \texttt{0}, otherwise \texttt{true}\\
+        \texttt{[T]} & \texttt{int} & Returns the list length.\\
+        \texttt{\{T\}} & \texttt{string} & Conversion to a string representation.\\
+        \texttt{\{T\}} & \texttt{bool} & \texttt{false} when the dictionary length is \texttt{0}, otherwise \texttt{true}\\
+        \texttt{\{T\}} & \texttt{int} & Returns the dictionary length.\\
+    \end{tabular}
+    \caption{Nuua casts}
+    \label{fig:nuua_casts}
+\end{table}
+
+\subsubsection{Examples}
+
+Example casting operations.
+\begin{lstlisting}
+10 as float // 10.0
+25.8 as int // 25
+false as string // "false"
+[1, 2, 3] as string // "[1, 2, 3]"
+[20, 30] as int // 2
+\end{lstlisting}
+
+\subsection{Binary Expression}
+
+The binary expression is used to perform an operation that require two values to be done with the exception of the logical expression
+that is treated differently. The binary operations that can be performed are shown in
+\autoref{fig:nuua_additive_bin_ops}, \autoref{fig:nuua_multiplicative_bin_ops},
+\autoref{fig:nuua_relational_equality_bin_ops} and \autoref{fig:nuua_relational_ordering_bin_ops}.
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{+} & \texttt{int} & \texttt{int} & \texttt{int} addition.\\
+            \texttt{float} & \texttt{+} & \texttt{float} & \texttt{float} & \texttt{float} addition.\\
+            \texttt{string} & \texttt{+} & \texttt{string} & \texttt{string} & \texttt{string} concatenation.\\
+            \texttt{bool} & \texttt{+} & \texttt{bool} & \texttt{int} & \texttt{bool} addition.\\
+            \texttt{[T]} & \texttt{+} & \texttt{[T]} & \texttt{[T]} & \texttt{[T]} concatenation.\\
+            \texttt{\{T\}} & \texttt{+} & \texttt{\{T\}} & \texttt{\{T\}} & \texttt{\{T\}} concatenation.\\
+		\end{tabular}
+		\caption{Addition}
+	\end{subtable}
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{-} & \texttt{int} & \texttt{int} & \texttt{int} subtraction.\\
+            \texttt{float} & \texttt{-} & \texttt{float} & \texttt{float} & \texttt{float} subtraction.\\
+            \texttt{bool} & \texttt{-} & \texttt{bool} & \texttt{int} & \texttt{bool} subtraction.\\
+		\end{tabular}
+		\caption{Substraction}
+	\end{subtable}
+	\caption{Nuua additive binary operations}
+    \label{fig:nuua_additive_bin_ops}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{*} & \texttt{int} & \texttt{int} & \texttt{int} multiplication.\\
+            \texttt{float} & \texttt{*} & \texttt{float} & \texttt{float} & \texttt{float} multiplication.\\
+            \texttt{bool} & \texttt{*} & \texttt{bool} & \texttt{int} & \texttt{bool} multiplication.\\
+            \texttt{int} & \texttt{*} & \texttt{string} & \texttt{string} & \texttt{string} repetition.\\
+            \texttt{string} & \texttt{*} & \texttt{int} & \texttt{string} & \texttt{string} repetition.\\
+            \texttt{int} & \texttt{*} & \texttt{[T]} & \texttt{[T]} & \texttt{[T]} repetition.\\
+            \texttt{[T]} & \texttt{*} & \texttt{int} & \texttt{[T]} & \texttt{[T]} repetition.\\
+		\end{tabular}
+		\caption{Multiplication}
+	\end{subtable}
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{/} & \texttt{int} & \texttt{float} & \texttt{int} division.\\
+            \texttt{float} & \texttt{/} & \texttt{float} & \texttt{float} & \texttt{float} division.\\
+            \texttt{string} & \texttt{/} & \texttt{int} & \texttt{[string]} & \texttt{string} division.\\
+            \texttt{[T]} & \texttt{/} & \texttt{int} & \texttt{[[T]]} & \texttt{[T]} division.\\
+		\end{tabular}
+		\caption{Division}
+	\end{subtable}
+	\caption{Nuua multiplicative binary operations}
+    \label{fig:nuua_multiplicative_bin_ops}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{==} & \texttt{int} & \texttt{bool} & \texttt{int} equality.\\
+            \texttt{float} & \texttt{==} & \texttt{float} & \texttt{bool} & \texttt{float} equality.\\
+            \texttt{string} & \texttt{==} & \texttt{string} & \texttt{bool} & \texttt{string} equality.\\
+            \texttt{bool} & \texttt{==} & \texttt{bool} & \texttt{bool} & \texttt{bool} equality.\\
+            \texttt{[T]} & \texttt{==} & \texttt{[T]} & \texttt{bool} & \texttt{[T]} equality.\\
+            \texttt{\{T\}} & \texttt{==} & \texttt{\{T\}} & \texttt{bool} & \texttt{\{T\}} equality.\\
+		\end{tabular}
+		\caption{Equality}
+	\end{subtable}
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{!=} & \texttt{int} & \texttt{bool} & \texttt{int} inequality.\\
+            \texttt{float} & \texttt{!=} & \texttt{float} & \texttt{bool} & \texttt{float} inequality.\\
+            \texttt{string} & \texttt{!=} & \texttt{string} & \texttt{bool} & \texttt{string} inequality.\\
+            \texttt{bool} & \texttt{!=} & \texttt{bool} & \texttt{bool} & \texttt{bool} inequality.\\
+            \texttt{[T]} & \texttt{!=} & \texttt{[T]} & \texttt{bool} & \texttt{[T]} inequality.\\
+            \texttt{\{T\}} & \texttt{!=} & \texttt{\{T\}} & \texttt{bool} & \texttt{\{T\}} inequality.\\
+		\end{tabular}
+		\caption{Inequality}
+	\end{subtable}
+	\caption{Nuua relational equality binary operations}
+    \label{fig:nuua_relational_equality_bin_ops}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{>} & \texttt{int} & \texttt{bool} & \texttt{int} higher than.\\
+            \texttt{float} & \texttt{>} & \texttt{float} & \texttt{bool} & \texttt{float} higher than.\\
+            \texttt{string} & \texttt{>} & \texttt{string} & \texttt{bool} & \texttt{string} higher than.\\
+            \texttt{bool} & \texttt{>} & \texttt{bool} & \texttt{bool} & \texttt{bool} higher than.\\
+		\end{tabular}
+		\caption{Higher than}
+	\end{subtable}
+	\begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{>=} & \texttt{int} & \texttt{bool} & \texttt{int} higher than or equal.\\
+            \texttt{float} & \texttt{>=} & \texttt{float} & \texttt{bool} & \texttt{float} higher than or equal.\\
+            \texttt{string} & \texttt{>=} & \texttt{string} & \texttt{bool} & \texttt{string} higher than or equal.\\
+            \texttt{bool} & \texttt{>=} & \texttt{bool} & \texttt{bool} & \texttt{bool} higher than or equal.\\
+		\end{tabular}
+		\caption{Higher than or equal}
+	\end{subtable}
+    \begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{<} & \texttt{int} & \texttt{bool} & \texttt{int} lower than.\\
+            \texttt{float} & \texttt{<} & \texttt{float} & \texttt{bool} & \texttt{float} lower than.\\
+            \texttt{string} & \texttt{<} & \texttt{string} & \texttt{bool} & \texttt{string} lower than.\\
+            \texttt{bool} & \texttt{<} & \texttt{bool} & \texttt{bool} & \texttt{bool} lower than.\\
+		\end{tabular}
+		\caption{Lower than}
+	\end{subtable}
+    \begin{subtable}{\textwidth}
+		\centering
+        \begin{tabular}{ l l l l p{9.5cm} }
+            \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
+            \texttt{int} & \texttt{<=} & \texttt{int} & \texttt{bool} & \texttt{int} lower than or equal.\\
+            \texttt{float} & \texttt{<=} & \texttt{float} & \texttt{bool} & \texttt{float} lower than or equal.\\
+            \texttt{string} & \texttt{<=} & \texttt{string} & \texttt{bool} & \texttt{string} lower than or equal.\\
+            \texttt{bool} & \texttt{<=} & \texttt{bool} & \texttt{bool} & \texttt{bool} lower than or equal.\\
+		\end{tabular}
+		\caption{Lower than or equal}
+	\end{subtable}
+	\caption{Nuua relational ordering binary operations}
+    \label{fig:nuua_relational_ordering_bin_ops}
+\end{table}
+
+\subsubsection{Examples}
+
+Example binary operations.
+\begin{lstlisting}
+10 + 20 // 30
+20 < 50 // true
+"sample" == "sample"
+"abc" * 2 // "abcabc"
+"erik" / 4 // ["e", "r", "i", "k"]
+\end{lstlisting}
+
+\subsection{Logical Expression}
+
+The logical expression is used to perform a logical operation on two values. The logical operations supported are
+the \texttt{and} and the \texttt{or} operations that perform a logical conjunction and a logical disjunction respectively.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The values on both sides of the logical expression are required to be of type \texttt{bool}. Explicit casting is needed.
+    \item If one or both values are not of type bool, an error is thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Example logical \texttt{and}.
+\begin{lstlisting}
+true and false // false
+true and true // true
+\end{lstlisting}
+Example logical \texttt{or}.
+\begin{lstlisting}
+true or false // true
+true or true // true
+\end{lstlisting}
+
+\subsection{Range Expression}
+
+The range expression is used to create a list ranging from a \texttt{start} index to an \texttt{end} index.
+This expression allows for quick lists to be created and ready to worth with a single line. The range can be
+inclusive or exclusive depending on the number of dots found in the expression.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The \texttt{start} and the \texttt{end} index must be of type \texttt{int}. If not, an error is thrown prior to execution.
+    \item Inclusive ranges use three dots, while an exclusive range uses two dots.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Example ranges.
+\begin{lstlisting}
+0..3 // [0, 1, 2]
+-2...2 // [-2, -1, 0, -1, -2]
+\end{lstlisting}
+
+\subsection{Assignment Expression}
+
+The assignment expression is used to assign a value to a target. Target may be a variable, an access expression or a property expression.
+The left side (target) is then assigned the expression on the right side (value). The assignment expression returns the assignment value.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The types of the target and the value must match to perform an assignment. If not, an error is thrown prior to execution.
+\end{itemize}
+
+\subsubsection{Examples}
+
+Example variable assignment.
+\begin{lstlisting}
+test: int
+test = 20 // 20
+\end{lstlisting}
+Example access assignment.
+\begin{lstlisting}
+l := [1, 2, 3]
+l[1] = 4 // 4
+// The value of l will now be [1, 4, 3]
+d := {"a": 10, "b": 20}
+d["a"] = 5 // 5
+// The value of d will now be {"a": 5, "b": 20}
+\end{lstlisting}
+Example property assignment.
+\begin{lstlisting}
+class Person {
+    name: string
+}
+p := Person!{name: "Erik"}
+p.name = "User" // "User"
+// The value of p will now be Person!{name: "User"}
 \end{lstlisting}
 
 \section{Comments}
 
-Comments in nuua can be written by using a double \texttt{\textbackslash\textbackslash} followed by the comment text.
+Comments in Nuua can be written by using a double backslash (\texttt{\textbackslash\textbackslash}) followed by the comment text.
 The comment text lasts till a \texttt{\textbackslash n} character is found. Therefore, multiline comments can be done
-by manually writting the double back slash on each differnt line.
+by manually writing the double backslash on each different line.
 
 Comment blocks are not part of the language grammar and therefore they are totally discarded from the AST. When
-the lexer finds the double back slash, it proceed to discard the whole line.
+the lexer finds the double backslash, it proceeds to discard the whole line.
 
 \begin{lstlisting}
 // Some comment here
