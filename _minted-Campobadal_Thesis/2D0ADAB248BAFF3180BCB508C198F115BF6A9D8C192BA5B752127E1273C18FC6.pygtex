@@ -1,0 +1,40 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Token}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// The type of the token.}
+        \PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{;}
+        \PYG{c+c1}{// A pointer to the first char.}
+        \PYG{c+c1}{// (Not used as a null terminated char array)}
+        \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{start}\PYG{p}{;}
+        \PYG{c+c1}{// The length of the token.}
+        \PYG{k}{const} \PYG{k+kt}{uint32\PYGZus{}t} \PYG{n}{length}\PYG{p}{;}
+        \PYG{c+c1}{// The line where it is found.}
+        \PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{;}
+        \PYG{c+c1}{// The column where it is found.}
+        \PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{;}
+        \PYG{c+c1}{// String representation of the token names.}
+        \PYG{k}{static} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{token\PYGZus{}names}\PYG{p}{;}
+        \PYG{c+c1}{// Pattern matching a token name.}
+        \PYG{k}{static} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{type\PYGZus{}names}\PYG{p}{;}
+        \PYG{c+c1}{// Contains the escaped chars of the language.}
+        \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{char}\PYG{p}{,} \PYG{k+kt}{char}\PYG{o}{\PYGZgt{}} \PYG{n}{escaped\PYGZus{}chars}\PYG{p}{;}
+        \PYG{c+c1}{// Create a new instance of a token given the}
+        \PYG{c+c1}{// required parameters.}
+        \PYG{n}{Token}\PYG{p}{(}
+            \PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{,}
+            \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{start}\PYG{p}{,}
+            \PYG{k+kt}{uint32\PYGZus{}t} \PYG{n}{length}\PYG{p}{,}
+            \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{,}
+            \PYG{n}{column\PYGZus{}t} \PYG{n}{column}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{),} \PYG{n}{start}\PYG{p}{(}\PYG{n}{start}\PYG{p}{),} \PYG{n}{length}\PYG{p}{(}\PYG{n}{length}\PYG{p}{),}
+            \PYG{n}{line}\PYG{p}{(}\PYG{n}{line}\PYG{p}{),} \PYG{n}{column}\PYG{p}{(}\PYG{n}{column}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Debug the token by printing it on the}
+        \PYG{c+c1}{// screen with the correct format.}
+        \PYG{k+kt}{void} \PYG{n}{debug\PYGZus{}token}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Convert the token to a string representation.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Convert the token to its pattern string representation.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}type\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

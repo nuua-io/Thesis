@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Token}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{;}
+        \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{start}\PYG{p}{;}
+        \PYG{k}{const} \PYG{k+kt}{uint32\PYGZus{}t} \PYG{n}{length}\PYG{p}{;}
+        \PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{;}
+        \PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{;}
+
+        \PYG{k}{static} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{token\PYGZus{}names}\PYG{p}{;}
+        \PYG{k}{static} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{type\PYGZus{}names}\PYG{p}{;}
+
+        \PYG{c+c1}{// Contains the escaped chars of the language.}
+        \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{char}\PYG{p}{,} \PYG{k+kt}{char}\PYG{o}{\PYGZgt{}} \PYG{n}{escaped\PYGZus{}chars}\PYG{p}{;}
+
+        \PYG{n}{Token}\PYG{p}{(}\PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{start}\PYG{p}{,} \PYG{k+kt}{uint32\PYGZus{}t} \PYG{n}{length}\PYG{p}{,} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{),} \PYG{n}{start}\PYG{p}{(}\PYG{n}{start}\PYG{p}{),} \PYG{n}{length}\PYG{p}{(}\PYG{n}{length}\PYG{p}{),} \PYG{n}{line}\PYG{p}{(}\PYG{n}{line}\PYG{p}{),} \PYG{n}{column}\PYG{p}{(}\PYG{n}{column}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+
+        \PYG{k+kt}{void} \PYG{n}{debug\PYGZus{}token}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}type\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{k}{static} \PYG{k+kt}{void} \PYG{n+nf}{debug\PYGZus{}token}\PYG{p}{(}\PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{token}\PYG{p}{);}
+        \PYG{k}{static} \PYG{k+kt}{void} \PYG{n+nf}{debug\PYGZus{}tokens}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Token}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tokens}\PYG{p}{);}
+        \PYG{k}{static} \PYG{k+kt}{void} \PYG{n+nf}{debug\PYGZus{}tokens}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{TokenType}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tokens}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

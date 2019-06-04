@@ -40,7 +40,7 @@ where the error happened so that a quick look at the line can determine the prob
 The logger entity has all the properties that are mandatory fora log.
 This includes the absolute file path of the source program, the line of the file where the error happened
 and the column. Additionally, the error message that it has associated. A code representation is shown in
-the Listing \autoref{ls:logger_entity}.
+the \autoref{ls:logger_entity}.
 
 \begin{listing}[H]
 \begin{minted}{cpp}
@@ -70,7 +70,7 @@ class LoggerEntity {
 
 \section{Logger class}
 
-Listing \autoref{ls:logger_class} shows a logger class implementation that satisfies all the previous statements.
+\autoref{ls:logger_class} shows a logger class implementation that satisfies all the previous statements.
 In short, it stores a list of all the log entities and provides methods to add and remove logs. It also provides a crash
 method that outputs the logs and returns an exit code without calling \texttt{exit()}.
 

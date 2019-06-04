@@ -485,6 +485,26 @@ all of the keywords in Nuua.\\
 
 More information about the \texttt{print} keyword and why it does exist can be found in \autoref{sec:print_statement}.
 
+\subsection{Escaped characters}
+\label{sec:espaced_chars}
+
+There are some characters that can be escaped in Nuua, for example when the value \texttt{'"'} wants to be used inside
+a string where the delimiters are also \texttt{'"'}. To escape a character, the prefix \texttt{\textbackslash} needs to be used followed
+by the character willing to escape. The following list gives a view of all the available characters that allow beeing escaped found in Nuua.\\
+
+\begin{tasks}[counter-format = (tsk[r]), label-width = 2cm](2)
+        \task \texttt{\textbackslash}
+        \task \texttt{'}
+        \task \texttt{"}
+        \task \texttt{n}
+        \task \texttt{t}
+        \task \texttt{r}
+        \task \texttt{b}
+        \task \texttt{f}
+        \task \texttt{v}
+        \task \texttt{0}\\
+\end{tasks}
+
 \section{Scopes}
 \label{sec:nuua_scopes}
 

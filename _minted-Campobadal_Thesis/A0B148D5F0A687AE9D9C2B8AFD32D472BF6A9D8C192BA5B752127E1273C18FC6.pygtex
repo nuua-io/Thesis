@@ -1,0 +1,37 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Lexer}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the file where the tokens are beeing scanned.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{file}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the start char of the token beeing scanned.}
+    \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{start}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the current char of the token beeing scanned.}
+    \PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{current}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the current line and column in the source file.}
+    \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{;}
+    \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{;}
+    \PYG{c+c1}{// Stores a list of reserved words for the identifiers.}
+    \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{TokenType}\PYG{o}{\PYGZgt{}} \PYG{n}{reserved\PYGZus{}words}\PYG{p}{;}
+    \PYG{c+c1}{// Generates a token error.}
+    \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{token\PYGZus{}error}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+    \PYG{c+c1}{// Build the token and set the start char to the current one.}
+    \PYG{n}{Token} \PYG{n+nf}{make\PYGZus{}token}\PYG{p}{(}\PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{);}
+    \PYG{c+c1}{// Returns true and advances if the current char is c.}
+    \PYG{k+kt}{bool} \PYG{n+nf}{match}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{char} \PYG{n}{c}\PYG{p}{);}
+    \PYG{c+c1}{// Helper to build a string.}
+    \PYG{n}{TokenType} \PYG{n+nf}{is\PYGZus{}string}\PYG{p}{(}\PYG{k+kt}{bool} \PYG{n}{simple}\PYG{p}{);}
+    \PYG{c+c1}{// Helper to build a number.}
+    \PYG{n}{TokenType} \PYG{n+nf}{is\PYGZus{}number}\PYG{p}{();}
+    \PYG{c+c1}{// Helper to build an identifier.}
+    \PYG{n}{TokenType} \PYG{n+nf}{is\PYGZus{}identifier}\PYG{p}{();}
+    \PYG{c+c1}{// Reads a file and stores the contents in the current instance.}
+    \PYG{k+kt}{void} \PYG{n+nf}{read\PYGZus{}from\PYGZus{}file}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{);}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the source code of the file.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unique\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{source}\PYG{p}{;}
+        \PYG{c+c1}{// Scans the source and stores the tokens.}
+        \PYG{k+kt}{void} \PYG{n+nf}{scan}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{unique\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Token}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tokens}\PYG{p}{);}
+        \PYG{c+c1}{// Initializes a lexer given a file name.}
+        \PYG{n}{Lexer}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

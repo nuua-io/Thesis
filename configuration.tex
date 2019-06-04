@@ -49,6 +49,8 @@
 
 % References and links
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\addto\extrasenglish{\renewcommand{\chapterautorefname}{Chapter}}
+\providecommand*{\listingautorefname}{Listing}
 \hypersetup{hidelinks=true}
 \usepackage[usestackEOL]{stackengine}
 
@@ -86,17 +88,18 @@
 
 % Identations and newlines
 \usepackage[parfill]{parskip}
-
 \usetikzlibrary{
-    calc,trees,positioning,arrows,chains,shapes.geometric,%
-    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    automata,calc,trees,positioning,arrows,chains,shapes.geometric,
+    decorations.pathreplacing,decorations.pathmorphing,shapes,
     matrix,shapes.symbols
 }
 \tikzset{
     block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=7.5em},
+    square/.style={rectangle, draw=black, thick,, text centered},
     big_block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=10em},
     bigger_block/.style={rectangle, rounded corners, minimum height=3em, draw=black, very thick,, text centered ,text width=15em},
     line/.style={->, thick,shorten >=1.5pt},
+    dot_arrow/.style={*->, thick, shorten >=1.5pt},
     decoration={brace},
     tuborg/.style={decorate},
     tubnode/.style={midway, right=2pt},

@@ -1,0 +1,356 @@
+The lexer is the lowest layer in the Nuua system as shown in \autoref{fig:nuua_system}. The lexer job is to transform
+the program source code into a list of tokens. This step is also known as lexical analysis or tokenization.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [node distance=1cm]
+
+        % Nodes of the layered system
+        \node[block] (input) {List of characters};
+        \node[block,right=of input] (lexer) {Lexer};
+        \node[block,right=of lexer] (output) {List of tokens};
+
+        % Lines
+        \draw[line] (input) -- (lexer);
+        \draw[line] (lexer) -- (output);
+
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{Lexer overview}
+    \label{fig:lexer_overview}
+\end{figure}
+
+The lexer needs to provide an API to the layer above and one of the parameters of the scan function is the path of the
+source file to scan. The lexer is also responsible for opening the file and creating a \texttt{char} array with its contents. This can be
+done in the lexer class constructor seen in \autoref{ls:lexer_class}.
+When the layer above wishes to scan the tokens the tokenization begins and therefore a list of tokens is built and returned.
+
+\section{Strategy}
+
+The strategy of the lexer is to use a state machine to determine the pattern of the tokens and be able to identify
+what token type it's being scanned. The state machine finds a pattern and creates a specific token depending on
+the state it landed. The state machine can also lead to no pattern. If there's a sequence of characters that don't match
+a pattern, an error is then thrown using the logger module as described in \autoref{sec:logger}.
+
+The implementation uses a C++ \texttt{switch} statement to match the first character of the pattern and further continues if needed
+depending on the patterns.
+
+In case a \texttt{\textbackslash n} is found, the lexer line is incremented and the column is reset to $0$. Since the current line and column
+are properties in the lexer instance they only affect a single instance allowing multiple instances to scan different files at the same
+time. \autoref{fig:finite_state_strings} shows an example pattern found in the lexer.
+
+\begin{figure}[H]
+	\centering
+    \begin{subfigure}{\textwidth}
+		\centering
+        \begin{tikzpicture}[node distance=3cm]
+            % Nodes
+            \node[state] (1) {\texttt{S1}};
+            \node[state, below left of=1] (2) {\texttt{S2}};
+            \node[state, below right of=1] (3) {\texttt{S3}};
+            % Lines
+            \draw[line] (1) edge[left, bend right] node[xshift=-0.15cm, yshift=0.15cm] {\texttt{e1}} (2);
+            \draw[line] (2) edge[loop left] node[xshift=-0.15cm] {\texttt{e2}} (2);
+            \draw[line] (2) edge[below, bend right] node[yshift=-0.15cm] {\texttt{e3}} (3);
+            \draw[line] (3) edge[right, bend right] node[xshift=0.15cm, yshift=0.15cm] {\texttt{e4}} (1);
+        \end{tikzpicture}
+		\caption{Diagram}
+	\end{subfigure}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l p{4.5cm} }
+            \textbf{State} & \textbf{Explanation} \\
+            \texttt{S1} & Initial state of the state machine. \\
+            \texttt{S2} & Build string. \texttt{s += c} \\
+            \texttt{S3} & Create token \\
+		\end{tabular}
+		\caption{State table}
+	\end{subtable}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l l }
+            \textbf{Event} & \textbf{Condition} & \textbf{Action} \\
+            \texttt{e1} & \texttt{c == '"'} & \texttt{c = next\_char()} \\
+            \texttt{e2} & \texttt{c != '"'} & \texttt{c = next\_char()} \\
+            \texttt{e3} & \texttt{c == '"'} & \texttt{-} \\
+            \texttt{e4} & \texttt{-} & \texttt{c = next\_char()} \\
+		\end{tabular}
+		\caption{Event table}
+	\end{subtable}
+	\caption{Example finite state machine for strings}
+    \label{fig:finite_state_strings}
+\end{figure}
+
+As shown in \autoref{fig:scanner}, an efficient way to scan the file is using two pointers to some of the \texttt{chars} found in the source file.
+The first pointer points to the start of the token being scanned and the second one advances accordingly with the help of the
+state machine. When the state machine determines that a new token must be created the start pointer is used as the first character
+pointer in the token as explained in \autoref{sec:tokens} and the length of the token can be determined by using pointer arithmetic given:
+
+\begin{center}
+$\texttt{length} = \texttt{current\_ptr} - \texttt{start\_ptr} + 1$
+\end{center}
+
+Since the string values can ignore the two \texttt{'"'} found at the
+start and at the end of the token, the length will be decremented by two and the start pointer is incremented by one to get only the string value.
+When a blank space is found in the initial state of the state machine the \texttt{start\_ptr} pointer address is then set to the \texttt{current\_ptr} address
+and the current parser column increases.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[node distance=1cm]
+        % Nodes
+        \node[square, minimum height=0.75cm, minimum width=1cm,] (n1) {...};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n1] (n2) {\texttt{"}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n2] (n3) {\texttt{a}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n3] (n4) {\texttt{b}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n4] (n5) {\texttt{c}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n5] (n6) {\texttt{"}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n6] (n7) {...};
+        % Lines
+        \draw[line] ($(n2.south) + (0, -0.75)$) node[anchor=north] {\texttt{start\_ptr}} -- (n2);
+        \draw[line] ($(n6.south) + (0, -0.75)$) node[anchor=north] {\texttt{current\_ptr}} -- (n6);
+    \end{tikzpicture}
+    \caption{Lexer scan technique}
+    \label{fig:scanner}
+\end{figure}
+
+\section{Tokens}
+\label{sec:tokens}
+
+Tokens represent specific lexeme patterns. The list of the patterns and the tokens associated with it can be seen on \autoref{fig:nuua_tokens_1},
+\autoref{fig:nuua_tokens_2} and \autoref{fig:nuua_tokens_3}. The tokens must also take into consideration escaping characters. For example, a string
+representation might be willing to use the char \texttt{'"'} as part of the string value and not determine the end of the string. Therefore, there
+is a list of escaped chars that are taken into consideration as shown in \autoref{sec:espaced_chars}.
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{\textbackslash n} & \texttt{TOKEN\_NEW\_LINE} \\
+            \texttt{(} & \texttt{TOKEN\_LEFT\_PAREN} \\
+            \texttt{)} & \texttt{TOKEN\_RIGHT\_PAREN} \\
+            \texttt{\{} & \texttt{TOKEN\_LEFT\_BRACE} \\
+            \texttt{\}} & \texttt{TOKEN\_RIGHT\_BRACE} \\
+            \texttt{,} & \texttt{TOKEN\_COMMA} \\
+            \texttt{.} & \texttt{TOKEN\_DOT} \\
+            \texttt{..} & \texttt{TOKEN\_DOUBLE\_DOT} \\
+            \texttt{...} & \texttt{TOKEN\_TRIPLE\_DOT} \\
+            \texttt{-} & \texttt{TOKEN\_MINUS} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{+} & \texttt{TOKEN\_PLUS} \\
+            \texttt{/} & \texttt{TOKEN\_SLASH} \\
+            \texttt{*} & \texttt{TOKEN\_STAR} \\
+            \texttt{->} & \texttt{TOKEN\_RIGHT\_ARROW} \\
+            \texttt{!} & \texttt{TOKEN\_BANG} \\
+            \texttt{!=} & \texttt{TOKEN\_BANG\_EQUAL} \\
+            \texttt{=} & \texttt{TOKEN\_EQUAL} \\
+            \texttt{==} & \texttt{TOKEN\_EQUAL\_EQUAL} \\
+            \texttt{>} & \texttt{TOKEN\_HIGHER} \\
+            \texttt{>=} & \texttt{TOKEN\_HIGHER\_EQUAL} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\caption{Nuua tokens (1)}
+    \label{fig:nuua_tokens_1}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{:} & \texttt{TOKEN\_COLON} \\
+            \texttt{return} & \texttt{TOKEN\_RETURN} \\
+            \texttt{print} & \texttt{TOKEN\_PRINT} \\
+            \texttt{use} & \texttt{TOKEN\_USE} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{from} & \texttt{TOKE\_FROM} \\
+            \texttt{elif} & \texttt{TOKEN\_ELIF} \\
+            \texttt{in} & \texttt{TOKEN\_IN} \\
+            \texttt{export} & \texttt{TOKEN\_EXPORT} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\caption{Nuua tokens (2)}
+    \label{fig:nuua_tokens_2}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{<} & \texttt{TOKEN\_LOWER} \\
+            \texttt{<=} & \texttt{TOKEN\_LOWER\_EQUAL} \\
+            \texttt{<STRING\_EXPR>} & \texttt{TOKEN\_IDENTIFIER} \\
+            \texttt{<INTEGER\_EXPR>} & \texttt{TOKEN\_STRING} \\
+            \texttt{<FLOAT\_EXPR>} & \texttt{TOKEN\_FLOAT} \\
+            \texttt{as} & \texttt{TOKEN\_AS} \\
+            \texttt{or} & \texttt{TOKEN\_OR} \\
+            \texttt{and} & \texttt{TOKEN\_AND} \\
+            \texttt{class} & \texttt{TOKEN\_CLASS} \\
+            \texttt{fun} & \texttt{TOKEN\_FUN} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \begin{tabular}{ l l }
+            \textbf{Pattern} & \textbf{Token} \\
+            \texttt{else} & \texttt{TOKEN\_ELSE} \\
+            \texttt{true} & \texttt{TOKEN\_TRUE} \\
+            \texttt{false} & \texttt{TOKEN\_FALSE} \\
+            \texttt{while} & \texttt{TOKEN\_WHILE} \\
+            \texttt{for} & \texttt{TOKEN\_FOR} \\
+            \texttt{if} & \texttt{TOKEN\_IF} \\
+            \texttt{\textbackslash 0} & \texttt{TOKEN\_EOF} \\
+            \texttt{[} & \texttt{TOKEN\_LEFT\_SQUARE} \\
+            \texttt{]} & \texttt{TOKEN\_RIGHT\_SQUARE} \\
+            \texttt{=>} & \texttt{TOKEN\_BIG\_RIGHT\_ARROW} \\
+		\end{tabular}
+		\caption{}
+	\end{subtable}
+	\caption{Nuua tokens (3)}
+    \label{fig:nuua_tokens_3}
+\end{table}
+
+To make an efficient token representation, instead of copying the \texttt{char} array (lexeme) that matches that token pattern
+a reference to the first character of the token is saved into the token instance and then the length is specified to know how many
+chars it does consist of. That way, no unnecessary memory is added to each token. The only needed thing is to keep the source code \texttt{char}
+array in memory and avoid reallocations till the token instance is not needed anymore. \autoref{fig:scanner_token} shows a visual representation.
+\autoref{ls:token_class} shows the token representation that is used in the Nuua compiler.
+
+Among other information, the type of the token (as shown in \autoref{fig:nuua_tokens_1}, \autoref{fig:nuua_tokens_2} and \autoref{fig:nuua_tokens_3})
+is also stored as part of the token. Additionally, the line and column where that token was found is also stored.\\
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[node distance=1cm]
+        % Nodes
+        \node[square, minimum height=0.75cm, minimum width=1cm] (n0) {Source code};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right = -0.025cm of n0.east] (n1) {...};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n1] (n2) {\texttt{w}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n2] (n3) {\texttt{h}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n3] (n4) {\texttt{i}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n4] (n5) {\texttt{l}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n5] (n6) {\texttt{e}};
+        \node[square, minimum height=0.75cm, minimum width=1cm, right of=n6] (n7) {...};
+        % Token nodes
+        \node[square, anchor=west, minimum height=0.75cm] at ($(n0.south west) + (0, -2)$) (token) {Token Instance};
+        \node[square, minimum height=0.75cm, right = -0.025cm of token.east] (token1) {\texttt{const char *start = \phantom{X}}};
+        \node[square, minimum height=0.75cm, right = -0.025cm of token1.east] (token2) {\texttt{const uint32\_t length = 5}};
+        % Lines
+        \draw[dot_arrow] ($(token1.east) + (-0.2, -0.05)$) -- (n2.south);
+    \end{tikzpicture}
+    \caption{Lexer token technique}
+    \label{fig:scanner_token}
+\end{figure}
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Token
+{
+    public:
+        // The type of the token.
+        const TokenType type;
+        // A pointer to the first char.
+        // (Not used as a null terminated char array)
+        const char *start;
+        // The length of the token.
+        const uint32_t length;
+        // The line where it is found.
+        const line_t line;
+        // The column where it is found.
+        const column_t column;
+        // String representation of the token names.
+        static std::vector<std::string> token_names;
+        // Pattern matching a token name.
+        static std::vector<std::string> type_names;
+        // Contains the escaped chars of the language.
+        static const std::unordered_map<char, char> escaped_chars;
+        // Create a new instance of a token given the
+        // required parameters.
+        Token(
+            const TokenType type,
+            const char *start,
+            const uint32_t length,
+            const line_t line,
+            const column_t column
+        ) : type(type), start(start), length(length),
+            line(line), column(column) {}
+        // Debug the token by printing it on the
+        // screen with the correct format.
+        void debug_token() const;
+        // Convert the token to a string representation.
+        std::string to_string() const;
+        // Convert the token to its pattern string representation.
+        std::string to_type_string() const;
+};
+\end{minted}
+\caption{Token class}
+\label{ls:token_class}
+\end{listing}
+
+\section{Lexer class}
+
+The lexer class represents a lexer instance to scan a file and return a list of tokens.
+\autoref{ls:lexer_class} shows the code used in the Nuua compiler to transform a \texttt{char} array
+corresponding to the source file to a list of token instances.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Lexer
+{
+    // Stores the file where the tokens are being scanned.
+    std::shared_ptr<const std::string> file;
+    // Stores the start char of the token being scanned.
+    const char *start;
+    // Stores the current char of the token beeing scanned.
+    const char *current;
+    // Stores the current line in the source file.
+    line_t line;
+    // Stores the current column in the source file.
+    column_t column;
+    // Stores a list of reserved words for the identifiers.
+    static const std::unordered_map<std::string, TokenType> reserved_words;
+    // Generates a token error.
+    const std::string token_error() const;
+    // Build the token and set the start char to the current one.
+    Token make_token(TokenType type);
+    // Helper to build tokens.
+    bool match(const char c);
+    TokenType is_string(bool simple);
+    TokenType is_number();
+    TokenType is_identifier();
+    // Reads a file and stores the contents in the current instance.
+    void read_from_file(const std::shared_ptr<const std::string> &file);
+    public:
+        // Stores the source code of the file.
+        std::unique_ptr<std::string> source;
+        // Scans the source and stores the tokens.
+        void scan(std::unique_ptr<std::vector<Token>> &tokens);
+        // Initializes a lexer given a file name.
+        Lexer(const std::shared_ptr<const std::string> &file);
+};
+\end{minted}
+\caption{Lexer class}
+\label{ls:lexer_class}
+\end{listing}
