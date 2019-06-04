@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Access} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{target}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{index}\PYG{p}{;}
+        \PYG{n}{AccessType} \PYG{n}{type} \PYG{o}{=} \PYG{p}{(}\PYG{n}{AccessType}\PYG{p}{)} \PYG{n+nb}{NULL}\PYG{p}{;}
+        \PYG{n}{Access}\PYG{p}{(}
+            \PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{t}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{i}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}ACCESS}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{target}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{t}\PYG{p}{)),}
+            \PYG{n}{index}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{i}\PYG{p}{))} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

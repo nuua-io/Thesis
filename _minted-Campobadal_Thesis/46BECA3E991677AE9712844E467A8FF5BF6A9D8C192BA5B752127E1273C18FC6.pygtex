@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Block}\PYG{p}{;} \PYG{c+c1}{// Forward declaration.}
+\PYG{k}{class} \PYG{n+nc}{BlockClassType}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the block scope of the class.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{n}{block}\PYG{p}{;}
+        \PYG{c+c1}{// Determines if the class is exported.}
+        \PYG{k+kt}{bool} \PYG{n}{exported} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the AST node where this variable is.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{n}{node}\PYG{p}{;}
+        \PYG{c+c1}{// Constructors.}
+        \PYG{n}{BlockClassType}\PYG{p}{()} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{n}{BlockClassType}\PYG{p}{(}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{block}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{node}\PYG{p}{,}
+            \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{exported} \PYG{o}{=} \PYG{n+nb}{false}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{block}\PYG{p}{(}\PYG{n}{block}\PYG{p}{),} \PYG{n}{node}\PYG{p}{(}\PYG{n}{node}\PYG{p}{),} \PYG{n}{exported}\PYG{p}{(}\PYG{n}{exported}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

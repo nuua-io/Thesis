@@ -1,0 +1,34 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Parser}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the current parsing file.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{file}\PYG{p}{;}
+    \PYG{c+c1}{// Stores a pointer to the current token beeing parsed.}
+    \PYG{n}{Token} \PYG{o}{*}\PYG{n}{current} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{;}
+    \PYG{c+c1}{// Consumes a token and returns it for futher use.}
+    \PYG{n}{Token} \PYG{o}{*}\PYG{n+nf}{consume}\PYG{p}{(}\PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{type}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{message}\PYG{p}{);}
+    \PYG{c+c1}{// Returns true if the token type matches the current token.}
+    \PYG{k+kt}{bool} \PYG{n+nf}{match}\PYG{p}{(}\PYG{k}{const} \PYG{n}{TokenType} \PYG{n}{token}\PYG{p}{);}
+    \PYG{c+c1}{// Returns true if any of the given token types matches the current token.}
+    \PYG{k+kt}{bool} \PYG{n+nf}{match\PYGZus{}any}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{TokenType}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tokens}\PYG{p}{);}
+    \PYG{c+c1}{// Expressions}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{primary}\PYG{p}{();}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{unary\PYGZus{}postfix}\PYG{p}{();}
+    \PYG{c+c1}{// ... Other expression production rules.}
+    \PYG{c+c1}{// Statements}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{n}{fun\PYGZus{}declaration}\PYG{p}{();}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{n}{use\PYGZus{}declaration}\PYG{p}{();}
+    \PYG{c+c1}{// ... Other statement production rules.}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Parses a given source code and returns the code.}
+        \PYG{k+kt}{void} \PYG{n}{parse}\PYG{p}{(}
+            \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{code}
+        \PYG{p}{);}
+        \PYG{c+c1}{// Creates a new parser and formats the path.}
+        \PYG{n}{Parser}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{file}\PYG{p}{);}
+        \PYG{c+c1}{// Creates a new parser with a given formatted and initialized path.}
+        \PYG{n}{Parser}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{file}\PYG{p}{(}\PYG{n}{file}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// ... Other helpers and debugging methods.}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

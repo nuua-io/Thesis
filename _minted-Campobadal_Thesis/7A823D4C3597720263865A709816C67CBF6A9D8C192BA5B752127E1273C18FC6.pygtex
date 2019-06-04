@@ -1,0 +1,31 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Block}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the variable name and the type of it.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{BlockVariableType}\PYG{o}{\PYGZgt{}} \PYG{n}{variables}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the custom types of the block.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{BlockClassType}\PYG{o}{\PYGZgt{}} \PYG{n}{classes}\PYG{p}{;}
+        \PYG{c+c1}{// Gets a variable from the current block or returns nullptr.}
+        \PYG{n}{BlockVariableType} \PYG{o}{*}\PYG{n+nf}{get\PYGZus{}variable}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Gets a class from the current block or returns nullptr.}
+        \PYG{n}{BlockClassType} \PYG{o}{*}\PYG{n+nf}{get\PYGZus{}class}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Sets a variable.}
+        \PYG{k+kt}{void} \PYG{n+nf}{set\PYGZus{}variable}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{,} \PYG{k}{const} \PYG{n}{BlockVariableType} \PYG{o}{\PYGZam{}}\PYG{n}{var}\PYG{p}{);}
+        \PYG{c+c1}{// Sets a class.}
+        \PYG{k+kt}{void} \PYG{n+nf}{set\PYGZus{}class}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{,} \PYG{k}{const} \PYG{n}{BlockClassType} \PYG{o}{\PYGZam{}}\PYG{n}{c}\PYG{p}{);}
+        \PYG{c+c1}{// Determines if a variable is exported.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{is\PYGZus{}exported}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Determines if a class is exported.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{is\PYGZus{}exported\PYGZus{}class}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Determines if the block have a variable.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{has}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Determines if the block have a class.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{has\PYGZus{}class}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Debug the block by printing it to the screen.}
+        \PYG{k+kt}{void} \PYG{n+nf}{debug}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Helper to get a single variable out of a list of blocks.}
+        \PYG{c+c1}{// It iterates through it starting from the end till the front.}
+        \PYG{k}{static} \PYG{n}{BlockVariableType} \PYG{o}{*}\PYG{n+nf}{get\PYGZus{}single\PYGZus{}variable}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{*}\PYG{n}{blocks}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

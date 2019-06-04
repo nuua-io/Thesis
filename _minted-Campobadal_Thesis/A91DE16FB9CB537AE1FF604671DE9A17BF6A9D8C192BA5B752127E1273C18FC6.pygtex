@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Boolean} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{k+kt}{bool} \PYG{n}{value}\PYG{p}{;}
+        \PYG{n}{Boolean}\PYG{p}{(}\PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{v}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}BOOLEAN}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{value}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

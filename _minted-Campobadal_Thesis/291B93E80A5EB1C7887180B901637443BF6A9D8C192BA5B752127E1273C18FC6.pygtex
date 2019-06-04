@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Function} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Statement}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{FunctionValue}\PYG{o}{\PYGZgt{}} \PYG{n}{value}\PYG{p}{;}
+        \PYG{n}{Function}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{FunctionValue}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{v}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{Statement}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}FUNCTION}\PYG{p}{,} \PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{file}\PYG{p}{,} \PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{line}\PYG{p}{,} \PYG{n}{v}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+                \PYG{n}{value}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

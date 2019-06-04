@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}define NODE\PYGZus{}PROPS std::shared\PYGZus{}ptr\PYGZlt{}const std::string\PYGZgt{} \PYGZam{}file, const line\PYGZus{}t line, const column\PYGZus{}t column}
+\end{Verbatim}

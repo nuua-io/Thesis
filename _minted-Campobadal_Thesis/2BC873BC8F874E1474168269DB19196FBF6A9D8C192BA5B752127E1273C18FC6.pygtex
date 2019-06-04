@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Determines the available native types in nuua.}
+\PYG{k}{typedef} \PYG{k}{enum} \PYG{o}{:} \PYG{k+kt}{uint8\PYGZus{}t} \PYG{p}{\PYGZob{}}
+    \PYG{n}{VALUE\PYGZus{}INT}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}FLOAT}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}BOOL}\PYG{p}{,}
+    \PYG{n}{VALUE\PYGZus{}STRING}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}LIST}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}DICT}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}FUN}\PYG{p}{,}
+    \PYG{n}{VALUE\PYGZus{}OBJECT}\PYG{p}{,} \PYG{n}{VALUE\PYGZus{}NO\PYGZus{}TYPE}
+\PYG{p}{\PYGZcb{}} \PYG{n}{ValueType}\PYG{p}{;}
+\end{Verbatim}

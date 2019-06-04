@@ -179,6 +179,7 @@ statement
     | while_statement "\n"
     | for_statement "\n"
     | return_statement "\n"
+    | delete_statement "\n"
     | print_statement "\n"
     | expression_statement "\n"
     ;
@@ -252,6 +253,14 @@ return_statement
 \end{lstlisting}
 
 A \texttt{return} statement uses the \texttt{return} keyword and an optional expression to return.
+
+\begin{lstlisting}
+delete_statement
+    : "delete" expression
+    ;
+\end{lstlisting}
+
+A \texttt{delete} statement uses the \texttt{delete} keyword and an expression willing to delete.
 
 \begin{lstlisting}
 print_statement
@@ -554,6 +563,7 @@ fun main(argv: [string]) {
 \end{lstlisting}
 
 \section{Data types}
+\label{sec:nuua_data_types}
 
 This section defines all the Nuua data types that are supported. Each value in Nuua
 has a type associated with it, meaning that each value must belong to a certain data type.
@@ -974,6 +984,27 @@ fun b(): int {
 }
 \end{lstlisting}
 
+\subsection{Delete Statement}
+\label{sec:delete_statement}
+
+The delete statement is used to delete a specific index of a target. The target must be a Nuua iterator as shown in \autoref{fig:nuua_iterators}.
+The rule must be an access expression to indicate the exact element to delete.
+
+\subsubsection{Caveats}
+
+\begin{itemize}
+    \item The target must be a Nuua iterator and the rule must be an access.
+\end{itemize}
+
+\subsubsection{Examples}
+
+A simple delete statement.
+\begin{lstlisting}
+a: [int] = [1, 2, 3]
+delete a[1]
+// a is now [1, 3]
+\end{lstlisting}
+
 \subsection{Print Statement}
 \label{sec:print_statement}
 
@@ -1001,6 +1032,7 @@ fun a(): int {
 \end{lstlisting}
 
 \section{Expressions}
+\label{sec:expressions}
 
 Expressions can always be reduced up to a value of a single data type. This section explains all the expressions that can be found
 in Nuua.
@@ -1291,6 +1323,7 @@ Person!{name: "Erik"}.name // "Erik"
 \end{lstlisting}
 
 \subsection{Unary Expression}
+\label{sec:unary_expression}
 
 The unary expression is an expression that has an operation attached to it. Prefix notation is used to specify the operation
 to the expression. The list of available unary operations is found in \autoref{fig:unary_ops}.
@@ -1325,6 +1358,7 @@ Example unary operations
 \end{lstlisting}
 
 \subsection{Cast Expression}
+\label{sec:cast_expression}
 
 The cast expression is used to perform type conversion on values. The casts are checked prior to execution, and the supported list
 of casts is show in \autoref{fig:nuua_casts}.
@@ -1367,6 +1401,7 @@ false as string // "false"
 \end{lstlisting}
 
 \subsection{Binary Expression}
+\label{sec:binary_expression}
 
 The binary expression is used to perform an operation that require two values to be done with the exception of the logical expression
 that is treated differently. The binary operations that can be performed are shown in

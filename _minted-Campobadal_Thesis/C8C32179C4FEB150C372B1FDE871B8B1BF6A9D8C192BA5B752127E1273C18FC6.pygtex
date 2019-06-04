@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Range} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{start}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{end}\PYG{p}{;}
+        \PYG{k+kt}{bool} \PYG{n}{inclusive}\PYG{p}{;}
+        \PYG{n}{Range}\PYG{p}{(}
+            \PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{s}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{e}\PYG{p}{,}
+            \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{i}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}RANGE}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{start}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{s}\PYG{p}{)),}
+            \PYG{n}{end}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{e}\PYG{p}{)),}
+            \PYG{n}{inclusive}\PYG{p}{(}\PYG{n}{i}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

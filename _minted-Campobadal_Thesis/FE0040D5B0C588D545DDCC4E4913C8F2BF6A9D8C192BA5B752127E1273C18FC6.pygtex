@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{List} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{value}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the list type since it\PYGZsq{}s complex to analyze later.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{n}{type}\PYG{p}{;}
+        \PYG{n}{List}\PYG{p}{(}\PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{v}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}LIST}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{value}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

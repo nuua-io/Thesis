@@ -11,6 +11,9 @@
 \renewcommand*\dictumauthorformat[1]{\vspace{0.5cm}--- #1\vspace{0.25cm}}
 \renewcommand*\dictumrule{}
 
+% Table of contents depth
+\setcounter{tocdepth}{2}
+
 % Cover configuration commands
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 \def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}}
@@ -21,13 +24,14 @@
 % Graphics
 \usepackage{graphicx}
 \usepackage{tikz}
-\usepackage{float}
+\usepackage{newfloat}
 \usepackage{caption}
 \usepackage{subcaption}
 \setlength{\abovecaptionskip}{10pt}
 \setlength{\belowcaptionskip}{10pt}
 \renewcommand{\thesubtable}{\roman{subtable}}
 \renewcommand{\thesubfigure}{\roman{subfigure}}
+\newenvironment{code}{\captionsetup{type=listing}}{}
 
 % Symbols and Math
 \usepackage{amssymb}
@@ -46,6 +50,7 @@
 \usepackage{minted}
 \usemintedstyle{pastie}
 \setminted{linenos, breaklines=true}
+\DeclareBoolOption{newfloat}
 
 % References and links
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}

@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Binary} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{left}\PYG{p}{;}
+        \PYG{n}{Token} \PYG{n}{op}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{right}\PYG{p}{;}
+        \PYG{c+c1}{// Determines what type of binary operation will be performed.}
+        \PYG{n}{BinaryType} \PYG{n}{type} \PYG{o}{=} \PYG{p}{(}\PYG{n}{BinaryType}\PYG{p}{)} \PYG{n+nb}{NULL}\PYG{p}{;}
+        \PYG{n}{Binary}\PYG{p}{(}
+            \PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{l}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{Token} \PYG{o}{\PYGZam{}}\PYG{n}{o}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{r}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}BINARY}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{left}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{l}\PYG{p}{)),}
+            \PYG{n}{op}\PYG{p}{(}\PYG{n}{o}\PYG{p}{),}
+            \PYG{n}{right}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{move}\PYG{p}{(}\PYG{n}{r}\PYG{p}{))} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

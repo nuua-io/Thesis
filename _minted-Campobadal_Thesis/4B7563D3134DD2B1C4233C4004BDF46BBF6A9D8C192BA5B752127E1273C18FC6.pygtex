@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Property} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Expression}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{n}{object}\PYG{p}{;}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{name}\PYG{p}{;}
+        \PYG{n}{Property}\PYG{p}{(}
+            \PYG{n}{NODE\PYGZus{}PROPS}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{o}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{n}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{Expression}\PYG{p}{(\PYGZob{}} \PYG{n}{RULE\PYGZus{}PROPERTY}\PYG{p}{,} \PYG{n}{file}\PYG{p}{,} \PYG{n}{line}\PYG{p}{,} \PYG{n}{column} \PYG{p}{\PYGZcb{}),}
+            \PYG{n}{object}\PYG{p}{(}\PYG{n}{o}\PYG{p}{),}
+            \PYG{n}{name}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

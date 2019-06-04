@@ -1,0 +1,62 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Type}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{ValueType}\PYG{o}{\PYGZgt{}} \PYG{n}{value\PYGZus{}types}\PYG{p}{;}
+    \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{types\PYGZus{}string}\PYG{p}{;}
+    \PYG{c+c1}{// Unsafe variants for public. Underlying for shared\PYGZus{}ptr or reference.}
+    \PYG{k+kt}{void} \PYG{n+nf}{copy\PYGZus{}to}\PYG{p}{(}\PYG{n}{Type} \PYG{o}{*}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+    \PYG{k+kt}{bool} \PYG{n+nf}{same\PYGZus{}as}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the type.}
+        \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the inner type if needed (used as return type for functions).}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{n}{inner\PYGZus{}type}\PYG{p}{;}
+        \PYG{c+c1}{// Class name.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{class\PYGZus{}name}\PYG{p}{;}
+        \PYG{c+c1}{// Store the parameters of a function type.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{parameters}\PYG{p}{;}
+        \PYG{c+c1}{// Create a value type given the type.}
+        \PYG{n}{Type}\PYG{p}{()} \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{VALUE\PYGZus{}NO\PYGZus{}TYPE}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Create a type given a value type and the inner type.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{inner\PYGZus{}type}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{),} \PYG{n}{inner\PYGZus{}type}\PYG{p}{(}\PYG{n}{inner\PYGZus{}type}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Create a type given a string representation of it.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Create a type given an expression and a}
+        \PYG{c+c1}{// list of code blocks to know the variable values.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{*}\PYG{n}{blocks}\PYG{p}{);}
+        \PYG{c+c1}{// Create a function type given the function itself.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Function}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{fun}\PYG{p}{);}
+        \PYG{c+c1}{// \PYGZti{}Type() \PYGZob{} this\PYGZhy{}\PYGZgt{}deallocate(); \PYGZcb{}}
+        \PYG{c+c1}{// Returns true if the cast can be performed and stored the dest cast type to the pointer.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{cast}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{to}\PYG{p}{,} \PYG{n}{CastType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}casttype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{k+kt}{bool} \PYG{n+nf}{cast}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{to}\PYG{p}{,} \PYG{n}{CastType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}casttype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{c+c1}{// Returns true if the unary operation can be done and stores the dest type and the unary type on their pointers.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{unary}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Token} \PYG{o}{\PYGZam{}}\PYG{n}{op}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{dest\PYGZus{}type} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{(),} \PYG{n}{UnaryType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}unarytype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{k+kt}{bool} \PYG{n+nf}{unary}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Token} \PYG{o}{\PYGZam{}}\PYG{n}{op}\PYG{p}{,} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{dest\PYGZus{}type} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{,} \PYG{n}{UnaryType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}unarytype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{c+c1}{// Returns true if the binary op can be done and stores the dest type and the binary type on their pointers.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{binary}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Token} \PYG{o}{\PYGZam{}}\PYG{n}{op}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{t1}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{dest\PYGZus{}type} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{(),} \PYG{n}{BinaryType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}bintype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{k+kt}{bool} \PYG{n+nf}{binary}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Token} \PYG{o}{\PYGZam{}}\PYG{n}{op}\PYG{p}{,} \PYG{k}{const} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{t1}\PYG{p}{,} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{dest\PYGZus{}type} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{,} \PYG{n}{BinaryType} \PYG{o}{*}\PYG{n}{dest\PYGZus{}bintype} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{);}
+        \PYG{c+c1}{// Returns the unary type resulting of a unary operation.}
+        \PYG{c+c1}{// UnaryType unary(Token \PYGZam{}op, Type *dest);}
+        \PYG{c+c1}{// Returns the string representation of the type.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Copies the type from \PYGZdq{}this\PYGZdq{} to \PYGZdq{}type\PYGZdq{}.}
+        \PYG{k+kt}{void} \PYG{n+nf}{copy\PYGZus{}to}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{k+kt}{void} \PYG{n+nf}{copy\PYGZus{}to}\PYG{p}{(}\PYG{n}{Type} \PYG{o}{\PYGZam{}}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Compares if the type is the same as another provided type.}
+        \PYG{c+c1}{// Recursive function that also checks inner types.}
+        \PYG{k+kt}{bool} \PYG{n+nf}{same\PYGZus{}as}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{k+kt}{bool} \PYG{n+nf}{same\PYGZus{}as}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Type} \PYG{o}{\PYGZam{}}\PYG{n}{type}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Resets the type.}
+        \PYG{k+kt}{void} \PYG{n+nf}{reset}\PYG{p}{(}\PYG{k}{const} \PYG{n}{ValueType} \PYG{n}{new\PYGZus{}type}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{new\PYGZus{}inner\PYGZus{}type}\PYG{p}{);}
+        \PYG{c+c1}{// Returns the names of all the classes used in this type.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{classes\PYGZus{}used}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{mod}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Prints the type as a string.}
+        \PYG{k+kt}{void} \PYG{n+nf}{print}\PYG{p}{()} \PYG{k}{const} \PYG{p}{;}
+        \PYG{c+c1}{// Prints the type as a string with a new line.}
+        \PYG{k+kt}{void} \PYG{n+nf}{println}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

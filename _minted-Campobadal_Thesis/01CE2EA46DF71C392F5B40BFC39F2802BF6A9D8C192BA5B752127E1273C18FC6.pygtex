@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Expression} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Node}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{k}{explicit} \PYG{n}{Expression}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Node} \PYG{o}{\PYGZam{}}\PYG{n}{node}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{Node}\PYG{p}{(}\PYG{n}{node}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\PYG{k}{class} \PYG{n+nc}{Statement} \PYG{o}{:} \PYG{k}{public} \PYG{n}{Node}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{k}{explicit} \PYG{n}{Statement}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Node} \PYG{o}{\PYGZam{}}\PYG{n}{node}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{Node}\PYG{p}{(}\PYG{n}{node}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

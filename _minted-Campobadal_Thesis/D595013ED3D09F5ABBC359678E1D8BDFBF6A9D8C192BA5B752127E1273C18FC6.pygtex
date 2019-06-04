@@ -1,0 +1,44 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Type}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the asociation between the types}
+    \PYG{c+c1}{// as string and the value type.}
+    \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{ValueType}\PYG{o}{\PYGZgt{}} \PYG{n}{value\PYGZus{}types}\PYG{p}{;}
+    \PYG{c+c1}{// Determines the string representation}
+    \PYG{c+c1}{// of the value types.}
+    \PYG{k}{static} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{types\PYGZus{}string}\PYG{p}{;}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the type.}
+        \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the inner type if needed.}
+        \PYG{c+c1}{// Used as return type for functions.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{n}{inner\PYGZus{}type}\PYG{p}{;}
+        \PYG{c+c1}{// Class name.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{class\PYGZus{}name}\PYG{p}{;}
+        \PYG{c+c1}{// Store the parameters of a function type.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{parameters}\PYG{p}{;}
+        \PYG{c+c1}{// Create a value type given the type.}
+        \PYG{n}{Type}\PYG{p}{()} \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{VALUE\PYGZus{}NO\PYGZus{}TYPE}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Create a type given a value type and the inner type.}
+        \PYG{n}{Type}\PYG{p}{(}
+            \PYG{k}{const} \PYG{n}{ValueType} \PYG{n}{type}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{inner\PYGZus{}type}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{),} \PYG{n}{inner\PYGZus{}type}\PYG{p}{(}\PYG{n}{inner\PYGZus{}type}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Create a type given a string representation of it.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+        \PYG{c+c1}{// Create a type given an expression and a}
+        \PYG{c+c1}{// list of code blocks to know the variable values.}
+        \PYG{n}{Type}\PYG{p}{(}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{*}\PYG{n}{blocks}
+        \PYG{p}{);}
+        \PYG{c+c1}{// Create a function type given the function itself.}
+        \PYG{n}{Type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Function}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{fun}\PYG{p}{);}
+        \PYG{c+c1}{// Additional methods used as helpers for casts,}
+        \PYG{c+c1}{// unary and binary operations and for other operations}
+        \PYG{c+c1}{// like copy or}
+        \PYG{c+c1}{// ...}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

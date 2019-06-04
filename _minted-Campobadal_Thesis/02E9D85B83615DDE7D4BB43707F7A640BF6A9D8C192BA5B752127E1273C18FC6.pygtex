@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{BlockVariableType}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Represents the variable type}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{n}{type}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the AST node where this variable is.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{n}{node}\PYG{p}{;}
+        \PYG{c+c1}{// Represents the registers where it\PYGZsq{}s stored.}
+        \PYG{n}{register\PYGZus{}t} \PYG{n}{reg} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+        \PYG{c+c1}{// Determines in the variable is exported.}
+        \PYG{c+c1}{// (only applies to TLDs).}
+        \PYG{k+kt}{bool} \PYG{n}{exported} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{;}
+        \PYG{c+c1}{// Represents the last use of the variable (Variable life)}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{n}{last\PYGZus{}use}\PYG{p}{;}
+        \PYG{c+c1}{// Constructors.}
+        \PYG{n}{BlockVariableType}\PYG{p}{()} \PYG{p}{\PYGZob{}\PYGZcb{};}
+        \PYG{n}{BlockVariableType}\PYG{p}{(}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{type}\PYG{p}{,}
+            \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{node}\PYG{p}{,}
+            \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{exported} \PYG{o}{=} \PYG{n+nb}{false}
+        \PYG{p}{)} \PYG{o}{:} \PYG{n}{type}\PYG{p}{(}\PYG{n}{type}\PYG{p}{),} \PYG{n}{node}\PYG{p}{(}\PYG{n}{node}\PYG{p}{),} \PYG{n}{exported}\PYG{p}{(}\PYG{n}{exported}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}
