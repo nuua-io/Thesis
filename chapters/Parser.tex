@@ -27,7 +27,7 @@ a hand written top down recursive descend predictive parser for the following ma
 
 \begin{enumerate}
     \item To have as much control as needed over the parser. Specially for error reporting.
-    \item To enforce a zero-policy rule.
+    \item To enforce a zero-dependency policy.
     \item Easy to build and fast enough for the job.
     \item To learn how to build a recursive descend parser and learn how it works.
 \end{enumerate}
@@ -51,6 +51,73 @@ A recursive descend parser is a possible technique for implementing a top-down p
 nonterminal found in the grammar and then calling the functions depending on the current token and the lookahead.
 
 \section{Abstract Syntax Tree}
+
+The abstract syntax tree (AST) is the data structure used to represent the program in memory. This tree contains the
+representation of the whole program starting from an initial node \texttt{program} as seen in \autoref{sec:program_tld}.
+\autoref{fig:ast_example} shows an example AST.
+
+\begin{figure}[H]
+	\centering
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \texttt{1 - 2 * -3}
+		\caption{Program}
+	\end{subtable}
+	\begin{subtable}{0.45\textwidth}
+		\centering
+        \texttt{TOKEN\_INTEGER TOKEN\_MINUS TOKEN\_INTEGER TOKEN\_STAR TOKEN\_MINUS TOKEN\_INTEGER}
+		\caption{List of tokens}
+	\end{subtable}
+    \begin{subfigure}{0.45\textwidth}
+		\centering
+        \begin{tikzpicture}[node distance=1.75cm]
+            % Nodes
+            \node[state] (1) {\texttt{-}};
+            \node[state, below left of=1] (2) {\texttt{1}};
+            \node[state, below right of=1] (3) {\texttt{*}};
+            \node[state, below left of=3] (4) {\texttt{2}};
+            \node[state, below right of=3] (5) {\texttt{-}};
+            \node[state, below of=5] (6) {\texttt{3}};
+            % Lines
+            \draw (1) -- (2);
+            \draw (1) -- (3);
+            \draw (3) -- (4);
+            \draw (3) -- (5);
+            \draw (5) -- (6);
+        \end{tikzpicture}
+		\caption{Abstract syntax tree}
+	\end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+		\centering
+        \begin{tikzpicture}[node distance=1.75cm]
+            % Nodes
+            \node[state] (0) {\texttt{P(1)}};
+            \node[state, below of=0] (1) {\texttt{B(+)}};
+            \node[state, below left of=1] (2) {\texttt{1}};
+            \node[state, below right of=1] (3) {\texttt{B(*)}};
+            \node[state, below left of=3] (4) {\texttt{2}};
+            \node[state, below right of=3] (5) {\texttt{U(-)}};
+            \node[state, below of=5] (6) {\texttt{3}};
+            % Legend
+            \node[text width=4.5cm, align=left, right = 0.5cm of 0.east] (l) {
+
+                { \footnotesize \noindent
+                    \texttt{P(n):\\\quad Program (n statements)}\\\texttt{B(operation):\\\quad Binary operation}\\\texttt{U(operation):\\\quad Unary operation}
+                }
+            };
+            % Lines
+            \draw (0) -- (1);
+            \draw (1) -- (2);
+            \draw (1) -- (3);
+            \draw (3) -- (4);
+            \draw (3) -- (5);
+            \draw (5) -- (6);
+        \end{tikzpicture}
+		\caption{Nuua AST}
+	\end{subfigure}
+	\caption{Example abstract syntax tree}
+    \label{fig:ast_example}
+\end{figure}
 
 \section{Block Scope}
 

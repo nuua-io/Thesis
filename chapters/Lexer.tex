@@ -170,10 +170,10 @@ is a list of escaped chars that are taken into consideration as shown in \autore
 		\centering
         \begin{tabular}{ l l }
             \textbf{Pattern} & \textbf{Token} \\
+            \texttt{=>} & \texttt{TOKEN\_BIG\_RIGHT\_ARROW} \\
             \texttt{:} & \texttt{TOKEN\_COLON} \\
             \texttt{return} & \texttt{TOKEN\_RETURN} \\
             \texttt{print} & \texttt{TOKEN\_PRINT} \\
-            \texttt{use} & \texttt{TOKEN\_USE} \\
 		\end{tabular}
 		\caption{}
 	\end{subtable}
@@ -181,6 +181,7 @@ is a list of escaped chars that are taken into consideration as shown in \autore
 		\centering
         \begin{tabular}{ l l }
             \textbf{Pattern} & \textbf{Token} \\
+            \texttt{use} & \texttt{TOKEN\_USE} \\
             \texttt{from} & \texttt{TOKE\_FROM} \\
             \texttt{elif} & \texttt{TOKEN\_ELIF} \\
             \texttt{in} & \texttt{TOKEN\_IN} \\
@@ -200,14 +201,14 @@ is a list of escaped chars that are taken into consideration as shown in \autore
             \textbf{Pattern} & \textbf{Token} \\
             \texttt{<} & \texttt{TOKEN\_LOWER} \\
             \texttt{<=} & \texttt{TOKEN\_LOWER\_EQUAL} \\
-            \texttt{<STRING\_EXPR>} & \texttt{TOKEN\_IDENTIFIER} \\
-            \texttt{<INTEGER\_EXPR>} & \texttt{TOKEN\_STRING} \\
+            \texttt{<IDENTIFIER>} & \texttt{TOKEN\_IDENTIFIER} \\
+            \texttt{<STRING\_EXPR>} & \texttt{TOKEN\_STRING} \\
+            \texttt{<INTEGER\_EXPR>} & \texttt{TOKEN\_INTEGER} \\
             \texttt{<FLOAT\_EXPR>} & \texttt{TOKEN\_FLOAT} \\
             \texttt{as} & \texttt{TOKEN\_AS} \\
             \texttt{or} & \texttt{TOKEN\_OR} \\
             \texttt{and} & \texttt{TOKEN\_AND} \\
             \texttt{class} & \texttt{TOKEN\_CLASS} \\
-            \texttt{fun} & \texttt{TOKEN\_FUN} \\
 		\end{tabular}
 		\caption{}
 	\end{subtable}
@@ -215,6 +216,7 @@ is a list of escaped chars that are taken into consideration as shown in \autore
 		\centering
         \begin{tabular}{ l l }
             \textbf{Pattern} & \textbf{Token} \\
+            \texttt{fun} & \texttt{TOKEN\_FUN} \\
             \texttt{else} & \texttt{TOKEN\_ELSE} \\
             \texttt{true} & \texttt{TOKEN\_TRUE} \\
             \texttt{false} & \texttt{TOKEN\_FALSE} \\
@@ -224,7 +226,6 @@ is a list of escaped chars that are taken into consideration as shown in \autore
             \texttt{\textbackslash 0} & \texttt{TOKEN\_EOF} \\
             \texttt{[} & \texttt{TOKEN\_LEFT\_SQUARE} \\
             \texttt{]} & \texttt{TOKEN\_RIGHT\_SQUARE} \\
-            \texttt{=>} & \texttt{TOKEN\_BIG\_RIGHT\_ARROW} \\
 		\end{tabular}
 		\caption{}
 	\end{subtable}
