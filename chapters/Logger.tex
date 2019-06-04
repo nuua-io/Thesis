@@ -11,7 +11,7 @@ this information is still possible.
 
 In case of an error, the reported error must be formatted accordingly and written in the standard error stream (stderr).
 
-\section{Error design}
+\section{Error Design}
 
 Error reporting plays a very important job in a compiler. Recently, GCC released a new version that improves the diagnostics
 that the compiler outputs to have user-friendly errors similar to how rust does error reporting. Therefore, the error design must
@@ -35,7 +35,7 @@ The last white paragraph contains the line as seen in the source code of the pro
 where the error happened so that a quick look at the line can determine the problem.
 
 
-\section{Logger entities}
+\section{Logger Entities}
 
 The logger entity has all the properties that are mandatory fora log.
 This includes the absolute file path of the source program, the line of the file where the error happened
@@ -68,7 +68,7 @@ class LoggerEntity {
 \label{ls:logger_entity}
 \end{listing}
 
-\section{Logger class}
+\section{Logger Class}
 
 \autoref{ls:logger_class} shows a logger class implementation that satisfies all the previous statements.
 In short, it stores a list of all the log entities and provides methods to add and remove logs. It also provides a crash
@@ -104,7 +104,7 @@ class Logger
 \label{ls:logger_class}
 \end{listing}
 
-\section{Cross-platform caveat}
+\section{Cross-platform Caveat}
 
 Due to the fact that Nuua is supported in multiple platforms, there is an important feature mentioned that must be
 handled manually. The colored red output must be portable across all the major platforms. Windows is the platform that

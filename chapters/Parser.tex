@@ -1,1 +1,61 @@
-The parser ...
+The job of the parser is to transform the list of tokens returned by the Lexer into an abstract syntax tree.\\
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [node distance=1cm]
+
+        % Nodes of the layered system
+        \node[block] (input) {List of tokens};
+        \node[block,right=of input] (parser) {Parser};
+        \node[block,right=of lexer] (output) {Abstract Syntax Tree};
+
+        % Lines
+        \draw[line] (input) -- (parser);
+        \draw[line] (parser) -- (output);
+
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{Parser overview}
+    \label{fig:parser_overview}
+\end{figure}
+
+There are a lot of different algorithms and strategies for parsing different set of grammars.
+There are also a lot of parser generators out there that can help building a parser. However, this thesis implements
+a hand written top down recursive descend predictive parser for the following main reasons:
+
+\begin{enumerate}
+    \item To have as much control as needed over the parser. Specially for error reporting.
+    \item To enforce a zero-policy rule.
+    \item Easy to build and fast enough for the job.
+    \item To learn how to build a recursive descend parser and learn how it works.
+\end{enumerate}
+
+Recursive descend parsers are probably the simplest way to build a parser as mentioned in \autocite[Section~6]{crafting_interpreters}.
+In fact, even if it's a simple parser it's used in very famous and large projects like \texttt{GCC} or \texttt{V8}.
+
+As can be seen on \autocite{top_down_parsing} the top down parers can be classified into the ones using backtracking and the ones using a predictive technique.
+
+\begin{itemize}
+    \item \emph{Backtracking parsers}: Backtracking parsers try to guess the correct production rule based on the current token. This guess can however, lead to a
+        dead-end and therefore a backtrack is needed to go back and make anothe decision. This is hoever, very inefficient for programming languages due the ammount
+        of nonterminals found in them.
+    \item \emph{Predictive parsers}: Predictive parsers choose the production rule acording to the current token and the next token found. The next tooken is called
+        a lookahead token. Predictive parsers have a major issue with left-recursion and therefore, the language grammar needs to be adapted to it.
+        The Nuua grammar as seen on \autoref{sec:nuua_grammar} is already adapted for left-recursion based on the solution mentioned on
+        \autocite[Section~6]{crafting_interpreters}.
+\end{itemize}
+
+A recursive descend parser is a possible technique for implementing a top-down predictive parser that consists in the creation of a funciton for each
+nonterminal found in the grammar and then calling the functions depending on the current token and the lookahead.
+
+\section{Abstract Syntax Tree}
+
+\section{Block Scope}
+
+\section{Data Types}
+
+\section{Tree Nodes}
+
+\section{Parser Class}
