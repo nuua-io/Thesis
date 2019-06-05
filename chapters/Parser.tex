@@ -335,6 +335,7 @@ class Block
 \end{listing}
 
 \section{Tree Nodes}
+\label{sec:tree_nodes}
 
 A node in the AST is represented by the class found \autoref{ls:node_class}
 
@@ -1257,3 +1258,33 @@ class Parser
 \caption{Parser class}
 \label{ls:parser_class}
 \end{listing}
+
+\section{Module In-memory Cache}
+
+During the parsing of a module, this might require the use of other modules. When importing a module, the required module is first
+parser. However, The module might have already been parser by a previous import, so there's no need to parse that file again. This is prevented
+by having an in-memory cache to avoid re-parsing files more than once.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[node distance=2cm]
+        % Nodes
+        \node[state] (A) {\texttt{A}};
+        \node[state, below left of=A] (B) {\texttt{B}};
+        \node[state, below right of=A] (C) {\texttt{C}};
+        \node[state, below left of=C] (D) {\texttt{D}};
+        % Lines
+        \draw[line] (A) -- (B);
+        \draw[line] (A) -- (C);
+        \draw[line] (B) -- (D);
+        \draw[line] (C) -- (D);
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{A use case for the in-memory parser cache}
+    \label{fig:module_mem_cache}
+\end{figure}
+
+This situation increases performance when a library is used by a lot of modules.
+\autoref{fig:module_mem_cache} ilustrates this situation by having a module \texttt{D} imported more than once. The in-memory cache will prevent the second
+parse and will assign that use node the right AST parsed previously.

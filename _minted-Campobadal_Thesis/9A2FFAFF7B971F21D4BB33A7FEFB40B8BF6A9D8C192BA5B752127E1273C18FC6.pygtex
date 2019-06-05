@@ -1,0 +1,45 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Module}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the file name of that module.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{file}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the code of that module.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{n}{code}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the blocks used while analyzing the module.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{blocks}\PYG{p}{;}
+    \PYG{c+c1}{// Return variable if needs to be checked. Only 1 can exist since}
+    \PYG{c+c1}{// it can only analyze 1 function at a time.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{n}{return\PYGZus{}type}\PYG{p}{;}
+    \PYG{c+c1}{// Analyzes the TLDs given a list of top level delcarations.}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}tld}\PYG{p}{();}
+    \PYG{c+c1}{// Analyzes the given top level declaration.}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}tld}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tld}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{set\PYGZus{}exported} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+    \PYG{c+c1}{// Analyzes the class top level declarations.}
+    \PYG{c+c1}{// void analyze\PYGZus{}class\PYGZus{}tld(const std::shared\PYGZus{}ptr\PYGZlt{}Class\PYGZgt{} \PYGZam{}c);}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}class\PYGZus{}tld}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{tld}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{block}\PYG{p}{);}
+    \PYG{c+c1}{// Analyzes the code.}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}code}\PYG{p}{();}
+    \PYG{c+c1}{// Analyzes the statement.}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}code}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{,} \PYG{k+kt}{bool} \PYG{n}{no\PYGZus{}declare} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+    \PYG{c+c1}{// Analyzes the expression.}
+    \PYG{k+kt}{void} \PYG{n+nf}{analyze\PYGZus{}code}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{allowed\PYGZus{}noreturn\PYGZus{}call} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+    \PYG{c+c1}{// Analyzes the block.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{n}{analyze\PYGZus{}code}\PYG{p}{(}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{code}\PYG{p}{,}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Declaration}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{initializers} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Declaration}\PYG{o}{\PYGZgt{}\PYGZgt{}}\PYG{p}{(),}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{initializer\PYGZus{}node} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}}\PYG{p}{()}
+    \PYG{p}{);}
+    \PYG{c+c1}{// Declares a variable to the most top level block.}
+    \PYG{k+kt}{void} \PYG{n+nf}{declare}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Declaration}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{dec}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{node} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}}\PYG{p}{());}
+    \PYG{c+c1}{// Check if the given module have all the classes defined.}
+    \PYG{k+kt}{bool} \PYG{n+nf}{check\PYGZus{}classes}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{classes}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Node}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{fail\PYGZus{}at}\PYG{p}{);}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the main block of that module.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{n}{main\PYGZus{}block} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{make\PYGZus{}shared}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}}\PYG{p}{();}
+        \PYG{c+c1}{// Main module constructor}
+        \PYG{n}{Module}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{file}\PYG{p}{(}\PYG{n}{file}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{c+c1}{// Analyzes the module and adds it\PYGZsq{}s entry to the modules symbol table.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{n}{analyze}\PYG{p}{(}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{code}\PYG{p}{,} \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{require\PYGZus{}main} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}
