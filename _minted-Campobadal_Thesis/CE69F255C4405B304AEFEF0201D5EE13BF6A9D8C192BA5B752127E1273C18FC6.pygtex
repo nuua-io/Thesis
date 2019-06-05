@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{typedef} \PYG{k}{enum} \PYG{o}{:} \PYG{k+kt}{uint8\PYGZus{}t} \PYG{p}{\PYGZob{}}
+    \PYG{n}{APPLICATION\PYGZus{}FILE}
+\PYG{p}{\PYGZcb{}} \PYG{n}{ApplicationType}\PYG{p}{;}
+\end{Verbatim}

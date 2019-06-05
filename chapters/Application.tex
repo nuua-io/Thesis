@@ -1,0 +1,53 @@
+The application layer is responsible for firing the application. In short, the job
+of this layer is to parse the command line arguments and run the virtual machine.
+
+This layer exists so that the main file is not populated and the fact that this layer could evolve by providing different ways to run
+the program.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+typedef enum : uint8_t {
+    APPLICATION_FILE
+} ApplicationType;
+\end{minted}
+\caption{Application types}
+\label{ls:application_types}
+\end{listing}
+
+\autoref{ls:application_types} shows the supported application types. Additional types might be included in here, such as a prompt type or a string type.
+At the moment, the supported application is a file application, meaning the program must come from a file path.
+The application layer decides based on the command line arguments, the type of the application and performs the nessesary actions acordingly.
+
+This layer is also responsible for creating the argv parameter of the virtual machine. This parameter is a list of strings, so the C++ main arguments
+\texttt{argc} and \texttt{argv} are transformed into a vector of strings and further passed to the virtual machine so it can inject it into the
+main function call.
+
+\section{Application class}
+
+The application class is the implementation of the application layer, the implementation is very simple and can be seen in \autoref{ls:application_class}
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Application
+{
+    // Defines the application type described above.
+    ApplicationType application_type;
+    // Stores the vritual machine used by the application.
+    VirtualMachine virtual_machine;
+    // Stores the file name if the application type requires it.
+    std::string file_name;
+    // Stores the command line arguments.
+    std::vector<std::string> argv;
+    // Run the application based on an input string.
+    void string(const std::string &string);
+    public:
+        // The constructor determines the type of the application
+        // based on the command line arguments.
+        Application(int argc, char *argv[]);
+        // Starts (runs) the application.
+        int start();
+};
+\end{minted}
+\caption{Application class}
+\label{ls:application_class}
+\end{listing}

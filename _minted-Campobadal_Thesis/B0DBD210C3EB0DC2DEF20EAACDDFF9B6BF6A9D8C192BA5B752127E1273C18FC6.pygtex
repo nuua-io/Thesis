@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Application}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Defines the application type described above.}
+    \PYG{n}{ApplicationType} \PYG{n}{application\PYGZus{}type}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the vritual machine used by the application.}
+    \PYG{n}{VirtualMachine} \PYG{n}{virtual\PYGZus{}machine}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the file name if the application type requires it.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{file\PYGZus{}name}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the command line arguments.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{argv}\PYG{p}{;}
+    \PYG{c+c1}{// Run the application based on an input string.}
+    \PYG{k+kt}{void} \PYG{n+nf}{string}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{string}\PYG{p}{);}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// The constructor determines the type of the application}
+        \PYG{c+c1}{// based on the command line arguments.}
+        \PYG{n}{Application}\PYG{p}{(}\PYG{k+kt}{int} \PYG{n}{argc}\PYG{p}{,} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{argv}\PYG{p}{[]);}
+        \PYG{c+c1}{// Starts (runs) the application.}
+        \PYG{k+kt}{int} \PYG{n+nf}{start}\PYG{p}{();}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

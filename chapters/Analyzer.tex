@@ -1,14 +1,14 @@
-The semantic analyzer is ran after the AST has been generated and therefore the program is all in
+The semantic analyzer is run after the AST has been generated and therefore the program is all in
 the same data structure. The job of the semantic analyzer is not to transform the AST but to analyze it.
-There is the possibility for optimizations to be performed during the analysis to improve the resulting code.
+There is the possibility for optimizations to be performed during the analysis to improve the AST.
 This includes for instance loop unrolling, constant folding or dead code elimination. However, those things
 are not part of this thesis and therefore those optimizations have been mentioned in \autoref{sec:forthcoming}.
-However, this thesis deals with other types of optimizations. Specifically, bytecode optimization is performed to some extend.
+However, this thesis deals with other types of optimizations. Specifically, bytecode optimization is performed to some extent.
 
 In short, the job of the analyzer is to perform the following things:
 
 \begin{itemize}
-    \item Create the symbol table for each scope and block found. This include all module scopes and each block scope found.
+    \item Create the symbol table for each scope and block found. This includes all module scopes and each block scope found.
     \item Get all the type information from the expressions.
     \item Perform the semantic checks on all the statements and expressions found in the AST. All the requirements for those nodes
         are explained in \autoref{sec:statements} and \autoref{sec:expressions} respectively.
@@ -18,19 +18,19 @@ In short, the job of the analyzer is to perform the following things:
 \section{Technique}
 
 Before any analysis begins, a full module scope analysis needs to be performed. This is done to ensure that when functions are analyzed
-(and so do their statements) the module scope is already valid and contains the information needed to have a correct statement analysis. For instance
-if a function have a statement that makes a call to another function on the module, that callee function must be known, so its signature needs to be
-analyzed before.
+(and so do their statements) the module scope is already valid and contains the information needed to have a correct statement analysis. For instance,
+if a function has a statement that makes a call to another function on the module, that callee function must be known, so its signature needs to be
+analyzed first.
 
 To solve this, a first analysis is performed only on the top level declarations (module scope) found in the module.
-If one of the top level declarations is a use declaration, then that module is first analyzed completly while the current one waits.
-The top level analysis just gets information about the top level declarations and does not perform further analysis.
+If one of the top-level declarations is a use declaration, then that module is first analyzed completely before the current analysis can continue.
+The top-level analysis just gets information about the top-level declarations and does not perform further analysis.
 That means that it just gets the information of the functions, classes and so on without analyzing the function bodies.
-Top level classes are also analyzed only on the top level of their bodies. Once all this phase is complete, the code analysis begin in an arbitrary order.
+Top level classes are also analyzed only on the top level of their bodies. Once all this phase is complete, the code analysis begins in an arbitrary order.
 This can be done as the top level is already analyzed and therefore all the symbol table for the module block is already built and the types are known.
 
-Once the code analysis begin the function bodies are analyzed and so do classes methods. The analysis run by recursively walking the AST and further performing
-all the checks mentioned in \autoref{sec:statements} and on \autoref{sec:expressions} depending on the type of node beeing analyzed.
+Once the code analysis begins the function bodies are analyzed and so do classes methods. The analysis run by recursively walking the AST and further performing
+all the checks mentioned in \autoref{sec:statements} and on \autoref{sec:expressions} depending on the type of node being analyzed.
 This analysis is also recursive.
 
 \begin{figure}[H]
@@ -89,7 +89,7 @@ This analysis is also recursive.
 		\end{tabular}
 		\caption{Module scope symbol table}
 	\end{subfigure}
-	\caption{Example program top level analysis}
+	\caption{Example program top-level analysis}
     \label{fig:ast_example}
 \end{figure}
 
@@ -109,10 +109,22 @@ Among other mentioned checks that are specific to certain nodes, some of the che
     \item \texttt{main([string])} required on the main module.
 \end{itemize}
 
+\section{Type Inference}
+
+Type inference is done in Nuua by the \texttt{Type} class seen on \autoref{ls:type_class}. However, it is used in this layer to get
+the expression types of the program. Type inference is ability to get the type of the expressions at compile time. Type inference is
+a step needed to perform type checks on the AST. Most nodes require a type check at some point and therefore, type inference can be used
+to get the type of the expressions on such nodes. The \texttt{Type} class has a constructor that accepts an expression and a list of blocks.
+This constructor can determine the expression type and if the expression contains variables, their type is obtained from the block list,
+starting from the last block going back till the first block of the list. Although errors are checked, the expression should always be analyzed prior
+to any type inference to avoid issues.
+
 \section{Module class}
 
 The module class is used to analyze a module. It automatically creates a new instance of it when it needs to analyze
-the AST of a use declaration.\\
+the AST of a use declaration.
+
+\autoref{ls:module_class} shows the implementation of the module class used by the analyzer\\
 
 \begin{code}
 \begin{minted}{cpp}
@@ -160,6 +172,8 @@ class Module
         std::shared_ptr<Block> analyze(std::shared_ptr<std::vector<std::shared_ptr<Statement>>> &code, const bool require_main = false);
 };
 \end{minted}
+\caption{Module class}
+\label{ls:module_class}
 \end{code}
 
 \section{Module In-memory Cache}
@@ -167,4 +181,4 @@ class Module
 Since a module might be imported more than once as shown in \autoref{fig:module_mem_cache} the analyzer
 have an in-memory cache to know when a module has been analyzed to avoid redundant analyses.
 Once a module has been analyzed it is added into a list of analyzed modules and when a new module is required to be
-analyzed is first checked if it has been. If so, it returns its module scope symbol table.
+analyzed is first checked if it has been. If the module has already been analyzed it returns its module scope symbol table and otherwise, it gets analyzed.

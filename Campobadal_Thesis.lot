@@ -3,39 +3,45 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {1.1}{\ignorespaces Variation of EBNF syntax used by this thesis\relax }}{14}{table.caption.5}
+\contentsline {table}{\numberline {1.1}{\ignorespaces Variation of EBNF syntax used by this thesis\relax }}{15}{table.caption.5}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.1}{\ignorespaces Nuua operator precedence from highest to lowest with the associativity\relax }}{31}{table.caption.13}
+\contentsline {table}{\numberline {2.1}{\ignorespaces Nuua operator precedence from highest to lowest with the associativity\relax }}{32}{table.caption.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.2}{\ignorespaces Nuua statements with scope blocks\relax }}{32}{table.caption.14}
+\contentsline {table}{\numberline {2.2}{\ignorespaces Nuua statements with scope blocks\relax }}{33}{table.caption.14}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.3}{\ignorespaces Nuua iterators\relax }}{41}{table.caption.31}
+\contentsline {table}{\numberline {2.3}{\ignorespaces Nuua iterators\relax }}{42}{table.caption.31}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.4}{\ignorespaces Slice parameters\relax }}{48}{table.caption.56}
+\contentsline {table}{\numberline {2.4}{\ignorespaces Slice parameters\relax }}{49}{table.caption.56}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.5}{\ignorespaces Unary operations\relax }}{50}{table.caption.63}
+\contentsline {table}{\numberline {2.5}{\ignorespaces Unary operations\relax }}{51}{table.caption.63}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.6}{\ignorespaces Nuua casts\relax }}{51}{table.caption.66}
+\contentsline {table}{\numberline {2.6}{\ignorespaces Nuua casts\relax }}{52}{table.caption.66}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.7}{\ignorespaces Nuua additive binary operations\relax }}{52}{table.caption.68}
+\contentsline {table}{\numberline {2.7}{\ignorespaces Nuua additive binary operations\relax }}{53}{table.caption.68}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.8}{\ignorespaces Nuua multiplicative binary operations\relax }}{53}{table.caption.69}
+\contentsline {table}{\numberline {2.8}{\ignorespaces Nuua multiplicative binary operations\relax }}{54}{table.caption.69}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.9}{\ignorespaces Nuua relational equality binary operations\relax }}{54}{table.caption.70}
+\contentsline {table}{\numberline {2.9}{\ignorespaces Nuua relational equality binary operations\relax }}{55}{table.caption.70}
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {2.10}{\ignorespaces Nuua relational ordering binary operations\relax }}{55}{table.caption.71}
+\contentsline {table}{\numberline {2.10}{\ignorespaces Nuua relational ordering binary operations\relax }}{56}{table.caption.71}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Nuua tokens (1)\relax }}{66}{table.caption.83}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.2}{\ignorespaces Nuua tokens (2)\relax }}{66}{table.caption.84}
+\defcounter {refsection}{0}\relax 
+\contentsline {table}{\numberline {4.3}{\ignorespaces Nuua tokens (3)\relax }}{67}{table.caption.85}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.1}{\ignorespaces Nuua tokens (1)\relax }}{65}{table.caption.83}
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.2}{\ignorespaces Nuua tokens (2)\relax }}{65}{table.caption.84}
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.3}{\ignorespaces Nuua tokens (3)\relax }}{66}{table.caption.85}
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

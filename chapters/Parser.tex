@@ -398,7 +398,7 @@ To work with all the nodes in a more effective way, the definition in \autoref{l
 \label{ls:node_def}
 \end{listing}
 
-\subsection{Integer}
+\subsection{Integer Node}
 
 The integer node only needs the value that corresponds to it. In this case a C++ \texttt{int64\_t} type is used as shown in
 \autoref{ls:integer_node}.
@@ -418,7 +418,7 @@ class Integer : public Expression
 \label{ls:integer_node}
 \end{listing}
 
-\subsection{Float}
+\subsection{Float Node}
 
 The float node only needs the value that corresponds to it. In this case a C++ \texttt{double} type is used as shown in
 \autoref{ls:float_node}.
@@ -438,7 +438,7 @@ class Float : public Expression
 \label{ls:float_node}
 \end{listing}
 
-\subsection{String}
+\subsection{String Node}
 
 The string node only needs the value that corresponds to it. In this case a C++ \texttt{std::string} type is used as shown in
 \autoref{ls:string_node}.
@@ -458,7 +458,7 @@ class String : public Expression
 \label{ls:string_node}
 \end{listing}
 
-\subsection{Boolean}
+\subsection{Boolean Node}
 
 The boolean node only needs the value that corresponds to it. In this case a C++ \texttt{bool} type is used as shown in
 \autoref{ls:bool_node}.
@@ -478,7 +478,7 @@ class Boolean : public Expression
 \label{ls:bool_node}
 \end{listing}
 
-\subsection{List}
+\subsection{List Node}
 
 The list node needs the value that corresponds to it and a type parameter that's filled in by the semantic analyzer.
 In this case a C++ \texttt{std::vector<std::shared\_ptr<Expression>>} type is used as shown in \autoref{ls:list_node}.
@@ -503,7 +503,7 @@ class List : public Expression
 \label{ls:list_node}
 \end{listing}
 
-\subsection{Dictionary}
+\subsection{Dictionary Node}
 
 The dictionary node needs the key value pairs of strings and expressions and the key order. In this case a C++ \texttt{std::unordered\_map<std::string, std::shared\_ptr<Expression>>} type is used as shown in \autoref{ls:dict_node}. The type is also added and used by the semantic analyzer.
 
@@ -529,7 +529,7 @@ class Dictionary : public Expression
 \label{ls:dict_node}
 \end{listing}
 
-\subsection{Group}
+\subsection{Group Node}
 
 The group node consists of a single expression as seen in \autoref{ls:group_node}.
 
@@ -548,9 +548,9 @@ class Group : public Expression
 \label{ls:group_node}
 \end{listing}
 
-\subsection{Unary}
+\subsection{Unary Node}
 
-The Unary node consists of the token operation to do and the right expression. It also stores the type of unary operation as seen in
+The unary node consists of the token operation to do and the right expression. It also stores the type of unary operation as seen in
 \autoref{sec:unary_expression}. \autoref{ls:unary_node} shows the representation of the unary node.
 
 \begin{listing}[H]
@@ -573,9 +573,9 @@ class Unary : public Expression
 \label{ls:unary_node}
 \end{listing}
 
-\subsection{Binary}
+\subsection{Binary Node}
 
-The Binary node consists of the token operation to do and the left and right expression. It also stores the type of binary operation as seen in
+The binary node consists of the token operation to do and the left and right expression. It also stores the type of binary operation as seen in
 \autoref{sec:binary_expression}. \autoref{ls:binary_node} shows the representation of the binary node.
 
 \begin{listing}[H]
@@ -603,9 +603,9 @@ class Binary : public Expression
 \label{ls:binary_node}
 \end{listing}
 
-\subsection{Variable}
+\subsection{Variable Node}
 
-The Variable node consists of the the name of the variable. \autoref{ls:variable_node} shows the representation of the variable node.
+The variable node consists of the the name of the variable. \autoref{ls:variable_node} shows the representation of the variable node.
 
 \begin{listing}[H]
 \begin{minted}{cpp}
@@ -622,9 +622,9 @@ class Variable : public Expression
 \label{ls:variable_node}
 \end{listing}
 
-\subsection{Assign}
+\subsection{Assign Node}
 
-The Assign node consists of the target (the expression to be assigned) and the value of the assignment.
+The assign node consists of the target (the expression to be assigned) and the value of the assignment.
 \autoref{ls:assign_node} shows the representation of the assign node. It also stores a boolean that determines if
 the assignment is done to an access target (an inner value of a Nuua iterator). This boolean is used by the semantic analyzer.
 
@@ -649,9 +649,9 @@ class Assign : public Expression
 \label{ls:assign_node}
 \end{listing}
 
-\subsection{Logical}
+\subsection{Logical Node}
 
-The Logical node consists the logical operation (\texttt{or} or \texttt{and}) and the left and right expressions.
+The logical node consists the logical operation (\texttt{or} or \texttt{and}) and the left and right expressions.
 \autoref{ls:logical_node} shows the representation of the logical node.
 
 \begin{listing}[H]
@@ -677,9 +677,9 @@ class Logical : public Expression
 \label{ls:logical_node}
 \end{listing}
 
-\subsection{Call}
+\subsection{Call Node}
 
-The Call node consists the calle target and of the arguments provided to perform the call.
+The call node consists the calle target and of the arguments provided to perform the call.
 \autoref{ls:call_node} shows the representation of the call node. It also stores if the call has a return
 depending on the callee. This helps the semantic analyzer determine where and when this call can be used since
 this expression may have no value.
@@ -706,9 +706,9 @@ class Call : public Expression
 \label{ls:call_node}
 \end{listing}
 
-\subsection{Access}
+\subsection{Access Node}
 
-The Access node consists the target to access and the index for it.
+The access node consists the target to access and the index for it.
 \autoref{ls:access_node} shows the representation of the access node.
 The type represents the type of access (the type of iterator to access).
 
@@ -733,9 +733,9 @@ class Access : public Expression
 \label{ls:access_node}
 \end{listing}
 
-\subsection{Cast}
+\subsection{Cast Node}
 
-The Cast node consists the expression to cast and the type to cast it to.
+The cast node consists the expression to cast and the type to cast it to.
 \autoref{ls:cast_node} shows the representation of the access node.
 The type of cast as show in \autoref{sec:cast_expression} is also stored and further used by the analyzer.
 
@@ -760,9 +760,9 @@ class Cast : public Expression
 \label{ls:cast_node}
 \end{listing}
 
-\subsection{Slice}
+\subsection{Slice Node}
 
-The Slice node consists the expressions of the target and the expressions of the start, end and step indexes.
+The slice node consists the expressions of the target and the expressions of the start, end and step indexes.
 \autoref{ls:slice_node} shows the representation of the access node.
 The additional \texttt{is\_list} represents if the slice is done to a list or a string and it's used by the semantic analyzer.
 
@@ -794,9 +794,9 @@ class Slice : public Expression
 \label{ls:slice_node}
 \end{listing}
 
-\subsection{Range}
+\subsection{Range Node}
 
-The Range node consists the expressions of the start and end indexes.
+The range node consists the expressions of the start and end indexes.
 \autoref{ls:range_node} shows the representation of the access node.
 The inclusive fields indicates if the range is inclusive or exclusive.
 
@@ -823,9 +823,9 @@ class Range : public Expression
 \label{ls:range_node}
 \end{listing}
 
-\subsection{Delete}
+\subsection{Delete Node}
 
-The Delete node consists the target expression to delete.
+The delete node consists the target expression to delete.
 \autoref{ls:range_node} shows the representation of the access node.
 
 \begin{listing}[H]
@@ -845,9 +845,9 @@ class Delete : public Expression
 \label{ls:delete_node}
 \end{listing}
 
-\subsection{FunctionValue}
+\subsection{Function Value Node}
 
-The FunctionValue node represents a value to build a function. The node must know the function name,
+The function value node represents a value to build a function. The node must know the function name,
 the parameters of it, the return type and the body. Aditionally the scope block is also stored for further use.
 \autoref{ls:function_value_node} shows the representation of the FunctionValue node.
 
@@ -877,9 +877,9 @@ class FunctionValue : public Expression
 \label{ls:function_value_node}
 \end{listing}
 
-\subsection{Object}
+\subsection{Object Node}
 
-The Object node represents an object expression. The required informations are the class name and the arguments to initialize the instance (as a key value pair).
+The object node represents an object expression. The required informations are the class name and the arguments to initialize the instance (as a key value pair).
 Aditionally the scope block is also stored for further use.
 \autoref{ls:object_node} shows the representation of the Object node.
 
@@ -903,9 +903,9 @@ class Object : public Expression
 \label{ls:object_node}
 \end{listing}
 
-\subsection{Property}
+\subsection{Property Node}
 
-The Property node represents an access to an object property.
+The property node represents an access to an object property.
 The information needed is the expression to access and the name of the property.
 \autoref{ls:property_node} shows the representation of the Property node.
 
@@ -929,9 +929,9 @@ class Property : public Expression
 \label{ls:property_node}
 \end{listing}
 
-\subsection{Print}
+\subsection{Print Node}
 
-The Print node only requires the expression to print.
+The print node only requires the expression to print.
 \autoref{ls:print_node} shows the representation of the Print node.
 
 \begin{listing}[H]
@@ -951,9 +951,9 @@ class Print : public Statement
 \label{ls:print_node}
 \end{listing}
 
-\subsection{ExpressionStatement}
+\subsection{Expression Statement Node}
 
-The ExpressionStatement node is used as a wrapper to treat an expression as a valid statement.
+The expression statement node is used as a wrapper to treat an expression as a valid statement.
 \autoref{ls:expression_statement_node} shows the representation of the ExpressionStatement node.
 
 \begin{listing}[H]
@@ -973,9 +973,9 @@ class ExpressionStatement : public Statement
 \label{ls:expression_statement_node}
 \end{listing}
 
-\subsection{Declaration}
+\subsection{Declaration Node}
 
-The Declaration node is requires the name of the variable to declare and then a combination of the type and the initializer.
+The declaration node is requires the name of the variable to declare and then a combination of the type and the initializer.
 The type may be empty if the initializer is set, and the initializer may be empty if the type is set. Both of them may also be set
 but not empty.
 \autoref{ls:declaration_node} shows the representation of the Declaration node.
@@ -1002,9 +1002,9 @@ class Declaration : public Statement
 \label{ls:declaration_node}
 \end{listing}
 
-\subsection{Return}
+\subsection{Return Node}
 
-The Return node does not need an expression to be valid, but one may be provided.
+The return node does not need an expression to be valid, but one may be provided.
 \autoref{ls:return_node} shows the representation of the Return node.
 
 \begin{listing}[H]
@@ -1024,9 +1024,9 @@ class Return : public Statement
 \label{ls:return_node}
 \end{listing}
 
-\subsection{If}
+\subsection{If Node}
 
-The If node does need the condition expression and the then branch followed by the then block.
+The if node does need the condition expression and the then branch followed by the then block.
 Aditionally, it may have an else branch and an else scope block.
 \autoref{ls:if_node} shows the representation of the If node.
 
@@ -1054,9 +1054,9 @@ class If : public Statement
 \label{ls:if_node}
 \end{listing}
 
-\subsection{While}
+\subsection{While Node}
 
-The While node does need the condition expression and the body of it.
+The while node does need the condition expression and the body of it.
 It also stores the scope block for further use.
 \autoref{ls:while_node} shows the representation of the While node.
 
@@ -1081,9 +1081,9 @@ class While : public Statement
 \label{ls:while_node}
 \end{listing}
 
-\subsection{For}
+\subsection{For Node}
 
-The For node does require the iterator and the variable to store the loop value.
+The for node does require the iterator and the variable to store the loop value.
 Aditionally it may have the index in case it's needed as part of the loop.
 It also stores the scope block for further use.
 \autoref{ls:for_node} shows the representation of the For node.
@@ -1116,9 +1116,9 @@ class For : public Statement
 \label{ls:for_node}
 \end{listing}
 
-\subsection{Function}
+\subsection{Function Node}
 
-The Function node wraps the \texttt{FunctionValue} node as a statement.
+The function node wraps the \texttt{FunctionValue} node as a statement.
 \autoref{ls:function_node} shows the representation of the Function node.
 
 \begin{listing}[H]
@@ -1136,9 +1136,9 @@ class Function : public Statement
 \label{ls:function_node}
 \end{listing}
 
-\subsection{Use}
+\subsection{Use Node}
 
-The Use node requires the module name to import and an optional target list. Targets can be empty and all exported targets
+The use node requires the module name to import and an optional target list. Targets can be empty and all exported targets
 will be imported. It also requires a property to store the code of the module (the AST of that particular module) and
 the module scope block of it.
 \autoref{ls:use_node} shows the representation of the Use node.
@@ -1165,9 +1165,9 @@ class Use : public Statement
 \label{ls:use_node}
 \end{listing}
 
-\subsection{Export}
+\subsection{Export Node}
 
-The Export node just requires the statement that is exporting.
+The export node just requires the statement that is exporting.
 \autoref{ls:export_node} shows the representation of the Export node.
 
 \begin{listing}[H]
@@ -1185,9 +1185,9 @@ class Export : public Statement
 \label{ls:export_node}
 \end{listing}
 
-\subsection{Class}
+\subsection{Class Node}
 
-The Class node needs the class name, the body of the class and it saves the scope block of the class for further use.
+The class node needs the class name, the body of the class and it saves the scope block of the class for further use.
 \autoref{ls:class_node} shows the representation of the Class node.
 
 \begin{listing}[H]
