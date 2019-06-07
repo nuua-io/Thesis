@@ -121,7 +121,7 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
+\contentsline {listing}{\numberline {40}{\ignorespaces Main CMake script\relax }}{67}{listing.caption.40}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
@@ -129,75 +129,77 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {40}{\ignorespaces Node class\relax }}{109}{listing.40}
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {41}{\ignorespaces Expression and Statement classes\relax }}{110}{listing.41}
+\contentsline {listing}{\numberline {41}{\ignorespaces Node class\relax }}{111}{listing.41}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {42}{\ignorespaces Node properties definition\relax }}{110}{listing.42}
+\contentsline {listing}{\numberline {42}{\ignorespaces Expression and Statement classes\relax }}{112}{listing.42}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {43}{\ignorespaces Integer Node\relax }}{110}{listing.43}
+\contentsline {listing}{\numberline {43}{\ignorespaces Node properties definition\relax }}{112}{listing.43}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {44}{\ignorespaces Float Node\relax }}{111}{listing.44}
+\contentsline {listing}{\numberline {44}{\ignorespaces Integer Node\relax }}{112}{listing.44}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {45}{\ignorespaces String Node\relax }}{111}{listing.45}
+\contentsline {listing}{\numberline {45}{\ignorespaces Float Node\relax }}{113}{listing.45}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {46}{\ignorespaces Boolean Node\relax }}{112}{listing.46}
+\contentsline {listing}{\numberline {46}{\ignorespaces String Node\relax }}{113}{listing.46}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {47}{\ignorespaces List Node\relax }}{112}{listing.47}
+\contentsline {listing}{\numberline {47}{\ignorespaces Boolean Node\relax }}{114}{listing.47}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {48}{\ignorespaces Dictionary Node\relax }}{113}{listing.48}
+\contentsline {listing}{\numberline {48}{\ignorespaces List Node\relax }}{114}{listing.48}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {49}{\ignorespaces Group Node\relax }}{113}{listing.49}
+\contentsline {listing}{\numberline {49}{\ignorespaces Dictionary Node\relax }}{115}{listing.49}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {50}{\ignorespaces Unary Node\relax }}{114}{listing.50}
+\contentsline {listing}{\numberline {50}{\ignorespaces Group Node\relax }}{115}{listing.50}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {51}{\ignorespaces Binary Node\relax }}{114}{listing.51}
+\contentsline {listing}{\numberline {51}{\ignorespaces Unary Node\relax }}{116}{listing.51}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {52}{\ignorespaces Variable Node\relax }}{115}{listing.52}
+\contentsline {listing}{\numberline {52}{\ignorespaces Binary Node\relax }}{116}{listing.52}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {53}{\ignorespaces Assign Node\relax }}{115}{listing.53}
+\contentsline {listing}{\numberline {53}{\ignorespaces Variable Node\relax }}{117}{listing.53}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {54}{\ignorespaces Logical Node\relax }}{116}{listing.54}
+\contentsline {listing}{\numberline {54}{\ignorespaces Assign Node\relax }}{117}{listing.54}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {55}{\ignorespaces Call Node\relax }}{117}{listing.55}
+\contentsline {listing}{\numberline {55}{\ignorespaces Logical Node\relax }}{118}{listing.55}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {56}{\ignorespaces Access Node\relax }}{117}{listing.56}
+\contentsline {listing}{\numberline {56}{\ignorespaces Call Node\relax }}{119}{listing.56}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {57}{\ignorespaces Cast Node\relax }}{118}{listing.57}
+\contentsline {listing}{\numberline {57}{\ignorespaces Access Node\relax }}{119}{listing.57}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {58}{\ignorespaces Slice Node\relax }}{119}{listing.58}
+\contentsline {listing}{\numberline {58}{\ignorespaces Cast Node\relax }}{120}{listing.58}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {59}{\ignorespaces Range Node\relax }}{120}{listing.59}
+\contentsline {listing}{\numberline {59}{\ignorespaces Slice Node\relax }}{121}{listing.59}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {60}{\ignorespaces Delete Node\relax }}{120}{listing.60}
+\contentsline {listing}{\numberline {60}{\ignorespaces Range Node\relax }}{122}{listing.60}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {61}{\ignorespaces FunctionValue Node\relax }}{121}{listing.61}
+\contentsline {listing}{\numberline {61}{\ignorespaces Delete Node\relax }}{122}{listing.61}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {62}{\ignorespaces Object Node\relax }}{122}{listing.62}
+\contentsline {listing}{\numberline {62}{\ignorespaces FunctionValue Node\relax }}{123}{listing.62}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {63}{\ignorespaces Property Node\relax }}{122}{listing.63}
+\contentsline {listing}{\numberline {63}{\ignorespaces Object Node\relax }}{124}{listing.63}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {64}{\ignorespaces Print Node\relax }}{123}{listing.64}
+\contentsline {listing}{\numberline {64}{\ignorespaces Property Node\relax }}{124}{listing.64}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {65}{\ignorespaces ExpressionStatement Node\relax }}{123}{listing.65}
+\contentsline {listing}{\numberline {65}{\ignorespaces Print Node\relax }}{125}{listing.65}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {66}{\ignorespaces Declaration Node\relax }}{124}{listing.66}
+\contentsline {listing}{\numberline {66}{\ignorespaces ExpressionStatement Node\relax }}{125}{listing.66}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {67}{\ignorespaces Return Node\relax }}{124}{listing.67}
+\contentsline {listing}{\numberline {67}{\ignorespaces Declaration Node\relax }}{126}{listing.67}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {68}{\ignorespaces If Node\relax }}{125}{listing.68}
+\contentsline {listing}{\numberline {68}{\ignorespaces Return Node\relax }}{126}{listing.68}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {69}{\ignorespaces While Node\relax }}{126}{listing.69}
+\contentsline {listing}{\numberline {69}{\ignorespaces If Node\relax }}{127}{listing.69}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {70}{\ignorespaces For Node\relax }}{127}{listing.70}
+\contentsline {listing}{\numberline {70}{\ignorespaces While Node\relax }}{128}{listing.70}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {71}{\ignorespaces Function Node\relax }}{127}{listing.71}
+\contentsline {listing}{\numberline {71}{\ignorespaces For Node\relax }}{129}{listing.71}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {72}{\ignorespaces Use Node\relax }}{128}{listing.72}
+\contentsline {listing}{\numberline {72}{\ignorespaces Function Node\relax }}{129}{listing.72}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {73}{\ignorespaces Export Node\relax }}{128}{listing.73}
+\contentsline {listing}{\numberline {73}{\ignorespaces Use Node\relax }}{130}{listing.73}
 \defcounter {refsection}{0}\relax 
-\contentsline {listing}{\numberline {74}{\ignorespaces Class Node\relax }}{129}{listing.74}
+\contentsline {listing}{\numberline {74}{\ignorespaces Export Node\relax }}{130}{listing.74}
+\defcounter {refsection}{0}\relax 
+\contentsline {listing}{\numberline {75}{\ignorespaces Class Node\relax }}{131}{listing.75}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

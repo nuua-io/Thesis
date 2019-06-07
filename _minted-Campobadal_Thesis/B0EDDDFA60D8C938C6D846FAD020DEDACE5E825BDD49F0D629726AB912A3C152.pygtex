@@ -1,0 +1,56 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{\PYGZsh{} Required project information.}
+\PYG{n+nb}{cmake\PYGZus{}minimum\PYGZus{}required} \PYG{p}{(}\PYG{l+s}{VERSION} \PYG{l+s}{3.9}\PYG{p}{)}
+\PYG{n+nb}{project} \PYG{p}{(}\PYG{l+s}{Nuua}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} IPO support}
+\PYG{n+nb}{include} \PYG{p}{(}\PYG{l+s}{CheckIPOSupported}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Set the output directory}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{OUTPUT\PYGZus{}DIR} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{CMAKE\PYGZus{}BINARY\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/bin}\PYG{p}{)}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{LIBRARY\PYGZus{}DIR} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{CMAKE\PYGZus{}BINARY\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/lib}\PYG{p}{)}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{STANDARD\PYGZus{}LIRBARY\PYGZus{}DIR} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{CMAKE\PYGZus{}SOURCE\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/Lib}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Set the default build mode to release if not set.}
+\PYG{n+nb}{if} \PYG{p}{(}\PYG{l+s}{NOT} \PYG{l+s}{CMAKE\PYGZus{}BUILD\PYGZus{}TYPE}\PYG{p}{)}
+  \PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}BUILD\PYGZus{}TYPE} \PYG{l+s}{Release}\PYG{p}{)}
+\PYG{n+nb}{endif} \PYG{p}{()}
+
+\PYG{c}{\PYGZsh{} Set the C++ standard to use.}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}CXX\PYGZus{}STANDARD} \PYG{l+s}{20}\PYG{p}{)}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}CXX\PYGZus{}STANDARD\PYGZus{}REQUIRED} \PYG{l+s}{ON}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Enable interprocedural optimizations}
+\PYG{n+nb}{check\PYGZus{}ipo\PYGZus{}supported} \PYG{p}{(}\PYG{l+s}{RESULT} \PYG{l+s}{ipo\PYGZus{}supported}\PYG{p}{)}
+\PYG{n+nb}{if} \PYG{p}{(}\PYG{l+s}{ipo\PYGZus{}supported}\PYG{p}{)}
+    \PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}INTERPROCEDURAL\PYGZus{}OPTIMIZATION} \PYG{l+s}{true}\PYG{p}{)}
+\PYG{n+nb}{endif} \PYG{p}{()}
+
+\PYG{c}{\PYGZsh{} Set the C++ general flags and flags for debug and release.}
+\PYG{n+nb}{if} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}COMPILER\PYGZus{}IS\PYGZus{}GNUCXX}\PYG{p}{)}
+    \PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}CXX\PYGZus{}FLAGS} \PYG{l+s+s2}{\PYGZdq{}\PYGZhy{}Wall \PYGZhy{}Wextra \PYGZhy{}pipe\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}CXX\PYGZus{}FLAGS\PYGZus{}DEBUG} \PYG{l+s+s2}{\PYGZdq{}\PYGZhy{}g \PYGZhy{}DDEBUG=true\PYGZdq{}}\PYG{p}{)}
+    \PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}CXX\PYGZus{}FLAGS\PYGZus{}RELEASE} \PYG{l+s+s2}{\PYGZdq{}\PYGZhy{}Ofast \PYGZhy{}s \PYGZhy{}flto \PYGZhy{}frename\PYGZhy{}registers \PYGZhy{}fopenmp \PYGZhy{}D\PYGZus{}GLIBCXX\PYGZus{}PARALLEL \PYGZhy{}DDEBUG=false\PYGZdq{}}\PYG{p}{)}
+\PYG{n+nb}{endif} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}COMPILER\PYGZus{}IS\PYGZus{}GNUCXX}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Set the output directories.}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}ARCHIVE\PYGZus{}OUTPUT\PYGZus{}DIRECTORY} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{LIBRARY\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/}\PYG{o}{\PYGZdl{}\PYGZlt{}}\PYG{n+nv}{0:}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}LIBRARY\PYGZus{}OUTPUT\PYGZus{}DIRECTORY} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{LIBRARY\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/}\PYG{o}{\PYGZdl{}\PYGZlt{}}\PYG{n+nv}{0:}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+\PYG{n+nb}{set} \PYG{p}{(}\PYG{l+s}{CMAKE\PYGZus{}RUNTIME\PYGZus{}OUTPUT\PYGZus{}DIRECTORY} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{OUTPUT\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/}\PYG{o}{\PYGZdl{}\PYGZlt{}}\PYG{n+nv}{0:}\PYG{o}{\PYGZgt{}}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Add the subdirectories where to look.}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Logger}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Lexer}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Parser}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Analyzer}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Compiler}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Virtual\PYGZhy{}Machine}\PYG{p}{)}
+\PYG{n+nb}{add\PYGZus{}subdirectory} \PYG{p}{(}\PYG{l+s}{Application}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Setup the final executable.}
+\PYG{n+nb}{add\PYGZus{}executable} \PYG{p}{(}\PYG{l+s}{nuua} \PYG{l+s}{nuua.cpp} \PYG{l+s}{resources/icon.rc}\PYG{p}{)}
+\PYG{n+nb}{target\PYGZus{}link\PYGZus{}libraries} \PYG{p}{(}\PYG{l+s}{nuua} \PYG{l+s}{Application}\PYG{p}{)}
+
+\PYG{c}{\PYGZsh{} Copy the standard library to the exetuable path.}
+\PYG{n+nb}{add\PYGZus{}custom\PYGZus{}command} \PYG{p}{(}\PYG{l+s}{TARGET} \PYG{l+s}{nuua} \PYG{l+s}{POST\PYGZus{}BUILD} \PYG{l+s}{COMMAND} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{CMAKE\PYGZus{}COMMAND}\PYG{o}{\PYGZcb{}} \PYG{l+s}{\PYGZhy{}E} \PYG{l+s}{copy\PYGZus{}directory} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{STANDARD\PYGZus{}LIRBARY\PYGZus{}DIR}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZdl{}\PYGZob{}}\PYG{n+nv}{OUTPUT\PYGZus{}DIR}\PYG{o}{\PYGZcb{}}\PYG{l+s}{/Lib}\PYG{p}{)}
+\end{Verbatim}
