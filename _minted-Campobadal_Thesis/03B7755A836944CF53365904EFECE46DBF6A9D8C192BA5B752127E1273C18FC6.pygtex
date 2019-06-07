@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{clas} \PYG{n}{Person} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{name}\PYG{p}{:} \PYG{n}{string}
+    \PYG{n+nl}{age}\PYG{p}{:} \PYG{k+kt}{int}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{fun} \PYG{n}{main}\PYG{p}{(}\PYG{n+nl}{argv}\PYG{p}{:} \PYG{p}{[}\PYG{n}{string}\PYG{p}{])} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{p} \PYG{p}{:}\PYG{o}{=} \PYG{n}{Person}\PYG{o}{!}\PYG{p}{\PYGZob{}}\PYG{n+nl}{name}\PYG{p}{:} \PYG{l+s}{\PYGZdq{}Erik\PYGZdq{}}\PYG{p}{,} \PYG{n+nl}{age}\PYG{p}{:} \PYG{l+m+mi}{22}\PYG{p}{\PYGZcb{}}
+    \PYG{n}{print} \PYG{n}{p}\PYG{p}{.}\PYG{n}{name} \PYG{o}{+} \PYG{l+s}{\PYGZdq{} is \PYGZdq{}} \PYG{o}{+} \PYG{n}{p}\PYG{p}{.}\PYG{n}{age} \PYG{n}{as} \PYG{n}{string}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Memory}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// This stores the opcodes and consant indexes of the code.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{opcode\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{n}{code}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the value constants.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Value}\PYG{o}{\PYGZgt{}} \PYG{n}{constants}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the lines corresponding to the opcodes.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{size\PYGZus{}t}\PYG{p}{,} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{files}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the lines corresponding to the opcodes.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{size\PYGZus{}t}\PYG{p}{,} \PYG{n}{line\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{n}{lines}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the lines corresponding to the opcodes.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{k+kt}{size\PYGZus{}t}\PYG{p}{,} \PYG{n}{column\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{n}{columns}\PYG{p}{;}
+        \PYG{c+c1}{// Dumps the memory.}
+        \PYG{k+kt}{void} \PYG{n+nf}{dump}\PYG{p}{();}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

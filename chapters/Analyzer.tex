@@ -36,7 +36,11 @@ This analysis is also recursive.
 \begin{figure}[H]
 	\centering
 	\begin{subtable}{0.45\textwidth}
-        \texttt{fun main(argv: [string]) \{\\\tab// ...\\\}}
+\begin{minted}{cpp}
+fun main(argv:  [string]) {
+    // ...
+}
+\end{minted}
 		\caption{Program}
 	\end{subtable}
 	\begin{subtable}{0.45\textwidth}
@@ -104,7 +108,7 @@ Among other mentioned checks that are specific to certain nodes, some of the che
     \item List / String / Dictionary index type.
     \item Variable lifetime (\texttt{last\_use}).
     \item Use only exported declarations.
-    \item Check for iterator (must be list / dict).
+    \item Iterator check on required nodes (must be list / string / dict).
     \item Type matching.
     \item \texttt{main([string])} required on the main module.
 \end{itemize}
@@ -112,7 +116,7 @@ Among other mentioned checks that are specific to certain nodes, some of the che
 \section{Type Inference}
 
 Type inference is done in Nuua by the \texttt{Type} class seen on \autoref{ls:type_class}. However, it is used in this layer to get
-the expression types of the program. Type inference is ability to get the type of the expressions at compile time. Type inference is
+the expression types of the program. Type inference is the ability to get the type of expressions at compile time. Type inference is
 a step needed to perform type checks on the AST. Most nodes require a type check at some point and therefore, type inference can be used
 to get the type of the expressions on such nodes. The \texttt{Type} class has a constructor that accepts an expression and a list of blocks.
 This constructor can determine the expression type and if the expression contains variables, their type is obtained from the block list,
@@ -176,7 +180,7 @@ class Module
 \label{ls:module_class}
 \end{code}
 
-\section{Module In-memory Cache}
+\section{In-memory Module Cache}
 
 Since a module might be imported more than once as shown in \autoref{fig:module_mem_cache} the analyzer
 have an in-memory cache to know when a module has been analyzed to avoid redundant analyses.

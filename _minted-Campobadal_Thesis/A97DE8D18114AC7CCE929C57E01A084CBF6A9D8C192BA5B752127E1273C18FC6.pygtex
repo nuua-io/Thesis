@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{list\PYGZus{}int\PYGZus{}sum}\PYG{p}{(}\PYG{n+nl}{l}\PYG{p}{:} \PYG{p}{[}\PYG{k+kt}{int}\PYG{p}{])}\PYG{o}{:} \PYG{k+kt}{int} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{sum} \PYG{p}{:}\PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{for} \PYG{n}{num} \PYG{n}{in} \PYG{n}{l} \PYG{o}{=\PYGZgt{}} \PYG{n}{sum} \PYG{o}{=} \PYG{n}{sum} \PYG{o}{+} \PYG{n}{num}
+    \PYG{k}{return} \PYG{n}{sum}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{list\PYGZus{}int\PYGZus{}map}\PYG{p}{(}\PYG{n+nl}{l}\PYG{p}{:} \PYG{p}{[}\PYG{k+kt}{int}\PYG{p}{],} \PYG{n+nl}{f}\PYG{p}{:} \PYG{p}{(}\PYG{k+kt}{int} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kt}{int}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{k}{for} \PYG{n}{num}\PYG{p}{,} \PYG{n}{index} \PYG{n}{in} \PYG{n}{l} \PYG{o}{=\PYGZgt{}} \PYG{n}{l}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{=} \PYG{n}{f}\PYG{p}{(}\PYG{n}{num}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{list\PYGZus{}float\PYGZus{}sum}\PYG{p}{(}\PYG{n+nl}{l}\PYG{p}{:} \PYG{p}{[}\PYG{k+kt}{float}\PYG{p}{])}\PYG{o}{:} \PYG{k+kt}{float} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{sum} \PYG{p}{:}\PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{for} \PYG{n}{num} \PYG{n}{in} \PYG{n}{l} \PYG{o}{=\PYGZgt{}} \PYG{n}{sum} \PYG{o}{=} \PYG{n}{sum} \PYG{o}{+} \PYG{n}{num}
+    \PYG{k}{return} \PYG{n}{sum}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{list\PYGZus{}float\PYGZus{}map}\PYG{p}{(}\PYG{n+nl}{l}\PYG{p}{:} \PYG{p}{[}\PYG{k+kt}{float}\PYG{p}{],} \PYG{n+nl}{f}\PYG{p}{:} \PYG{p}{(}\PYG{k+kt}{float} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kt}{float}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{k}{for} \PYG{n}{num}\PYG{p}{,} \PYG{n}{index} \PYG{n}{in} \PYG{n}{l} \PYG{o}{=\PYGZgt{}} \PYG{n}{l}\PYG{p}{[}\PYG{n}{index}\PYG{p}{]} \PYG{o}{=} \PYG{n}{f}\PYG{p}{(}\PYG{n}{num}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

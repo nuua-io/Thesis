@@ -1,0 +1,27 @@
+As a result of the hard work involved in the development of this thesis, the final result satisfies all the primary objectives set at \autoref{sec:objectives}.
+The final result gets close to other programming languages in terms of project structure but also in terms of performance according to some initial
+tests done. However, benchmarking these systems is a very complex job and therefore it's not part of this thesis.
+
+\section{Further Evolution}
+\label{sec:forthcoming}
+
+Although all the objects are complete there are still many things that could be implemented into the language, the compiler, and the interpreter.
+Some of these things are very important and they are found in most mature programming languages. There are a set of features that are planned to be
+implemented into the language, the compiler, and the interpreter.
+
+Some of this features are not simple changes or additions, in fact, some of the features provided here can probably take months to implement,
+therefore, they can't be included as part of this thesis and are just listed here for future reference.
+
+\begin{itemize}
+    \item A C foreign function interface (FFI) to call C code using Nuua. This should allow the use of libc and other existing C code.
+    \item A propper I/O interface to read and write to files, including stdin, stdout, stderr and removing the print statement.
+    \item Function overloading.
+    \item Generic programming
+    \item Extend and create a proper useful standard library.
+    \item A website (\href{https://nuua.io}{nuua.io}) to announce, showcase and write all the documentation.
+    \item A centralized package/module manager to automate the process of using external modules at a certain version.
+    \item Use a wider string representation for the compiler. Change from \texttt{std::string} to something wider like
+        \texttt{std::u16string} or \texttt{std::wstring}.
+    \item Support more binary operators such as \texttt{\%, +=, -=, /= or *=}.
+    \item Add more optimizations to the compiler.
+\end{itemize}

@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{ValueFunction}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the function index where it\PYGZsq{}s code begin.}
+        \PYG{k+kt}{size\PYGZus{}t} \PYG{n}{index}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the ammount of registers needed}
+        \PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{registers}\PYG{p}{;}
+        \PYG{c+c1}{// Basic constructor for the function value.}
+        \PYG{n}{ValueFunction}\PYG{p}{(}\PYG{k+kt}{size\PYGZus{}t} \PYG{n}{index}\PYG{p}{,} \PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{registers}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{index}\PYG{p}{(}\PYG{n}{index}\PYG{p}{),} \PYG{n}{registers}\PYG{p}{(}\PYG{n}{registers}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

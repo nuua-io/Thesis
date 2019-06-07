@@ -1,0 +1,85 @@
+This chapter deals with a very basic implementation of the Nuua standard library. This chapter is used as a working example of the path system mentioned in \autoref{sec:parser_class}.
+
+Although this is just a minimal working example, it is enough to see how it works
+and be ready to get expanded as time goes on.
+
+\section{Utility module}
+
+The \texttt{utility} module as shown in \autoref{ls:utility_module} implements basic utilities to work with different data types.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+export fun int_min(a: int, b: int): int {
+    if a < b => return a
+    return b
+}
+export fun float_min(a: float, b: float): float {
+    if a < b => return a
+    return b
+}
+export fun int_max(a: int, b: int): int {
+    if a > b => return a
+    return b
+}
+export fun float_max(a: float, b: float): float {
+    if a > b => return a
+    return b
+}
+\end{minted}
+\caption{Utility module}
+\label{ls:utility_module}
+\end{listing}
+
+\section{List module}
+
+The \texttt{list} module as shown in \autoref{ls:list_module} implements basic functions to work with list types.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+export fun list_int_sum(l: [int]): int {
+    sum := 0
+    for num in l => sum = sum + num
+    return sum
+}
+export fun list_int_map(l: [int], f: (int -> int)) {
+    for num, index in l => l[index] = f(num)
+}
+export fun list_float_sum(l: [float]): float {
+    sum := 0.0
+    for num in l => sum = sum + num
+    return sum
+}
+export fun list_float_map(l: [float], f: (float -> float)) {
+    for num, index in l => l[index] = f(num)
+}
+\end{minted}
+\caption{List module}
+\label{ls:list_module}
+\end{listing}
+
+\section{Dict module}
+
+The \texttt{dict} module as shown in \autoref{ls:dict_module} implements basic functions to work with dict types.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+export fun dict_int_sum(e: {int}): int {
+    sum := 0
+    for num in e => sum = sum + num
+    return sum
+}
+export fun dict_int_map(e: {int}, f: (int -> int)) {
+    for num, index in e => e[index] = f(num)
+}
+export fun dict_float_sum(e: {float}): float {
+    sum := 0.0
+    for num in e => sum = sum + num
+    return sum
+}
+export fun dict_float_map(e: {float}, f: (float -> float)) {
+    for num, index in e => e[index] = f(num)
+}
+\end{minted}
+\caption{Dict module}
+\label{ls:dict_module}
+\end{listing}

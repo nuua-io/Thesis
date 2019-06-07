@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nl}{l} \PYG{p}{:}\PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{]}
+\PYG{n}{l}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{4} \PYG{c+c1}{// 4}
+\PYG{c+c1}{// The value of l will now be [1, 4, 3]}
+\PYG{n+nl}{d} \PYG{p}{:}\PYG{o}{=} \PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZdq{}a\PYGZdq{}}\PYG{o}{:} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}b\PYGZdq{}}\PYG{o}{:} \PYG{l+m+mi}{20}\PYG{p}{\PYGZcb{}}
+\PYG{n}{d}\PYG{p}{[}\PYG{l+s}{\PYGZdq{}a\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{5} \PYG{c+c1}{// 5}
+\PYG{c+c1}{// The value of d will now be \PYGZob{}\PYGZdq{}a\PYGZdq{}: 5, \PYGZdq{}b\PYGZdq{}: 20\PYGZcb{}}
+\end{Verbatim}

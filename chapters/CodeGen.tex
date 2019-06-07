@@ -1,1 +1,480 @@
-The code generation...
+The code generation layer is responsible for generating the bytecode that will be interpreted by the virtual machine.
+Bytecode instructions are very similar to hardware instructions but at a much higher level (they are not as close to hardware).
+\autoref{fig:codegen_overview} shows the job of the code generator.
+
+This chapter does not define all the available opcodes found in Nuua. All those opcodes can be found on \autoref{sec:opcodes}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        [node distance=1cm]
+
+        % Nodes of the layered system
+        \node[block] (input) {Abstract syntax tree};
+        \node[block,right=of input] (codegen) {Code generator};
+        \node[block,right=of lexer] (output) {List of opcodes};
+
+        % Lines
+        \draw[line] (input) -- (codegen);
+        \draw[line] (codegen) -- (output);
+
+    \end{tikzpicture}
+
+    % Caption and Label
+    \caption{Code generator overview}
+    \label{fig:codegen_overview}
+\end{figure}
+
+The goal of this layer is to be able to transform a data structure into a linear sequence of opcodes. The opcodes have been designed
+for the needs of the project. This transformation is performed in a similar way as the semantic analysis explained in \autoref{sec:semantic_analysis}.
+It first performs a top-level walk to assign each function a register (known as tld registration) and if a use declaration is found, it is also
+registered by after the current module. Therefore, it delays it's registration until the current one it's analyzed. This has no impact on the resulting code
+rather than having each module registered sequentially (easier to debug).
+
+\section{Call Stack and Frames}
+\label{sec:call_stack}
+
+Each function call in Nuua introduces a new frame that is pushed into the call stack. The call stack is a stack that stores the active frames in the application.
+When the function ends the frame is popped from the call stack. The frame contains information about the function variables, specifically, it contains the registers
+where the function values live. Space is allocated when the frame is created and it's then deallocated when the function ends. This is done by the
+virtual machine as seen in \autoref{sec:virtual_machine}.
+
+The frame consists of an array containing the registers that the function use. Those registers are allocated when the frame is created (when a function is called).
+They must also contain the amount of registers it has allocated and a return address that is used by the virtual machine to go back to the opcode where the function was called.
+
+To allow passing parameters between frames (function parameters and return values) all frames share a common value stack. When a function is called, its arguments
+are pushed to the stack and once the function frame is set they are poped from it. When a function returns a value, it is pushed to the stack and the frame ends.
+When the last frame is restored, it then pops the value to a register for further use.
+
+Therefore, \autoref{ls:frame_class} shows the frame class that is used in the Nuua compiler and virtual machine.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Frame
+{
+    public:
+        // Stores the registers.
+        std::unique_ptr<Value[]> registers;
+        // Stores the registers size.
+        registers_size_t registers_size = 0;
+        // Stores the return address to get back to the original program counter.
+        opcode_t *return_address = nullptr;
+        // Allocates the space to store the registers.
+        void allocate_registers(registers_size_t size);
+        // Frees the allocated register space.
+        void free_registers();
+        // Setup the frame.
+        void setup(registers_size_t size, opcode_t *return_address);
+};
+\end{minted}
+\caption{Frame class}
+\label{ls:frame_class}
+\end{listing}
+
+\section{Register Allocation}
+
+Compiler allocation takes place during code generation by the use of a \texttt{FrameInfo} class that helps to determine the right amount of registers needed
+to compile a function and also optimizes the registers used by using a very simple strategy. The frame information class is shown in \autoref{ls:frame_info_class}.
+
+As it can be seen, the frame info is used as a register allocator, it basically consists of two lists of registers and a current register index.
+
+\begin{itemize}
+    \item \emph{Free Registers}: Stores the registers that were freed and can be used again.
+    \item \emph{Protected Registers}: Stores the registers that are protected from being freed (as they are used in variables and not anonymous expressions).
+    \item \emph{Current Register}: Stores the index of the register that will be given in case no free register is available.
+\end{itemize}
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class FrameInfo
+{
+    // Stores the registers that are free to use again.
+    std::vector<register_t> free_registers;
+    // Stores the registers that are protected to get free unless forçed.
+    std::vector<register_t> protected_registers;
+    public:
+        // Stores the next register to give in case no free ones are available.
+        register_t current_register = 0;
+        // Method to return an available register.
+        // It will try to get it from the free_registers
+        // otherwise it will return a new register and
+        // increment current_register by 1
+        register_t get_register(bool protect = false);
+        // Used to free a register.
+        void free_register(register_t reg, bool force = false);
+        // Resets the frame info.
+        void reset();
+};
+\end{minted}
+\caption{FrameInfo class}
+\label{ls:frame_info_class}
+\end{listing}
+
+When the function \texttt{get\_register} is called, it first performs a check on the \texttt{free\_registers} list. If that list is empty it means
+that there is no free register to be used, and therefore the \texttt{current\_register} index is the register that will be given and it's incremented by 1.
+If the list is not empty it means that there are free registers available and then the last element of the list is poped and is the register that will be given.
+In any case, if the \texttt{protect} parameter is true the given register is also added to the \texttt{protected\_registers} list before the function ends.
+
+When the function \texttt{free\_register} is called, it first performs a check to see if the register that is attempted to be freed is a protected register.
+If it is protected and the \texttt{force} parameter is false the function ends without any modifications. If it is protected and the \texttt{force} parameter
+is true, the element it's removed from the \texttt{protected\_registers} and the register is added to the \texttt{free\_registers} list. In case the register
+it's not in the \texttt{protected\_registers} list, it is added to the \texttt{free\_registers} list without any further checks.
+
+The reason behind this strategy is because when the code generation is taking place each node in the AST gets compiled and simple expressions like
+\texttt{1 + 2} need to use 3 registers. 1 for the destination where the result of the operations is going to be stored (this calls the \texttt{get\_register}
+function found in the register allocator) and 2 for the operands. However, when the operation is complete and the result is in the destination register,
+the other 2 registers are not used again. They are then considered garbage. However, that means that not only they are garbage but they are also using
+part of the memory that could be used by further registers.
+
+The solution is to use the register allocator presented in \autoref{ls:frame_info_class} to free the values of the 2 registers
+that can become garbage after the operation is complete. The reason there are protected registers is in case the operation was something
+like \texttt{a + 2}. Where the register where the variable \texttt{a} is stored should not be freed because the variable could be used afterward.
+This also means that when a variable is declared, the register that is bound to be a protected register and can only be freed when the
+variable reaches the last node where it is used (This is already known since the semantic analysis determines the variable lifetime).
+The variable can be freed by using the force parameter.
+
+In the \autoref{fig:bytecode_rel} there can be seen that the registers where the same destination register is used in different operations. This is
+thanks to this register allocation technique. The number of required registers for the function is also much lower needing much less space to allocate
+in order to do all of its tasks.
+
+\section{Program Memory}
+
+The program memory represents the place where the program is going to be stored. Not only does include all the generated bytecode but also
+includes the constant pool where all the constants are stored and also a way to store the relation between opcodes and their file, line, and column where
+they are found in the program source file in case the virtual machine needs to throw an error.
+The strategy used is explained in \autoref{sec:bytecode_origin}. \autoref{ls:memory_class} shows the class used in Nuua to represent the program memory.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Memory
+{
+    public:
+        // This stores the opcodes and consant indexes of the code.
+        std::vector<opcode_t> code;
+        // Stores the value constants.
+        std::vector<Value> constants;
+        // Stores the lines corresponding to the opcodes.
+        std::unordered_map<size_t, std::shared_ptr<const std::string>> files;
+        // Stores the lines corresponding to the opcodes.
+        std::unordered_map<size_t, line_t> lines;
+        // Stores the lines corresponding to the opcodes.
+        std::unordered_map<size_t, column_t> columns;
+        // Dumps the memory.
+        void dump();
+};
+\end{minted}
+\caption{Memory class}
+\label{ls:memory_class}
+\end{listing}
+
+\subsection{Bytecode and Source File Relationship}
+\label{sec:bytecode_origin}
+
+The number of opcodes generated can be pretty high but it's not an issue considering each opcode is just $64$ bits (64 bits * operand).
+However, each opcode should be bound to a file pointer, a line, and a column. This includes so many extra bytes for no reason. This would, however, be quite
+easy to implement by creating 3 additional arrays with the same length of the opcodes + operands (again it uses a lot of memory). A proposed solution uses 3
+hashmaps (for the files, lines, and columns) where the hashmap keys correspond to an arbitrary index in the bytecode array where the corresponding
+value has changed.
+
+This is better explained with an example as shown in \autoref{fig:bytecode_rel}. As the annotations on the right side of the bytecode show, there are only 3 line changes. Therefore, the hashmap that corresponds to the lines will have 3 entries where the keys are
+the indexes where this line change occur. Following the same code we can deduce:
+
+\begin{itemize}
+    \item The first index is 0 with the value of 1.
+    \item The second index 2 with the value of 2.
+    \item The third index 19 with the value of 3.
+\end{itemize}
+
+This strategy allows deducing the line where the code failed by looking at the hashmap keys and getting
+the value of the highest key that is lower or equal to the current index. Let's assume the code fails at the annotation marked with a \texttt{*}.
+The fail index is 8 (the opcode is on index 8). By looking at the hashmap keys previously stated, the highest key lower than 8 is the key 2
+and therefore the value is line 2.
+
+The same strategy applies to the file and the column as well.
+
+In short then, one of the jobs of the code generator is to add the necessary keys and values to the hashmaps.
+
+\begin{figure}[H]
+	\centering
+	\begin{subtable}{0.4\textwidth}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    1 + 2 + 3
+    4 + 5 + 6
+}
+\end{minted}
+		\caption{Program}
+	\end{subtable}
+	\begin{subtable}{0.5\textwidth}
+\begin{lstlisting}
+POP     R-00000 // Line 1
+LOAD_C  R-00001 C-00000 // Line 2
+LOAD_C  R-00002 C-00001
+ADD_INT R-00003 R-00001 R-00002 // *
+LOAD_C  R-00002 C-00002
+ADD_INT R-00001 R-00003 R-00002
+LOAD_C  R-00002 C-00003 // Line 3
+LOAD_C  R-00003 C-00004
+ADD_INT R-00004 R-00002 R-00003
+LOAD_C  R-00003 C-00005
+ADD_INT R-00002 R-00004 R-00003
+RETURN
+EXIT
+\end{lstlisting}
+		\caption{Bytecode generated}
+        \label{fig:bytecode_rel_bg}
+	\end{subtable}
+	\caption{Example program bytecode}
+    \label{fig:bytecode_rel}
+\end{figure}
+
+\section{Program}
+
+With the program memory taking care of all the opcodes, constants and the bytecode relationship with the source file, a program can be represented
+by its memory and the main frame (where the global registers live).
+\autoref{ls:program_class} shows the program class used in Nuua.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Program
+{
+    public:
+        // Stores the main frame of the program.
+        Frame main_frame;
+        // Stores the program memory (The main code).
+        std::unique_ptr<Memory> memory;
+        // Constructor to allocate the memory of the
+        // program memory. Can't be done here since
+        // Memory is a forward declared class.
+        Program();
+};
+\end{minted}
+\caption{Program class}
+\label{ls:program_class}
+\end{listing}
+
+\section{Values}
+
+Values are very important for the virtual machine, but the code generator is the one that defines how values look like since the code generator
+already creates values (the constants) for the program. Therefore, the values need to be explained here. As \autoref{sec:nuua_data_types} explains, the
+values may have any of those types but not more than one at the same time. The code generator defines the C++ data types for each value as
+shown in \autoref{ls:type_defs}.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+typedef int64_t nint_t;
+typedef double nfloat_t;
+typedef bool nbool_t;
+typedef std::string nstring_t;
+typedef std::vector<Value> nlist_t;
+typedef ValueDictionary ndict_t;
+typedef ValueFunction nfun_t;
+typedef ValueObject nobject_t;
+\end{minted}
+\caption{Nuua data type definitions}
+\label{ls:type_defs}
+\end{listing}
+
+A value must know its type and its current value. Due to the fact that the values are very different types but only a single one can exist at the same time, a
+C union can be used to avoid wasting memory. Modern C++ has a \texttt{std::variant} that is basically a C union with steroids since it calls the
+deconstructors when the data changes and also stores the type it owns. A value should be able to be retyped and changed without the need to
+allocate a new value and deallocate an old one. Reusing memory is something that will be needed since registers are re-used and the fewer memory allocations,
+the faster the execution becomes.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Value
+{
+    void build_from_type(const Type *type);
+    public:
+        // The type of the value.
+        Type type;
+        // Using a variant to avoid unessesary memory.
+        std::variant<
+            // Stores the reporesentation of the VALUE_INT.
+            nint_t,
+            // Stores the representation of the VALUE_FLOAT.
+            nfloat_t,
+            // Stores the representation of the VALUE_BOOL.
+            nbool_t,
+            // Stores the representation of the VALUE_STRING.
+            nstring_t,
+            // Stores the representation of the VALUE_LIST.
+            std::shared_ptr<nlist_t>,
+            // Stores the representation of the VALUE_DICT.
+            std::shared_ptr<ndict_t>,
+            // Stores the representation of the VALUE_FUN.
+            nfun_t,
+            // Stores the representation of the VALUE_OBJECT.
+            std::shared_ptr<nobject_t>
+        > value;
+        // Constructors
+        // ...
+        // Retypes the value.
+        void retype(ValueType new_type, const std::shared_ptr<Type> &new_inner_type = std::shared_ptr<Type>());
+        // Copies the current value to the destnation.
+        void copy_to(Value *dest) const;
+        // Gets a string representation of the value.
+        std::string to_string() const;
+};
+\end{minted}
+\caption{Value class}
+\label{ls:value_class}
+\end{listing}
+
+As seen on \autoref{ls:value_fun}, the value of a function consists of the opcode index where the execution begins and a number
+that corresponds to the number of registers needed to allocate in order for the function to work. By using the register allocator,
+this number may be determined by the \texttt{current\_register} that stores the max number of registers the frame needed when performing
+the code generation in the specific frame.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class ValueFunction
+{
+    public:
+        // Stores the function index where it's code begin.
+        size_t index;
+        // Stores the ammount of registers needed
+        registers_size_t registers;
+        // Basic constructor for the function value.
+        ValueFunction(size_t index, registers_size_t registers)
+            : index(index), registers(registers) {}
+};
+\end{minted}
+\caption{ValueFunction class}
+\label{ls:value_fun}
+\end{listing}
+
+\autoref{ls:dic_val} shows the dictionary value used in Nuua. The dictionary needs the hashmap to store the values and key order.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class ValueDictionary
+{
+    public:
+        // Represents the hashmap of the dictionary.
+        std::unordered_map<std::string, Value> values;
+        // Represent the current key order of the hashmap.
+        // Even with an ordered map, the key order is still
+        // important.
+        std::vector<std::string> key_order;
+        // Adds a new element to the dictionary.
+        void insert(const std::string &key, const Value &value);
+        // The basic constructor of the dictionary.
+        ValueDictionary(const std::unordered_map<std::string, Value> &values, const std::vector<std::string> &key_order)
+            : values(values), key_order(key_order) {}
+};
+\end{minted}
+\caption{ValueDictionary class}
+\label{ls:dic_val}
+\end{listing}
+
+The last complex type of data is the object. An object, as seen on \autoref{ls:obj_val} only needs the set of registers that
+correspond to its properties. Therefore, the length of the registers array is determined by the number of properties of the class
+it represents.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class ValueObject
+{
+    public:
+        // Stores the registers containing the properties values.
+        std::unique_ptr<Value[]> registers;
+        // Create a new object value and allocates the registers given the size.
+        ValueObject(registers_size_t size);
+};
+\end{minted}
+\caption{ValueObject class}
+\label{ls:obj_val}
+\end{listing}
+
+Since the values of \texttt{nlist\_t}, \texttt{ndict\_t}, \texttt{nobject\_t} are allocated in the heap and used as pointers
+then the \texttt{copy\_to} method copies the pointer and not the value, making them pass-by-reference values.
+Thanks to the C++ smart pointers, the pointer value is only deallocated when no value is using it.
+
+\section{Compiler Class}
+
+The compiler class is used as the code generator for the Nuua compiler.
+The Nuua compiler class is responsible for allocating a new program and it performs all the register allocations as
+mentioned in this chapter. It also performs basic optimizations to avoid extra loadings by the use of a suggested register.
+
+The suggested register is used instead of the need to move a register without reason (due to the nature of the tree compilation).
+By using a suggested register, some operations can avoid this extra step or avoid requesting a new register to the register allocator
+and using the suggested one.
+
+If complex structures (like lists and dictionaries) are found to be constant (it means that all of the elements
+of the list or dictionary are constants and therefore, their values can be created at compile time) the whole list or dictionary value is created
+at compile time avoiding the need to push each individual values at run time.
+
+\autoref{ls:compiler_class} shows the compiler class that Nuua use to generate the bytecode.\\
+
+\begin{code}
+\begin{minted}{cpp}
+class Compiler
+{
+    // Stores the program itself where everything is beeing compiled to.
+    std::shared_ptr<Program> program;
+    // Stores the current block.
+    std::vector<std::shared_ptr<Block>> blocks;
+    // Stores the global frame information.
+    FrameInfo global;
+    // Sotres the current local information (it resets automatically).
+    FrameInfo local;
+    // Compiles a module.
+    void compile_module(const std::shared_ptr<std::vector<std::shared_ptr<Statement>>> &code, const std::shared_ptr<Block> &block);
+    // Registers the top level declarations by assigning a register to them.
+    // it registers all TLD of all modules in the same main frame info.
+    void register_tld(const std::shared_ptr<std::vector<std::shared_ptr<Statement>>> &code, const std::shared_ptr<Block> &block);
+    // Compiles a list of statements
+    // Defines a basic compilation for a Statement.
+    void compile(const std::shared_ptr<Statement> &rule);
+    // Defines a basic compilation for an Expression. (Returns the register with the result).
+    // If const_opcode is true and the expression is a constant expression, it will move it
+    // to a new register. Otherwise, it will just add the constant and the constant index.
+    // suggested_register will use that register as the result.
+    register_t compile(
+        // The expression to compile
+        const std::shared_ptr<Expression> &rule,
+        // If the load constant opcode shall be included
+        const bool load_constant = true,
+        // If a register is suggested as the output instead of a new one.
+        const register_t *suggested_register = nullptr,
+        // If the access is an assignment, the value of it is passed here.
+        const std::shared_ptr<Expression> &access_assignment_value = std::shared_ptr<Expression>()
+    );
+    // Adds an opcode to the program.
+    void add_opcodes(const std::vector<opcode_t> &opcodes);
+    // Adds a constant to the constant pool of the current frame
+    // and return it's position.
+    size_t add_constant(const Value &value);
+    // Creates a constant list or dictionary from the given list expression.
+    // Take into consideration that the list MUST be checked if
+    // it's constant using is_constant() function.
+    void constant_list(const std::shared_ptr<List> &list, Value &dest);
+    void constant_dict(const std::shared_ptr<Dictionary> &dict, Value &dest);
+    // Determines if an expression is constant (is in the constant pool).
+    bool is_constant(const std::shared_ptr<Expression> &expression);
+    // Sets a file flag at the current code location.
+    std::shared_ptr<const std::string> current_file;
+    void set_file(const std::shared_ptr<const std::string> &file);
+    // Sets a line flag at the current code location.
+    line_t current_line = 0;
+    void set_line(const line_t line);
+    // Sets a column flag at the current code location.
+    column_t current_column = 0;
+    void set_column(const column_t column);
+    // Get a variable from the block stack and
+    // return a pair containing the variable and a boolean
+    // to indicate if it's global or not.
+    std::pair<BlockVariableType *, bool> get_variable(const std::string &name);
+    BlockClassType *get_class(const std::string &name);
+    public:
+        // Compile an input source and returns the main global register.
+        register_t compile(const char *file);
+        Compiler(const std::shared_ptr<Program> &program)
+            : program(program) {}
+};
+\end{minted}
+\caption{Compiler class}
+\label{ls:compiler_class}
+\end{code}

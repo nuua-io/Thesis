@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{typedef} \PYG{k+kt}{int64\PYGZus{}t} \PYG{n}{nint\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{k+kt}{double} \PYG{n}{nfloat\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{k+kt}{bool} \PYG{n}{nbool\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{nstring\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{Value}\PYG{o}{\PYGZgt{}} \PYG{n}{nlist\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{n}{ValueDictionary} \PYG{n}{ndict\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{n}{ValueFunction} \PYG{n}{nfun\PYGZus{}t}\PYG{p}{;}
+\PYG{k}{typedef} \PYG{n}{ValueObject} \PYG{n}{nobject\PYGZus{}t}\PYG{p}{;}
+\end{Verbatim}

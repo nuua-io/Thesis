@@ -1,1 +1,94 @@
-The virtual machine...
+The virtual machine is responsible for the bytecode execution. This layer must be
+carefully built since it may introduce significant bottlenecks to the program execution speed.
+If the virtual machine is carefully built and the bytecode is significantly improved, the
+resulting speed can be benefited. This thesis implements a register machine to interpret the code.
+A stack machine could also be used but it's less efficient as described in \autocite{stack_vs_register}.
+
+To design such a system, consideration needs to be taken at instruction dispatching. There are different ways
+to dispatch instructions in a virtual machine as seen in \autocite{stack_vs_register}. The most well known and used are:
+
+\begin{itemize}
+    \item \emph{Switch dispatch}: The switch dispatch uses a (C) switch statement to decide what instruction to execute.
+    \item \emph{Threaded dispatch}: The instruction dispatch is done by taking advantage of first-class labels. This is more efficient than
+        a switch dispatch, but it's not part of ANSI C. There is still the possibility of using assembly to write part of the interpreter.
+\end{itemize}
+
+This thesis is designed with a C switch to be compliant with ANSI C. However, it's good to note that is not the most efficient way to dispatch instructions.
+
+The virtual machine is responsible for storing the program. The virtual machine makes use of a program counter to decide the instruction to execute
+(the program counter is implemented as a pointer to the opcode). The virtual machine must also take care of the call stack and the shared value
+stack discussed in \autoref{sec:call_stack}.
+
+The same way as the program counter points to the current instruction, two pointers are used to point to the current call frame and the top of the value stack.
+
+\section{Virtual Machine Class}
+
+The implementation of the virtual machine class is rather easy. The complicated stuff (memory, program structure, and frames) are already done by the
+code generator, and therefore the only thing left is to implement the opcodes.
+
+The implementation can be seen on \autoref{ls:vm_class}
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+#define MAX_FRAMES 1024
+#define STACK_SIZE 1024
+class VirtualMachine
+{
+    // Stores the program to be executed.
+    std::shared_ptr<Program> program = std::make_shared<Program>();
+    // Virtual machine program counter.
+    opcode_t *program_counter;
+    // Stores the virtual machine stack (used to push function arguments / get return values)
+    Value stack[STACK_SIZE];
+    // Indicates the top of the stack.
+    Value *top_stack = this->stack;
+    // Stores the current frame stack.
+    Frame frames[MAX_FRAMES];
+    // Indicates the top level frame.
+    Frame *active_frame = this->frames - 1; // It performs a pre-increment when a call is done.
+    // Runs the virtual machine.
+    void run();
+    public:
+        // It runs the virtual machine given a source input.
+        void interpret(const char *file, const std::vector<std::string> &argv);
+        // Resets the virtual machine program memories.
+        void reset();
+};
+\end{minted}
+\caption{Virtual Machine Class}
+\label{ls:vm_class}
+\end{listing}
+
+The two defines find on the top of \autoref{ls:vm_class} sets the size of both stacks. They can be changed.
+
+\section{Opcode Operands Evaluation}
+
+When the virtual machine decides to execute an opcode, this normally comes with operands. Special care needs to be taken when getting the value of the
+operands. If you increment the program counter by one at a time it's fine if you do it by order but this normally requires setting some variables
+to store the values. It's also good to note that C++ have unspecified order of argument evaluation and that means that things like
+\texttt{a = 0; add(++a, ++a)} is not guaranteed to be \texttt{a = 0; add(1, 2)} and the compiler could chose to evaluate them in another order, for instance
+\texttt{a = 0; add(2, 1)}.
+
+If using increments + variables, the number of additions performed in an arbitrary opcode with 3 operands are:
+
+\begin{itemize}
+    \item 1 to go from the opcode to the 1st operand (program counter += 1).
+    \item 1 to go from the 1st operand to the 2nd (program counter += 1).
+    \item 1 to go from the 2nd operand to the 3rd (program counter += 1).
+    \item 1 to fetch the next instruction (program counter += 1).
+\end{itemize}
+
+A solution can be provided by using the same amount of additions and solving problematic issues with increments and avoiding the temporary variables.
+
+The solution requires the program counter to always point to the opcode. and further, perform additions to get the operands without modifying the program counter.
+
+If using this method, the number of additions performed in an arbitrary opcode with 3 operands are:
+
+\begin{itemize}
+    \item 1 to fetch the 1st operand (program counter + 1).
+    \item 1 to fetch the 2nd operand (program counter + 2).
+    \item 1 to fetch the 3rd operand (program counter + 3).
+    \item 1 to increment the program counter to the next opcode (program counter += 4)
+\end{itemize}
+
+This method also reduces the number of assignments done, since only a single assignment is performed when the program counter needs to fetch the next instruction.

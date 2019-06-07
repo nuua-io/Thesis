@@ -1,0 +1,66 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Compiler}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the program itself where everything is beeing compiled to.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Program}\PYG{o}{\PYGZgt{}} \PYG{n}{program}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the current block.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}\PYGZgt{}} \PYG{n}{blocks}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the global frame information.}
+    \PYG{n}{FrameInfo} \PYG{n}{global}\PYG{p}{;}
+    \PYG{c+c1}{// Sotres the current local information (it resets automatically).}
+    \PYG{n}{FrameInfo} \PYG{n}{local}\PYG{p}{;}
+    \PYG{c+c1}{// Compiles a module.}
+    \PYG{k+kt}{void} \PYG{n+nf}{compile\PYGZus{}module}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{code}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{block}\PYG{p}{);}
+    \PYG{c+c1}{// Registers the top level declarations by assigning a register to them.}
+    \PYG{c+c1}{// it registers all TLD of all modules in the same main frame info.}
+    \PYG{k+kt}{void} \PYG{n+nf}{register\PYGZus{}tld}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}\PYGZgt{}\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{code}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Block}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{block}\PYG{p}{);}
+    \PYG{c+c1}{// Compiles a list of statements}
+    \PYG{c+c1}{// Defines a basic compilation for a Statement.}
+    \PYG{k+kt}{void} \PYG{n+nf}{compile}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Statement}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{);}
+    \PYG{c+c1}{// Defines a basic compilation for an Expression. (Returns the register with the result).}
+    \PYG{c+c1}{// If const\PYGZus{}opcode is true and the expression is a constant expression, it will move it}
+    \PYG{c+c1}{// to a new register. Otherwise, it will just add the constant and the constant index.}
+    \PYG{c+c1}{// suggested\PYGZus{}register will use that register as the result.}
+    \PYG{n}{register\PYGZus{}t} \PYG{n+nf}{compile}\PYG{p}{(}
+        \PYG{c+c1}{// The expression to compile}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{rule}\PYG{p}{,}
+        \PYG{c+c1}{// If the load constant opcode shall be included}
+        \PYG{k}{const} \PYG{k+kt}{bool} \PYG{n}{load\PYGZus{}constant} \PYG{o}{=} \PYG{n+nb}{true}\PYG{p}{,}
+        \PYG{c+c1}{// If a register is suggested as the output instead of a new one.}
+        \PYG{k}{const} \PYG{n}{register\PYGZus{}t} \PYG{o}{*}\PYG{n}{suggested\PYGZus{}register} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{,}
+        \PYG{c+c1}{// If the access is an assignment, the value of it is passed here.}
+        \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{access\PYGZus{}assignment\PYGZus{}value} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}}\PYG{p}{()}
+    \PYG{p}{);}
+    \PYG{c+c1}{// Adds an opcode to the program.}
+    \PYG{k+kt}{void} \PYG{n+nf}{add\PYGZus{}opcodes}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{opcode\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{opcodes}\PYG{p}{);}
+    \PYG{c+c1}{// Adds a constant to the constant pool of the current frame}
+    \PYG{c+c1}{// and return it\PYGZsq{}s position.}
+    \PYG{k+kt}{size\PYGZus{}t} \PYG{n+nf}{add\PYGZus{}constant}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Value} \PYG{o}{\PYGZam{}}\PYG{n}{value}\PYG{p}{);}
+    \PYG{c+c1}{// Creates a constant list or dictionary from the given list expression.}
+    \PYG{c+c1}{// Take into consideration that the list MUST be checked if}
+    \PYG{c+c1}{// it\PYGZsq{}s constant using is\PYGZus{}constant() function.}
+    \PYG{k+kt}{void} \PYG{n+nf}{constant\PYGZus{}list}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{List}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{list}\PYG{p}{,} \PYG{n}{Value} \PYG{o}{\PYGZam{}}\PYG{n}{dest}\PYG{p}{);}
+    \PYG{k+kt}{void} \PYG{n+nf}{constant\PYGZus{}dict}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Dictionary}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{dict}\PYG{p}{,} \PYG{n}{Value} \PYG{o}{\PYGZam{}}\PYG{n}{dest}\PYG{p}{);}
+    \PYG{c+c1}{// Determines if an expression is constant (is in the constant pool).}
+    \PYG{k+kt}{bool} \PYG{n+nf}{is\PYGZus{}constant}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Expression}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{expression}\PYG{p}{);}
+    \PYG{c+c1}{// Sets a file flag at the current code location.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{current\PYGZus{}file}\PYG{p}{;}
+    \PYG{k+kt}{void} \PYG{n+nf}{set\PYGZus{}file}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{file}\PYG{p}{);}
+    \PYG{c+c1}{// Sets a line flag at the current code location.}
+    \PYG{n}{line\PYGZus{}t} \PYG{n}{current\PYGZus{}line} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{k+kt}{void} \PYG{n+nf}{set\PYGZus{}line}\PYG{p}{(}\PYG{k}{const} \PYG{n}{line\PYGZus{}t} \PYG{n}{line}\PYG{p}{);}
+    \PYG{c+c1}{// Sets a column flag at the current code location.}
+    \PYG{n}{column\PYGZus{}t} \PYG{n}{current\PYGZus{}column} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+    \PYG{k+kt}{void} \PYG{n+nf}{set\PYGZus{}column}\PYG{p}{(}\PYG{k}{const} \PYG{n}{column\PYGZus{}t} \PYG{n}{column}\PYG{p}{);}
+    \PYG{c+c1}{// Get a variable from the block stack and}
+    \PYG{c+c1}{// return a pair containing the variable and a boolean}
+    \PYG{c+c1}{// to indicate if it\PYGZsq{}s global or not.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{pair}\PYG{o}{\PYGZlt{}}\PYG{n}{BlockVariableType} \PYG{o}{*}\PYG{p}{,} \PYG{k+kt}{bool}\PYG{o}{\PYGZgt{}} \PYG{n}{get\PYGZus{}variable}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+    \PYG{n}{BlockClassType} \PYG{o}{*}\PYG{n+nf}{get\PYGZus{}class}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{name}\PYG{p}{);}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Compile an input source and returns the main global register.}
+        \PYG{n}{register\PYGZus{}t} \PYG{n}{compile}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{file}\PYG{p}{);}
+        \PYG{n}{Compiler}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Program}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{program}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{program}\PYG{p}{(}\PYG{n}{program}\PYG{p}{)} \PYG{p}{\PYGZob{}} \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

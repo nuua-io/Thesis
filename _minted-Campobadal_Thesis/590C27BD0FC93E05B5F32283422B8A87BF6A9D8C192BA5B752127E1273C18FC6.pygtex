@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{for} \PYG{k+kt}{char} \PYG{n}{in} \PYG{l+s}{\PYGZdq{}string\PYGZdq{}} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{k+kt}{char}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fun} \PYG{n+nf}{a}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Never executed\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

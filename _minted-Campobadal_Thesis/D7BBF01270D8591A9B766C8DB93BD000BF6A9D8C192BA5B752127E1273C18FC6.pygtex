@@ -1,0 +1,9 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fun} \PYG{n+nf}{main}\PYG{p}{(}\PYG{n+nl}{argv}\PYG{p}{:} \PYG{p}{[}\PYG{n}{string}\PYG{p}{])} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{number} \PYG{p}{:}\PYG{o}{=} \PYG{l+m+mi}{10}
+    \PYG{k}{while} \PYG{n}{number} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{p}{\PYGZob{}}
+        \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Higher than 10\PYGZdq{}}
+        \PYG{n}{number} \PYG{o}{=} \PYG{n}{number} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}
+    \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,9 +1,5 @@
-This chapter defines the Nuua programming language. Nuua is a general purpose programming language with an imperative
-paradigm and a statically typed system. The Nuua compiler and virtual machine explained in this thesis are written in C++
-with a zero-dependency policy. The interpreter is a register-based bytecode virtual machine.
-
-Nuua's system architecture built in this thesis, as described in \autoref{sec:sys_arch}, consists of a compiler that translates a program written
-in Nuua into bytecode instructions and of a virtual machine interpreter that executes those bytecode instructions.
+The Nuua language specification includes all the information about the language grammar, the scopes, the entry point, comments,
+the data types it has and additionally, the supported statements and expressions.
 
 \section{Grammar}
 \label{sec:nuua_grammar}
@@ -26,6 +22,8 @@ Lexical grammar is used by the lowest layer of the Nuua system to scan the sourc
 The main difference with the syntax grammar, as exposed in \autocite[Appendix~I]{crafting_interpreters}, is that the syntax grammar is a context-free grammar and lexical grammar is a regular grammar.
 
 Nuua's lexical rules are as follows:
+
+\clearpage
 
 \begin{lstlisting}
 DIGIT
@@ -70,6 +68,8 @@ FLOAT_EXPR
 
 Floats are like integers but require a dot followed by a digit or more, creating a decimal number.
 
+\clearpage
+
 \begin{lstlisting}
 BOOL_EXPR
     : "true"
@@ -111,6 +111,8 @@ program
 
 A Nuua program is a list of top-level declarations.
 
+\clearpage
+
 \begin{lstlisting}
 top_level_declaration
     : use_declaration "\n"
@@ -150,6 +152,8 @@ fun_body
 A function is defined using the keyword \texttt{fun} followed by the function name, and a list of optional parameters enclosed in parentheses.
 The function type is specified after the parameter list by using \texttt{:}. The return type might not be present if the function has no return value.
 The function body is specified in three different ways depending on the type of the function body that is expected.
+
+\clearpage
 
 \begin{lstlisting}
 class_declaration
@@ -197,6 +201,8 @@ variable_declaration
 
 A variable declaration may have a type assigned with it, or the declaration type will be inferred from the initializer.
 
+\clearpage
+
 \begin{lstlisting}
 if_statement
     : "if" expression if_body el_if* else?
@@ -240,7 +246,7 @@ for_body
     ;
 \end{lstlisting}
 
-A \texttt{for} statement acts is a way to interate a nuua iterator \autoref{fig:nuua_iterators}.
+A \texttt{for} statement acts is a way to interate a Nuua iterator \autoref{fig:nuua_iterators}.
 It gets declared by using the \texttt{for} keyword followed by an identifier that will be used to store the element
 in the iterator. An optional second identifier may be given in case the loop index needs to be stored as well.
 Those values change in every iteration. After the identifiers, the \texttt{in} keyword is expected, followed by the iterator expression and the
@@ -269,7 +275,7 @@ print_statement
 \end{lstlisting}
 
 The \texttt{print} expression is a statement that outputs an expression to the screen. This is a temporary statement used while
-Nuua is not able to properly read and write to files (stdout / stdin) in this specific case.
+Nuua is not able to properly read and write to files (stdout/stdin) in this specific case.
 
 \begin{lstlisting}
 expression_statement
@@ -376,6 +382,8 @@ unary_prefix
 
 The unary prefixes are used to change a value state by prefixing the operation.
 
+\clearpage
+
 \begin{lstlisting}
 unary_postfix
     : primary unary_p*
@@ -411,6 +419,8 @@ primary
 \end{lstlisting}
 
 Primary expressions have the highest precedence and are mostly native types, with the exception of the expression group.
+
+\clearpage
 
 \begin{lstlisting}
 OBJECT_EXPR
@@ -556,11 +566,11 @@ line arguments of the call.
 
 An example \texttt{main} may be as follows:
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun main(argv: [string]) {
     // ...
 }
-\end{lstlisting}
+\end{minted}
 
 \section{Data types}
 \label{sec:nuua_data_types}
@@ -590,10 +600,10 @@ a C++ \texttt{bool} type, usually using 8 bits to store it.
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 true
 false
-\end{lstlisting}
+\end{minted}
 
 \subsection{Strings}
 
@@ -624,21 +634,22 @@ To see how functions are declared head to \autoref{sec:statements_function}
 \subsubsection{Examples}
 
 Function without parameters nor return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 ()
-\end{lstlisting}
+\end{minted}
+\clearpage
 Function with 2 parameters of type int and a float return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 (int, int -> float)
-\end{lstlisting}
+\end{minted}
 Function without parameters and a return type of a list of strings.
-\begin{lstlisting}
+\begin{minted}{cpp}
 (-> [string])
-\end{lstlisting}
+\end{minted}
 Function with two parameters of type int and bool and no return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 (int, bool)
-\end{lstlisting}
+\end{minted}
 
 \subsection{Objects}
 
@@ -674,17 +685,17 @@ declarations.
 \subsubsection{Examples}
 
 Import all exported targets in a relative file path named "test.nu"
-\begin{lstlisting}
+\begin{minted}{cpp}
 use "test"
-\end{lstlisting}
+\end{minted}
 Import \texttt{a} and \texttt{b} from a relative file path named "test.nu"
-\begin{lstlisting}
+\begin{minted}{cpp}
 use a, b from "./test.nu"
-\end{lstlisting}
+\end{minted}
 Import \texttt{a} from an absolute file path in "C:/Nuua/test.nu"
-\begin{lstlisting}
+\begin{minted}{cpp}
 use a from "C:/Nuua/test.nu"
-\end{lstlisting}
+\end{minted}
 
 \subsection{Function Declaration}
 \label{sec:statements_function}
@@ -707,37 +718,37 @@ code length in certain situations (When a function is a single return expression
 \subsubsection{Examples}
 
 Function without parameters and no return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun a() {
     print "Hello, World"
 }
-\end{lstlisting}
+\end{minted}
 Function without parameters and return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun b(): string {
     return "Hello, World"
 }
-\end{lstlisting}
+\end{minted}
 Function with parameters and no return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun c(x: string) {
     print "Hello, " + x
 }
-\end{lstlisting}
+\end{minted}
 Function with parameters and return type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun d(x: string): string {
     return "Hello, " + x
 }
-\end{lstlisting}
+\end{minted}
 Single statement function.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun e(x: string): string => return "Hello, " + x
-\end{lstlisting}
+\end{minted}
 Single expression function.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun f(x: string): string -> "Hello, " + x
-\end{lstlisting}
+\end{minted}
 
 \subsection{Class Declaration}
 
@@ -753,11 +764,11 @@ as a self-reference to the object to mutate its state.
     \item Self-references to the same type are allowed.
     \item There is no class inheritance.
 \end{itemize}
-
+\clearpage
 \subsubsection{Examples}
 
 Simple class to represent a person.
-\begin{lstlisting}
+\begin{minted}{cpp}
 class Person {
     name: string
     age: int
@@ -765,7 +776,7 @@ class Person {
         print self.name + ", " + self.age as int
     }
 }
-\end{lstlisting}
+\end{minted}
 
 \subsection{Export Declaration}
 
@@ -781,18 +792,18 @@ modules. Marking a top-level declaration as exported allows other modules to imp
 \subsubsection{Examples}
 
 Export a function
-\begin{lstlisting}
+\begin{minted}{cpp}
 export fun add(a: int, b: int): int {
     return a + b
 }
-\end{lstlisting}
+\end{minted}
 Export a class.
-\begin{lstlisting}
+\begin{minted}{cpp}
 export class Person {
     name: string
     age: int
 }
-\end{lstlisting}
+\end{minted}
 
 \subsection{Variable Declaration}
 
@@ -813,17 +824,17 @@ blocks may have the same variable name. When getting the value of a variable, th
 \subsubsection{Examples}
 
 Simple variable declaration (defaults to \texttt{int}'s zero state, in this case 0).
-\begin{lstlisting}
+\begin{minted}{cpp}
 a: int
-\end{lstlisting}
+\end{minted}
 Variable declaration with an initializer.
-\begin{lstlisting}
+\begin{minted}{cpp}
 b: int = 10
-\end{lstlisting}
+\end{minted}
 Variable declaration with an inferred \texttt{int} type.
-\begin{lstlisting}
+\begin{minted}{cpp}
 c := 10
-\end{lstlisting}
+\end{minted}
 
 \subsection{If Statement}
 
@@ -845,21 +856,21 @@ shorthands can be used to minimize the lines of code.
 \subsubsection{Examples}
 
 Simple if statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 if condition {
     print "Condition is true"
 }
-\end{lstlisting}
+\end{minted}
 If statement with an else block.
-\begin{lstlisting}
+\begin{minted}{cpp}
 if condition {
     print "Condition is true"
 } else {
     print "Condition is false"
 }
-\end{lstlisting}
+\end{minted}
 If statement with multiple nested conditions.
-\begin{lstlisting}
+\begin{minted}{cpp}
 if number == 0 {
     print "The number is 0"
 } elif number == 1 {
@@ -867,13 +878,13 @@ if number == 0 {
 } else {
     print "The number is not 0 nor 1"
 }
-\end{lstlisting}
+\end{minted}
 If statement with the shorthand body.
-\begin{lstlisting}
+\begin{minted}{cpp}
 if number == 0 => print "The number is 0"
 elif number == 1 => print "The number is 1"
 else => print "The number is not 0 nor 1"
-\end{lstlisting}
+\end{minted}
 
 \subsection{While Statement}
 
@@ -891,23 +902,23 @@ The while statement also has a shorthand to define its body when it only consist
 \subsubsection{Examples}
 
 Simple while statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 while condition {
     print "Condition is true"
 }
-\end{lstlisting}
+\end{minted}
 Using the shorthand for single statements.
-\begin{lstlisting}
+\begin{minted}{cpp}
 while condition => print "Condition is true"
-\end{lstlisting}
+\end{minted}
 Real world while example
-\begin{lstlisting}
+\begin{minted}{cpp}
 a: int = 0
 while a < 10 => {
     print a
     a = a + 1
 }
-\end{lstlisting}
+\end{minted}
 
 \subsection{For Statement}
 
@@ -940,21 +951,21 @@ another optional variable containing the current index being used.
 \subsubsection{Examples}
 
 Simple for statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 for char in "string" {
     print char
 }
-\end{lstlisting}
+\end{minted}
 For statement with the index.
-\begin{lstlisting}
+\begin{minted}{cpp}
 for letter, index in ["A", "B", "C"] {
     print index as string + ": " + letter
 }
-\end{lstlisting}
+\end{minted}
 For statement with the shorthand.
-\begin{lstlisting}
+\begin{minted}{cpp}
 for num in 0..10 => print num
-\end{lstlisting}
+\end{minted}
 
 \subsection{Return Statement}
 
@@ -972,18 +983,18 @@ Return statements are mandatory in functions that have a return type.
 \subsubsection{Examples}
 
 A simple return statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun a() {
     return
     print "Never executed"
 }
-\end{lstlisting}
+\end{minted}
 A return statement returning a value.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun b(): int {
     return 10
 }
-\end{lstlisting}
+\end{minted}
 
 \subsection{Delete Statement}
 \label{sec:delete_statement}
@@ -1000,11 +1011,11 @@ The rule must be an access expression to indicate the exact element to delete.
 \subsubsection{Examples}
 
 A simple delete statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 a: [int] = [1, 2, 3]
 delete a[1]
 // a is now [1, 3]
-\end{lstlisting}
+\end{minted}
 
 \subsection{Print Statement}
 \label{sec:print_statement}
@@ -1021,16 +1032,16 @@ This statement will be finally deleted alongside the keyword when a propper I/O 
 \subsubsection{Examples}
 
 A simple print statement.
-\begin{lstlisting}
+\begin{minted}{cpp}
 print "Hello, World"
-\end{lstlisting}
+\end{minted}
 A print of a function
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun a(): int {
     print a
     return 10
 }
-\end{lstlisting}
+\end{minted}
 
 \section{Expressions}
 \label{sec:expressions}
@@ -1053,13 +1064,13 @@ Integer expressions return a value with the \texttt{int} data type.
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 0
 25
 81237
 -6378
 -1
-\end{lstlisting}
+\end{minted}
 
 \subsection{Float Expression}
 
@@ -1075,13 +1086,13 @@ Float expressions return a value with the \texttt{float} data type.
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 0.0
 25.5
 81237.11111
 -6378.673
 -1.9
-\end{lstlisting}
+\end{minted}
 
 \subsection{Boolean Expression}
 
@@ -1090,10 +1101,10 @@ Boolean expressions return a value with the \texttt{bool} data type.
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 true
 false
-\end{lstlisting}
+\end{minted}
 
 \subsection{String Expression}
 
@@ -1104,15 +1115,14 @@ String expressions return a value with the \texttt{string} data type.
 
 \begin{itemize}
     \item As for \today, the strings use a bare-bones C++ \texttt{std::string} to represent the string, that means that the string
-        is a list of single-byte characters (characters in the ASCII character table). A plan to support wider characters is mentioned
-        in \autoref{sec:forthcoming}.
+        is a list of single-byte characters (characters in the ASCII character table). A plan to support wider characters is mentioned in \autoref{sec:forthcoming}.
 \end{itemize}
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 "A string is represented like this"
-\end{lstlisting}
+\end{minted}
 
 \subsection{List Expression}
 
@@ -1132,13 +1142,13 @@ List expressions return a value with the \texttt{[T]} data type.
 \subsubsection{Examples}
 
 A list expression that return a value of type \texttt{[string]}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 ["this", "is", "a", "valid", "list", "of", "strings"]
-\end{lstlisting}
+\end{minted}
 A list expression that return a value of type \texttt{[int]}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 [1]
-\end{lstlisting}
+\end{minted}
 
 \subsection{Dictionary Expression}
 
@@ -1159,13 +1169,13 @@ Dictionary expressions return a value with the \texttt{\{T\}} data type.
 \subsubsection{Examples}
 
 A dictionary expression that return a value of type \texttt{\{string\}}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 {name: "Erik", occupation: "Student", color: "#ff0000"}
-\end{lstlisting}
+\end{minted}
 A dictionary expression that return a value of type \texttt{\{int\}}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 {left: 10, right: 20, sum: 30}
-\end{lstlisting}
+\end{minted}
 
 \subsection{Object Expression}
 \label{sec:object_expression}
@@ -1186,20 +1196,20 @@ The keys in the argument list are the class properties willing to initialize and
 \subsubsection{Examples}
 
 An example class to provide the examples.
-\begin{lstlisting}
+\begin{minted}{cpp}
 class Person {
     name: string
     born_at: int
 }
-\end{lstlisting}
+\end{minted}
 An object of class Person without arguments.
-\begin{lstlisting}
+\begin{minted}{cpp}
 Person!{}
-\end{lstlisting}
+\end{minted}
 An object of class Person with arguments.
-\begin{lstlisting}
+\begin{minted}{cpp}
 Person!{name: "Erik", born_at: 1997}
-\end{lstlisting}
+\end{minted}
 
 \subsection{Group Expression}
 
@@ -1208,36 +1218,36 @@ The group expression is an expression enclosed between \texttt{(} and \texttt{)}
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 (1 + 2) * 3 // 9
 (1 + 4 - 3) * (2 * (2 + 2)) // 16
-\end{lstlisting}
+\end{minted}
 
 \subsection{Access Expression}
 
-The access expression is used to access an inner value of another expressions. In short, the access expression can be used in any
+The access expression is used to access an inner value of another expression. In short, the access expression can be used in any
 Nuua iterator and the returned value is the inner value found on its index with the respective type as shown in \autoref{fig:nuua_iterators}.
 
 \subsubsection{Caveats}
 
 \begin{itemize}
-    \item Only nuua iterators can be accessed.
+    \item Only Nuua iterators can be accessed.
 \end{itemize}
-
+\clearpage
 \subsubsection{Examples}
 
 A string access.
-\begin{lstlisting}
+\begin{minted}{cpp}
 "Hello"[1] // "e"
-\end{lstlisting}
+\end{minted}
 A list access.
-\begin{lstlisting}
+\begin{minted}{cpp}
 ["Hello", "World"][1] // "World"
-\end{lstlisting}
+\end{minted}
 A dictionary access.
-\begin{lstlisting}
+\begin{minted}{cpp}
 {key1: "Hello", key2: "World"}["key1"] // "Hello"
-\end{lstlisting}
+\end{minted}
 
 \subsection{Slice Expression}
 
@@ -1265,13 +1275,13 @@ The supported parameters are:
 
 \subsubsection{Examples}
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 "Hello"[1:3] // "el"
 "Hello"[1:] // "ello"
 "Hello"[:3] // "Hel"
 "Hello"[::2] // "Hlo"
 "Hello"[::-1] // "olleH"
-\end{lstlisting}
+\end{minted}
 
 \subsection{Call Expression}
 
@@ -1290,13 +1300,13 @@ The call expression is the caller and the target function is the callee.
 \subsubsection{Examples}
 
 An example function acting as a callee.
-\begin{lstlisting}
+\begin{minted}{cpp}
 fun test(a: int): int -> a + 1
-\end{lstlisting}
+\end{minted}
 An example call.
-\begin{lstlisting}
+\begin{minted}{cpp}
 test(10) // 11
-\end{lstlisting}
+\end{minted}
 
 \subsection{Property Expression}
 
@@ -1313,15 +1323,15 @@ an object. The property name is the identifier used after the dot.
 \subsubsection{Examples}
 
 An example class to work with.
-\begin{lstlisting}
+\begin{minted}{cpp}
 class Person {
     name: string
 }
-\end{lstlisting}
+\end{minted}
 An example property expression.
-\begin{lstlisting}
+\begin{minted}{cpp}
 Person!{name: "Erik"}.name // "Erik"
-\end{lstlisting}
+\end{minted}
 
 \subsection{Unary Expression}
 \label{sec:unary_expression}
@@ -1351,12 +1361,12 @@ to the expression. The list of available unary operations is found in \autoref{f
 \subsubsection{Examples}
 
 Example unary operations
-\begin{lstlisting}
+\begin{minted}{cpp}
 -10 // -10
 -(10 + 2) // -12
 !false // true
 +true // 1
-\end{lstlisting}
+\end{minted}
 
 \subsection{Cast Expression}
 \label{sec:cast_expression}
@@ -1393,13 +1403,13 @@ of casts is show in \autoref{fig:nuua_casts}.
 \subsubsection{Examples}
 
 Example casting operations.
-\begin{lstlisting}
+\begin{minted}{cpp}
 10 as float // 10.0
 25.8 as int // 25
 false as string // "false"
 [1, 2, 3] as string // "[1, 2, 3]"
 [20, 30] as int // 2
-\end{lstlisting}
+\end{minted}
 
 \subsection{Binary Expression}
 \label{sec:binary_expression}
@@ -1410,9 +1420,9 @@ that is treated differently. The binary operations that can be performed are sho
 \autoref{fig:nuua_relational_equality_bin_ops} and \autoref{fig:nuua_relational_ordering_bin_ops}.
 
 \begin{table}[H]
-	\centering
-	\begin{subtable}{\textwidth}
-		\centering
+    \centering
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{+} & \texttt{int} & \texttt{int} & \texttt{int} addition.\\
@@ -1421,27 +1431,27 @@ that is treated differently. The binary operations that can be performed are sho
             \texttt{bool} & \texttt{+} & \texttt{bool} & \texttt{int} & \texttt{bool} addition.\\
             \texttt{[T]} & \texttt{+} & \texttt{[T]} & \texttt{[T]} & \texttt{[T]} concatenation.\\
             \texttt{\{T\}} & \texttt{+} & \texttt{\{T\}} & \texttt{\{T\}} & \texttt{\{T\}} concatenation.\\
-		\end{tabular}
-		\caption{Addition}
-	\end{subtable}
-	\begin{subtable}{\textwidth}
-		\centering
+        \end{tabular}
+        \caption{Addition}
+    \end{subtable}
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{-} & \texttt{int} & \texttt{int} & \texttt{int} subtraction.\\
             \texttt{float} & \texttt{-} & \texttt{float} & \texttt{float} & \texttt{float} subtraction.\\
             \texttt{bool} & \texttt{-} & \texttt{bool} & \texttt{int} & \texttt{bool} subtraction.\\
-		\end{tabular}
-		\caption{Substraction}
-	\end{subtable}
-	\caption{Nuua additive binary operations}
+        \end{tabular}
+        \caption{Substraction}
+    \end{subtable}
+    \caption{Nuua additive binary operations}
     \label{fig:nuua_additive_bin_ops}
 \end{table}
 
 \begin{table}[H]
-	\centering
-	\begin{subtable}{\textwidth}
-		\centering
+    \centering
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{*} & \texttt{int} & \texttt{int} & \texttt{int} multiplication.\\
@@ -1451,28 +1461,28 @@ that is treated differently. The binary operations that can be performed are sho
             \texttt{string} & \texttt{*} & \texttt{int} & \texttt{string} & \texttt{string} repetition.\\
             \texttt{int} & \texttt{*} & \texttt{[T]} & \texttt{[T]} & \texttt{[T]} repetition.\\
             \texttt{[T]} & \texttt{*} & \texttt{int} & \texttt{[T]} & \texttt{[T]} repetition.\\
-		\end{tabular}
-		\caption{Multiplication}
-	\end{subtable}
-	\begin{subtable}{\textwidth}
-		\centering
+        \end{tabular}
+        \caption{Multiplication}
+    \end{subtable}
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{/} & \texttt{int} & \texttt{float} & \texttt{int} division.\\
             \texttt{float} & \texttt{/} & \texttt{float} & \texttt{float} & \texttt{float} division.\\
             \texttt{string} & \texttt{/} & \texttt{int} & \texttt{[string]} & \texttt{string} division.\\
             \texttt{[T]} & \texttt{/} & \texttt{int} & \texttt{[[T]]} & \texttt{[T]} division.\\
-		\end{tabular}
-		\caption{Division}
-	\end{subtable}
-	\caption{Nuua multiplicative binary operations}
+        \end{tabular}
+        \caption{Division}
+    \end{subtable}
+    \caption{Nuua multiplicative binary operations}
     \label{fig:nuua_multiplicative_bin_ops}
 \end{table}
 
 \begin{table}[H]
-	\centering
-	\begin{subtable}{\textwidth}
-		\centering
+    \centering
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{==} & \texttt{int} & \texttt{bool} & \texttt{int} equality.\\
@@ -1481,11 +1491,11 @@ that is treated differently. The binary operations that can be performed are sho
             \texttt{bool} & \texttt{==} & \texttt{bool} & \texttt{bool} & \texttt{bool} equality.\\
             \texttt{[T]} & \texttt{==} & \texttt{[T]} & \texttt{bool} & \texttt{[T]} equality.\\
             \texttt{\{T\}} & \texttt{==} & \texttt{\{T\}} & \texttt{bool} & \texttt{\{T\}} equality.\\
-		\end{tabular}
-		\caption{Equality}
-	\end{subtable}
-	\begin{subtable}{\textwidth}
-		\centering
+        \end{tabular}
+        \caption{Equality}
+    \end{subtable}
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{!=} & \texttt{int} & \texttt{bool} & \texttt{int} inequality.\\
@@ -1494,73 +1504,73 @@ that is treated differently. The binary operations that can be performed are sho
             \texttt{bool} & \texttt{!=} & \texttt{bool} & \texttt{bool} & \texttt{bool} inequality.\\
             \texttt{[T]} & \texttt{!=} & \texttt{[T]} & \texttt{bool} & \texttt{[T]} inequality.\\
             \texttt{\{T\}} & \texttt{!=} & \texttt{\{T\}} & \texttt{bool} & \texttt{\{T\}} inequality.\\
-		\end{tabular}
-		\caption{Inequality}
-	\end{subtable}
-	\caption{Nuua relational equality binary operations}
+        \end{tabular}
+        \caption{Inequality}
+    \end{subtable}
+    \caption{Nuua relational equality binary operations}
     \label{fig:nuua_relational_equality_bin_ops}
 \end{table}
 
 \begin{table}[H]
-	\centering
-	\begin{subtable}{\textwidth}
-		\centering
+    \centering
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{>} & \texttt{int} & \texttt{bool} & \texttt{int} higher than.\\
             \texttt{float} & \texttt{>} & \texttt{float} & \texttt{bool} & \texttt{float} higher than.\\
             \texttt{string} & \texttt{>} & \texttt{string} & \texttt{bool} & \texttt{string} higher than.\\
             \texttt{bool} & \texttt{>} & \texttt{bool} & \texttt{bool} & \texttt{bool} higher than.\\
-		\end{tabular}
-		\caption{Higher than}
-	\end{subtable}
-	\begin{subtable}{\textwidth}
-		\centering
+        \end{tabular}
+        \caption{Higher than}
+    \end{subtable}
+    \begin{subtable}{\textwidth}
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{>=} & \texttt{int} & \texttt{bool} & \texttt{int} higher than or equal.\\
             \texttt{float} & \texttt{>=} & \texttt{float} & \texttt{bool} & \texttt{float} higher than or equal.\\
             \texttt{string} & \texttt{>=} & \texttt{string} & \texttt{bool} & \texttt{string} higher than or equal.\\
             \texttt{bool} & \texttt{>=} & \texttt{bool} & \texttt{bool} & \texttt{bool} higher than or equal.\\
-		\end{tabular}
-		\caption{Higher than or equal}
-	\end{subtable}
+        \end{tabular}
+        \caption{Higher than or equal}
+    \end{subtable}
     \begin{subtable}{\textwidth}
-		\centering
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{<} & \texttt{int} & \texttt{bool} & \texttt{int} lower than.\\
             \texttt{float} & \texttt{<} & \texttt{float} & \texttt{bool} & \texttt{float} lower than.\\
             \texttt{string} & \texttt{<} & \texttt{string} & \texttt{bool} & \texttt{string} lower than.\\
             \texttt{bool} & \texttt{<} & \texttt{bool} & \texttt{bool} & \texttt{bool} lower than.\\
-		\end{tabular}
-		\caption{Lower than}
-	\end{subtable}
+        \end{tabular}
+        \caption{Lower than}
+    \end{subtable}
     \begin{subtable}{\textwidth}
-		\centering
+        \centering
         \begin{tabular}{ l l l l p{9.5cm} }
             \textbf{Left type} & \textbf{Operation} & \textbf{Right type} & \textbf{Result type} & \textbf{Notes} \\
             \texttt{int} & \texttt{<=} & \texttt{int} & \texttt{bool} & \texttt{int} lower than or equal.\\
             \texttt{float} & \texttt{<=} & \texttt{float} & \texttt{bool} & \texttt{float} lower than or equal.\\
             \texttt{string} & \texttt{<=} & \texttt{string} & \texttt{bool} & \texttt{string} lower than or equal.\\
             \texttt{bool} & \texttt{<=} & \texttt{bool} & \texttt{bool} & \texttt{bool} lower than or equal.\\
-		\end{tabular}
-		\caption{Lower than or equal}
-	\end{subtable}
-	\caption{Nuua relational ordering binary operations}
+        \end{tabular}
+        \caption{Lower than or equal}
+    \end{subtable}
+    \caption{Nuua relational ordering binary operations}
     \label{fig:nuua_relational_ordering_bin_ops}
 \end{table}
 
 \subsubsection{Examples}
 
 Example binary operations.
-\begin{lstlisting}
+\begin{minted}{cpp}
 10 + 20 // 30
 20 < 50 // true
 "sample" == "sample"
 "abc" * 2 // "abcabc"
 "erik" / 4 // ["e", "r", "i", "k"]
-\end{lstlisting}
+\end{minted}
 
 \subsection{Logical Expression}
 
@@ -1577,15 +1587,15 @@ the \texttt{and} and the \texttt{or} operations that perform a logical conjuncti
 \subsubsection{Examples}
 
 Example logical \texttt{and}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 true and false // false
 true and true // true
-\end{lstlisting}
+\end{minted}
 Example logical \texttt{or}.
-\begin{lstlisting}
+\begin{minted}{cpp}
 true or false // true
 true or true // true
-\end{lstlisting}
+\end{minted}
 
 \subsection{Range Expression}
 
@@ -1603,10 +1613,10 @@ inclusive or exclusive depending on the number of dots found in the expression.
 \subsubsection{Examples}
 
 Example ranges.
-\begin{lstlisting}
+\begin{minted}{cpp}
 0..3 // [0, 1, 2]
 -2...2 // [-2, -1, 0, -1, -2]
-\end{lstlisting}
+\end{minted}
 
 \subsection{Assignment Expression}
 
@@ -1622,28 +1632,28 @@ The left side (target) is then assigned the expression on the right side (value)
 \subsubsection{Examples}
 
 Example variable assignment.
-\begin{lstlisting}
+\begin{minted}{cpp}
 test: int
 test = 20 // 20
-\end{lstlisting}
+\end{minted}
 Example access assignment.
-\begin{lstlisting}
+\begin{minted}{cpp}
 l := [1, 2, 3]
 l[1] = 4 // 4
 // The value of l will now be [1, 4, 3]
 d := {"a": 10, "b": 20}
 d["a"] = 5 // 5
 // The value of d will now be {"a": 5, "b": 20}
-\end{lstlisting}
+\end{minted}
 Example property assignment.
-\begin{lstlisting}
+\begin{minted}{cpp}
 class Person {
     name: string
 }
 p := Person!{name: "Erik"}
 p.name = "User" // "User"
 // The value of p will now be Person!{name: "User"}
-\end{lstlisting}
+\end{minted}
 
 \section{Comments}
 
@@ -1654,11 +1664,11 @@ by manually writing the double backslash on each different line.
 Comment blocks are not part of the language grammar and therefore they are totally discarded from the AST. When
 the lexer finds the double backslash, it proceeds to discard the whole line.
 
-\begin{lstlisting}
+\begin{minted}{cpp}
 // Some comment here
 fun test() {
     print "Hello"
     // Some other comment here
     print "Hello again"
 }
-\end{lstlisting}
+\end{minted}

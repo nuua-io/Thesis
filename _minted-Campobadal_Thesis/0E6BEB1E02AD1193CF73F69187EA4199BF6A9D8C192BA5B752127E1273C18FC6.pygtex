@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{add}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{int} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{n}{a} \PYG{o}{+} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

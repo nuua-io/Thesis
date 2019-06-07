@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fun} \PYG{n+nf}{b}\PYG{p}{()}\PYG{o}{:} \PYG{n}{string} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{l+s}{\PYGZdq{}Hello, World\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Frame}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the registers.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unique\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Value}\PYG{p}{[]}\PYG{o}{\PYGZgt{}} \PYG{n}{registers}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the registers size.}
+        \PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{registers\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the return address to get back to the original program counter.}
+        \PYG{n}{opcode\PYGZus{}t} \PYG{o}{*}\PYG{n}{return\PYGZus{}address} \PYG{o}{=} \PYG{k}{nullptr}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the frame caller (the function)}
+        \PYG{c+c1}{// Value *caller = nullptr;}
+        \PYG{c+c1}{// Allocates the space to store the registers.}
+        \PYG{k+kt}{void} \PYG{n+nf}{allocate\PYGZus{}registers}\PYG{p}{(}\PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{size}\PYG{p}{);}
+        \PYG{c+c1}{// Frees the allocated register space.}
+        \PYG{c+c1}{// void free\PYGZus{}registers();}
+        \PYG{c+c1}{// Setup the frame.}
+        \PYG{k+kt}{void} \PYG{n+nf}{setup}\PYG{p}{(}\PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{size}\PYG{p}{,} \PYG{n}{opcode\PYGZus{}t} \PYG{o}{*}\PYG{n}{return\PYGZus{}address}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

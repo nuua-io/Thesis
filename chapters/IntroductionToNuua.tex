@@ -1,0 +1,209 @@
+This chapter introduces the Nuua programming language. Nuua is a general-purpose programming language with an imperative
+paradigm and a statically typed system. The Nuua compiler and virtual machine explained in this thesis are written in C++
+with a zero-dependency policy. The interpreter is a register-based bytecode virtual machine discussed in \autoref{sec:virtual_machine}.
+
+Nuua's system architecture built in this thesis, as described in \autoref{sec:sys_arch}, consists of a compiler that translates a program written
+in Nuua into bytecode instructions and of a virtual machine interpreter that executes those bytecode instructions.
+
+This introduction dives directly to the usage of the language and provides example programs to understand it.
+This chapter does not deep dive into the syntax and the details of the language. The Nuua language specification can be found at \autoref{sec:nuua_spec}
+
+\section{Hello, World}
+
+To introduce a programming language, the simple yet most common program that is written is a "Hello, World" program to get a first view the language syntax.
+
+When writing a Nuua program, you first have to create a module. A module is a file that contains the logic of the program. Each module is a collection
+of top-level declarations. Top-level declarations can be functions, classes, exports, and use declarations. A special function called \texttt{main}
+must be included in the main module. This function is called the entry point and it's where the program will begin its execution. This function must also
+include a single argument of type \texttt{[string]} (list of strings) that includes the command line arguments given.
+The extension of the file is \texttt{.nu}. Therefore, a simple "Hello, World" program may be written as follows \\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    print "Hello, World"
+}
+\end{minted}
+\caption{hello\_world.nu}
+\label{ls:hello_world}
+\end{code}
+
+Since a module can have multiple functions we may add an additional function to it. The function can also have a return type, specified with a semicolon
+at the right of the parenthesis followed by the type name. A modification on the \texttt{hello\_world.nu} program can be made to support a function that returns
+the string \texttt{"Hello, World"}.\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    print hello()
+}
+
+fun hello(): string {
+    return "Hello, World"
+}
+\end{minted}
+\caption{hello\_world2.nu}
+\label{ls:hello_world2}
+\end{code}
+
+Notice how the order of the function declarations is not an issue. To make another final modification on the program, an additional parameter is added
+to the hello function.\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    print hello("World")
+}
+
+fun hello(name: string): string {
+    return "Hello, " + name
+}
+\end{minted}
+\caption{hello\_world3.nu}
+\label{ls:hello_world3}
+\end{code}
+
+This parameter can be added to the \texttt{"Hello, "} string and it's then concatenated and returned.
+All this operations are discussed in \autoref{sec:nuua_spec}.
+
+\section{Shorthands}
+
+Nuua comes with tons of shorthands to perform different actions. As a visual example, the \autoref{ls:hello_world3} can also be written as in
+\autoref{ls:shorthands}\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) => print hello("World")
+
+fun hello(name: string): string -> "Hello, " + name
+\end{minted}
+\caption{shorthands.nu}
+\label{ls:shorthands}
+\end{code}
+
+Notice the difference between those two arrows. The \texttt{=>} is used to determine a single statement while the \texttt{->} is used to determine a single
+returned expression.
+
+These shorthands also come in handy when defining a single statement while loop or any other control flow statement. As an example. The \autoref{ls:shorthands2}
+shows a program that prints "yes" or "no" depending on a condition.\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    number: int = 10
+    if number == 10 => print "yes"
+    else => print "no"
+}
+\end{minted}
+\caption{shorthands2.nu}
+\label{ls:shorthands2}
+\end{code}
+
+We can also see how variable declarations are made by looking at line 2 on \autoref{ls:shorthands2}.
+Variable declarations also have a shorthand to omit the type if an initial expression is provided.\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    number := 10
+    while number > 0 {
+        print "Higher than 10"
+        number = number - 1
+    }
+}
+\end{minted}
+\caption{shorthands3.nu}
+\label{ls:shorthands3}
+\end{code}
+
+\section{Modules}
+
+Nuua can also have different modules to encapsulate the logic. As an example, \autoref{ls:modules1} makes use of an exported function that can be found
+in \autoref{ls:modules2}. If the function \texttt{add} was not exported, the compiler would complain.\\
+
+\begin{code}
+\begin{minted}{cpp}
+use add from "module1"
+
+fun main(argv: [string]) {
+    print add(10, 20)
+}
+\end{minted}
+\caption{main1.nu}
+\label{ls:modules1}
+\end{code}
+
+\begin{code}
+\begin{minted}{cpp}
+export fun add(a: int, b: int): int {
+    return a + b
+}
+\end{minted}
+\caption{module1.nu}
+\label{ls:modules2}
+\end{code}
+
+\section{Loops and Ranges}
+
+Looping is a very easy in Nuua. Nuua supports the \texttt{while} and the \texttt{for ... in ...} statements. The while statement has already been seen
+in \autoref{ls:shorthands3}. \autoref{ls:loop} gives an overview to the \texttt{for ... in ...} statement and the \texttt{range} statement.
+The range statement is a way to create a list of numbers given an inclusive or an exclusive range.\\
+
+\begin{code}
+\begin{minted}{cpp}
+fun main(argv: [string]) {
+    for num in 0..10 {
+        print num
+    }
+    for num, i in 0...10 {
+        print i as string + ": " + num as string
+    }
+    for letter in "Erik" => print letter
+}
+\end{minted}
+\caption{loop.nu}
+\label{ls:loop}
+\end{code}
+
+\autoref{ls:loop} also gives a hint about casting values to other data types.
+
+\section{Classes and Objects}
+
+Nuua can also perform limited object-oriented programming as can be seen on \autoref{ls:oop}\\
+
+\begin{code}
+\begin{minted}{cpp}
+class Person {
+    name: string
+    age: int
+}
+
+fun main(argv: [string]) {
+    p := Person!{name: "Erik", age: 22}
+    print p.name + " is " + p.age as string
+}
+\end{minted}
+\caption{oop.nu}
+\label{ls:oop}
+\end{code}
+
+Classes can also have methods bound to it, in fact, the code in \autoref{ls:oop} can be written with a method as shown in \autoref{ls:oop2}\\
+
+\begin{code}
+\begin{minted}{cpp}
+class Person {
+    name: string
+    age: int
+    fun show() {
+        return self.name + " is " + self.age as string
+    }
+}
+
+fun main(argv: [string]) {
+    p := Person!{name: "Erik", age: 22}
+    print p.show()
+}
+\end{minted}
+\caption{oop.nu}
+\label{ls:oop2}
+\end{code}

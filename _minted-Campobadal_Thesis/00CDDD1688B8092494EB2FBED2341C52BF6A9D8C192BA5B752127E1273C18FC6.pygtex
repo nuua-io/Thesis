@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nl}{test}\PYG{p}{:} \PYG{k+kt}{int}
+\PYG{n}{test} \PYG{o}{=} \PYG{l+m+mi}{20} \PYG{c+c1}{// 20}
+\end{Verbatim}

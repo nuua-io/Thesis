@@ -1,28 +1,52 @@
 \begin{titlepage}
     \begin{center}
-        \vspace*{1cm}
-
-        {\huge \textbf{\thetitle}}
-
-        \vspace{0.5cm}
-
-        {\Large \thesubtitle}
+        \resizebox{!}{1.5cm} {
+            \begin{tikzpicture}
+                \fill [fill=upcblue]  (0,0) circle (5);
+                \foreach \x in {-1.8,0,1.8}
+                \foreach \y in {-1.8,0,1.8}
+                {
+                    \fill [fill=white,yshift=1cm] (\x,\y) circle (.7);
+                }
+                \draw [color=white,text centered,font=\helvbupc,yshift=0.2cm]
+                    (-1.8,-3  ) node {U}
+                    (0,-3)      node {P}
+                    (1.8,-3)    node {C};
+                \draw [color=upcblue,text centered,font=\helvupc]
+                    (0,-7) node {UNIVERSITAT POLIT\`ECNICA DE CATALUNYA};
+            \end{tikzpicture}
+        }
+        \par
+        \textsf{\color{upcblue}\Large Escola Superior d'Enginyeria de Manresa}
+        \end{center}
+        \vfill
+        \begin{center}
+        \rule{0.9\textwidth}{1pt}\par
+        \noindent\Huge\textbf{\thetitle}\par
+        \bigskip\noindent\LARGE\thesubtitle\par
+        \bigskip\bigskip
+        \large\today\par
+        \rule{0.9\textwidth}{1pt}\par
 
         \vfill
-
-        {\large \textbf{\textsl{\MakeUppercase{\theauthor}}}}
-
-        \vfill
-
-        \theintro
-
-        \vspace{0.75cm}
-
-        \includegraphics[height=3.5cm]{upc}
-
-        \vspace{0.75cm}
-
-        \themeta
-
+        \Large
+        {\scriptsize
+            Bachelor’s thesis submitted by
+        }\\
+        \textsc{\theauthor}\\
+        {\scriptsize
+            in partial fulfillment of the
+            requirements for the
+        }\\
+        \textsc{Degree of ICT Systems Engineering}
+        \par
+        \bigskip\large
+        {
+            Advisor: \theadvisor
+        }\\
     \end{center}
 \end{titlepage}
+\clearpage
+% License
+\thispagestyle{empty}
+\input{license}

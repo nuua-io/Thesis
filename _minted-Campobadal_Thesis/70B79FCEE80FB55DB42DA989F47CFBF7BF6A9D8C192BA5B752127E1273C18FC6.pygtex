@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fun} \PYG{n+nf}{main}\PYG{p}{(}\PYG{n+nl}{argv}\PYG{p}{:} \PYG{p}{[}\PYG{n}{string}\PYG{p}{])} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{number}\PYG{p}{:} \PYG{k+kt}{int} \PYG{o}{=} \PYG{l+m+mi}{10}
+    \PYG{k}{if} \PYG{n}{number} \PYG{o}{==} \PYG{l+m+mi}{10} \PYG{o}{=\PYGZgt{}} \PYG{n}{print} \PYG{l+s}{\PYGZdq{}yes\PYGZdq{}}
+    \PYG{k}{else} \PYG{o}{=\PYGZgt{}} \PYG{n}{print} \PYG{l+s}{\PYGZdq{}no\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

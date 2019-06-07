@@ -1,0 +1,26 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}define MAX\PYGZus{}FRAMES 1024}
+\PYG{c+cp}{\PYGZsh{}define STACK\PYGZus{}SIZE 1024}
+\PYG{k}{class} \PYG{n+nc}{VirtualMachine}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the program to be executed.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Program}\PYG{o}{\PYGZgt{}} \PYG{n}{program} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{make\PYGZus{}shared}\PYG{o}{\PYGZlt{}}\PYG{n}{Program}\PYG{o}{\PYGZgt{}}\PYG{p}{();}
+    \PYG{c+c1}{// Virtual machine program counter.}
+    \PYG{n}{opcode\PYGZus{}t} \PYG{o}{*}\PYG{n}{program\PYGZus{}counter}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the virtual machine stack (used to push function arguments / get return values)}
+    \PYG{n}{Value} \PYG{n}{stack}\PYG{p}{[}\PYG{n}{STACK\PYGZus{}SIZE}\PYG{p}{];}
+    \PYG{c+c1}{// Indicates the top of the stack.}
+    \PYG{n}{Value} \PYG{o}{*}\PYG{n}{top\PYGZus{}stack} \PYG{o}{=} \PYG{k}{this}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{stack}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the current frame stack.}
+    \PYG{n}{Frame} \PYG{n}{frames}\PYG{p}{[}\PYG{n}{MAX\PYGZus{}FRAMES}\PYG{p}{];}
+    \PYG{c+c1}{// Indicates the top level frame.}
+    \PYG{n}{Frame} \PYG{o}{*}\PYG{n}{active\PYGZus{}frame} \PYG{o}{=} \PYG{k}{this}\PYG{o}{\PYGZhy{}\PYGZgt{}}\PYG{n}{frames} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{;} \PYG{c+c1}{// It performs a pre\PYGZhy{}increment when a call is done.}
+    \PYG{c+c1}{// Runs the virtual machine.}
+    \PYG{k+kt}{void} \PYG{n+nf}{run}\PYG{p}{();}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// It runs the virtual machine given a source input.}
+        \PYG{k+kt}{void} \PYG{n}{interpret}\PYG{p}{(}\PYG{k}{const} \PYG{k+kt}{char} \PYG{o}{*}\PYG{n}{file}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{argv}\PYG{p}{);}
+        \PYG{c+c1}{// Resets the virtual machine program memories.}
+        \PYG{k+kt}{void} \PYG{n+nf}{reset}\PYG{p}{();}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

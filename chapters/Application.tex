@@ -16,9 +16,9 @@ typedef enum : uint8_t {
 
 \autoref{ls:application_types} shows the supported application types. Additional types might be included in here, such as a prompt type or a string type.
 At the moment, the supported application is a file application, meaning the program must come from a file path.
-The application layer decides based on the command line arguments, the type of the application and performs the nessesary actions acordingly.
+The application layer decides based on the command line arguments, the type of the application and performs the necessary actions accordingly.
 
-This layer is also responsible for creating the argv parameter of the virtual machine. This parameter is a list of strings, so the C++ main arguments
+This layer is also responsible for creating the \texttt{argv} parameter of the virtual machine. This parameter is a list of strings, so the C++ main arguments
 \texttt{argc} and \texttt{argv} are transformed into a vector of strings and further passed to the virtual machine so it can inject it into the
 main function call.
 

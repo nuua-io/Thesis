@@ -1,8 +1,15 @@
 % Document releated
 % \documentclass[12pt]{report}
-\documentclass[12pt]{scrreprt}
+%\RequirePackage[T1]{fontenc}
+%\RequirePackage[utf8]{inputenc}
+%\RequirePackage{environ}
+
+\documentclass[12pt, bibliography=totoc, headings=openright, twoside=semi]{scrbook}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[main=english,catalan]{babel}
+\usepackage{afterpage}
 
 % Configuration of KOMA-script
 \setkomafont{dictumtext}{\itshape\small}
@@ -17,9 +24,8 @@
 % Cover configuration commands
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 \def\subtitle#1{\gdef\@subtitle{#1}\gdef\thesubtitle{#1}}
-\def\intro#1{\gdef\@intro{#1}\gdef\theintro{#1}}
 \def\author#1{\gdef\@author{#1}\gdef\theauthor{#1}}
-\def\meta#1{\gdef\@meta{#1}\gdef\themeta{#1}}
+\def\advisor#1{\gdef\@advisor{#1}\gdef\theadvisor{#1}}
 
 % Graphics
 \usepackage{graphicx}
@@ -48,8 +54,8 @@
 }
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
 \usepackage{minted}
-\usemintedstyle{colorful}
-\setminted{linenos, breaklines=true, baselinestretch=1}
+%\usemintedstyle{colorful}
+\setminted{breaklines=true, baselinestretch=1}
 \DeclareBoolOption{newfloat}
 
 % References and links
@@ -89,7 +95,7 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancypagestyle{plain}{
 \fancyhf{}
-\fancyfoot[RO,LE]{\thepage}}
+\fancyfoot[RO,LE]{\textit{\thepage}}}
 
 % Identations and newlines
 \usepackage[parfill]{parskip}
@@ -109,20 +115,39 @@
     tuborg/.style={decorate},
     tubnode/.style={midway, right=2pt},
 }
+%\DeclareQuoteAlias{spanish/spanish}{catalan}
+\DeclareFixedFont{\helvbupc}{T1}{phv}{bx}{u}{2cm}
+\DeclareFixedFont{\smallhelvbupc}{T1}{phv}{bx}{u}{1.8cm}
+\DeclareFixedFont{\helvupc}{T1}{phv}{m}{u}{2cm}
+% El color principal, Pantone 3005
+\definecolor{upcblue}{HTML}{007AC9}
+% bola upc de 10cm
+\def\bola@upc{
+    \fill [fill=upcblue]  (0,0) circle (5);
+    \foreach \x in {-1.8,0,1.8}
+    \foreach \y in {-1.8,0,1.8}
+    {
+      \fill [fill=white,yshift=1cm] (\x,\y) circle (.7);
+    }
+    \draw [color=white,text centered,font=\helvbupc,yshift=0.2cm]
+      (-1.8,-3  ) node {U}
+      (0,-3)      node {P}
+      (1.8,-3)    node {C};
+}
+
+% bola upc amb les lletres centrades a sota
+\def\bola@upc@text{
+  \bola@upc
+  \draw [color=upcblue,text centered,font=\helvupc]
+      (0,-7) node {UNIVERSITAT POLIT\`ECNICA DE CATALUNYA};
+}
+
+% comanda
+\newcommand{\bolaupctext}[1][1cm]{\resizebox{!}{#1}{\tikz\bola@upc@text;}}
 
 \graphicspath{{images/}}
 
 \title{The Design of an Experimental Programming Language and its Translator}
 \subtitle{The Nuua Programming Language}
 \author{Èrik Campobadal Forés}
-\intro{
-    Bachelor thesis submitted as partial fulfillment\\
-    of the requirements for the degree of\\
-    ICT Systems Engineer
-}
-\meta{
-    Advisor: Sebastia Vila Marta\\
-    Department of Mining, Industrial and ICT Engineering\\
-    Technical University of Catalonia\\
-    \today
-}
+\advisor{Sebastia Vila Marta}

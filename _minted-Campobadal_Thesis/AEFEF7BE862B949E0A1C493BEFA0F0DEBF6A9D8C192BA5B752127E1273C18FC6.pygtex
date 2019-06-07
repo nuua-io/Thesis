@@ -1,0 +1,17 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{ValueDictionary}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Represents the hashmap of the dictionary.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{Value}\PYG{o}{\PYGZgt{}} \PYG{n}{values}\PYG{p}{;}
+        \PYG{c+c1}{// Represent the current key order of the hashmap.}
+        \PYG{c+c1}{// Even with an ordered map, the key order is still}
+        \PYG{c+c1}{// important.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{n}{key\PYGZus{}order}\PYG{p}{;}
+        \PYG{c+c1}{// Adds a new element to the dictionary.}
+        \PYG{k+kt}{void} \PYG{n+nf}{insert}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{o}{\PYGZam{}}\PYG{n}{key}\PYG{p}{,} \PYG{k}{const} \PYG{n}{Value} \PYG{o}{\PYGZam{}}\PYG{n}{value}\PYG{p}{);}
+        \PYG{c+c1}{// The basic constructor of the dictionary.}
+        \PYG{n}{ValueDictionary}\PYG{p}{(}\PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{unordered\PYGZus{}map}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{p}{,} \PYG{n}{Value}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{values}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{std}\PYG{o}{::}\PYG{n}{string}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{key\PYGZus{}order}\PYG{p}{)}
+            \PYG{o}{:} \PYG{n}{values}\PYG{p}{(}\PYG{n}{values}\PYG{p}{),} \PYG{n}{key\PYGZus{}order}\PYG{p}{(}\PYG{n}{key\PYGZus{}order}\PYG{p}{)} \PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

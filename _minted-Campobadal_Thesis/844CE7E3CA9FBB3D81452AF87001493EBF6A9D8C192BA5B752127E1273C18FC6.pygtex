@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{int\PYGZus{}min}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{int} \PYG{o}{=\PYGZgt{}} \PYG{p}{\PYGZob{}}
+    \PYG{k}{if} \PYG{n}{a} \PYG{o}{\PYGZlt{}} \PYG{n}{b} \PYG{o}{=\PYGZgt{}} \PYG{k}{return} \PYG{n}{a}
+    \PYG{k}{return} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{float\PYGZus{}min}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{float}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{float}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{float} \PYG{o}{=\PYGZgt{}} \PYG{p}{\PYGZob{}}
+    \PYG{k}{if} \PYG{n}{a} \PYG{o}{\PYGZlt{}} \PYG{n}{b} \PYG{o}{=\PYGZgt{}} \PYG{k}{return} \PYG{n}{a}
+    \PYG{k}{return} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{int\PYGZus{}max}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{int} \PYG{o}{=\PYGZgt{}} \PYG{p}{\PYGZob{}}
+    \PYG{k}{if} \PYG{n}{a} \PYG{o}{\PYGZgt{}} \PYG{n}{b} \PYG{o}{=\PYGZgt{}} \PYG{k}{return} \PYG{n}{a}
+    \PYG{k}{return} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n+nf}{float\PYGZus{}max}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{float}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{float}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{float} \PYG{o}{=\PYGZgt{}} \PYG{p}{\PYGZob{}}
+    \PYG{k}{if} \PYG{n}{a} \PYG{o}{\PYGZgt{}} \PYG{n}{b} \PYG{o}{=\PYGZgt{}} \PYG{k}{return} \PYG{n}{a}
+    \PYG{k}{return} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

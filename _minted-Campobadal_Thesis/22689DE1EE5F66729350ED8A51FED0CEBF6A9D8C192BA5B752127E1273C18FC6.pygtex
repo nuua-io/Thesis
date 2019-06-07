@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mi}{3} \PYG{c+c1}{// 9}
+\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{l+m+mi}{4} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{3}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{))} \PYG{c+c1}{// 16}
+\end{Verbatim}

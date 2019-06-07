@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{ValueObject}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the registers containing the properties values.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unique\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Value}\PYG{p}{[]}\PYG{o}{\PYGZgt{}} \PYG{n}{registers}\PYG{p}{;}
+        \PYG{c+c1}{// Create a new object value and allocates the registers given the size.}
+        \PYG{n}{ValueObject}\PYG{p}{(}\PYG{n}{registers\PYGZus{}size\PYGZus{}t} \PYG{n}{size}\PYG{p}{);}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

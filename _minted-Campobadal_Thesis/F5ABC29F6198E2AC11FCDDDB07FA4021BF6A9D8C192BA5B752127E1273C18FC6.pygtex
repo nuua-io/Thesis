@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{for} \PYG{n}{letter}\PYG{p}{,} \PYG{n}{index} \PYG{n}{in} \PYG{p}{[}\PYG{l+s}{\PYGZdq{}A\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}B\PYGZdq{}}\PYG{p}{,} \PYG{l+s}{\PYGZdq{}C\PYGZdq{}}\PYG{p}{]} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{n}{index} \PYG{n}{as} \PYG{n}{string} \PYG{o}{+} \PYG{l+s}{\PYGZdq{}: \PYGZdq{}} \PYG{o}{+} \PYG{n}{letter}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,36 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Value}
+\PYG{p}{\PYGZob{}}
+    \PYG{k+kt}{void} \PYG{n}{build\PYGZus{}from\PYGZus{}type}\PYG{p}{(}\PYG{k}{const} \PYG{n}{Type} \PYG{o}{*}\PYG{n}{type}\PYG{p}{);}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// The type of the value.}
+        \PYG{n}{Type} \PYG{n}{type}\PYG{p}{;}
+        \PYG{c+c1}{// Using a variant to avoid unessesary memory.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{variant}\PYG{o}{\PYGZlt{}}
+            \PYG{c+c1}{// Stores the reporesentation of the VALUE\PYGZus{}INT.}
+            \PYG{n}{nint\PYGZus{}t}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}FLOAT.}
+            \PYG{n}{nfloat\PYGZus{}t}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}BOOL.}
+            \PYG{n}{nbool\PYGZus{}t}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}STRING.}
+            \PYG{n}{nstring\PYGZus{}t}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}LIST.}
+            \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{nlist\PYGZus{}t}\PYG{o}{\PYGZgt{}}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}DICT.}
+            \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{ndict\PYGZus{}t}\PYG{o}{\PYGZgt{}}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}FUN.}
+            \PYG{n}{nfun\PYGZus{}t}\PYG{p}{,}
+            \PYG{c+c1}{// Stores the representation of the VALUE\PYGZus{}OBJECT.}
+            \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{nobject\PYGZus{}t}\PYG{o}{\PYGZgt{}}
+        \PYG{o}{\PYGZgt{}} \PYG{n}{value}\PYG{p}{;}
+        \PYG{c+c1}{// Constructors}
+        \PYG{c+c1}{// ...}
+        \PYG{c+c1}{// Retypes the value.}
+        \PYG{k+kt}{void} \PYG{n+nf}{retype}\PYG{p}{(}\PYG{n}{ValueType} \PYG{n}{new\PYGZus{}type}\PYG{p}{,} \PYG{k}{const} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}} \PYG{o}{\PYGZam{}}\PYG{n}{new\PYGZus{}inner\PYGZus{}type} \PYG{o}{=} \PYG{n}{std}\PYG{o}{::}\PYG{n}{shared\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Type}\PYG{o}{\PYGZgt{}}\PYG{p}{());}
+        \PYG{c+c1}{// Copies the current value to the destnation.}
+        \PYG{k+kt}{void} \PYG{n+nf}{copy\PYGZus{}to}\PYG{p}{(}\PYG{n}{Value} \PYG{o}{*}\PYG{n}{dest}\PYG{p}{)} \PYG{k}{const}\PYG{p}{;}
+        \PYG{c+c1}{// Gets a string representation of the value.}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{string} \PYG{n}{to\PYGZus{}string}\PYG{p}{()} \PYG{k}{const}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

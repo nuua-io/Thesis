@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{\PYGZob{}}\PYG{n+nl}{left}\PYG{p}{:} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n+nl}{right}\PYG{p}{:} \PYG{l+m+mi}{20}\PYG{p}{,} \PYG{n+nl}{sum}\PYG{p}{:} \PYG{l+m+mi}{30}\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

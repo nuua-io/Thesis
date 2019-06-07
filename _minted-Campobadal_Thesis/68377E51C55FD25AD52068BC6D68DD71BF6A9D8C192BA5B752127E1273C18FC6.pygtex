@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if} \PYG{n}{condition} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Condition is true\PYGZdq{}}
+\PYG{p}{\PYGZcb{}} \PYG{k}{else} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Condition is false\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{fun} \PYG{n+nf}{b}\PYG{p}{()}\PYG{o}{:} \PYG{k+kt}{int} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{l+m+mi}{10}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

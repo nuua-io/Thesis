@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{while} \PYG{n}{condition} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Condition is true\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{l+m+mf}{0..3} \PYG{c+c1}{// [0, 1, 2]}
+\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.}\PYG{p}{.}\PYG{l+m+mf}{.2} \PYG{c+c1}{// [\PYGZhy{}2, \PYGZhy{}1, 0, \PYGZhy{}1, \PYGZhy{}2]}
+\end{Verbatim}

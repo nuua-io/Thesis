@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// module\PYGZus{}main.nu}
+\PYG{n}{use} \PYG{n}{add} \PYG{n}{from} \PYG{l+s}{\PYGZdq{}mod\PYGZdq{}}
+
+\PYG{n}{fun} \PYG{n}{main}\PYG{p}{(}\PYG{n+nl}{argv}\PYG{p}{:} \PYG{p}{[}\PYG{n}{string}\PYG{p}{])} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{n}{add}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{c+c1}{// mod.nu}
+\PYG{k}{export} \PYG{n}{fun} \PYG{n}{add}\PYG{p}{(}\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{,} \PYG{n+nl}{b}\PYG{p}{:} \PYG{k+kt}{int}\PYG{p}{)}\PYG{o}{:} \PYG{k+kt}{int} \PYG{p}{\PYGZob{}}
+    \PYG{k}{return} \PYG{n}{a} \PYG{o}{+} \PYG{n}{b}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

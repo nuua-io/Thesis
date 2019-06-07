@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{10} \PYG{c+c1}{// \PYGZhy{}10}
+\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{l+m+mi}{10} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{c+c1}{// \PYGZhy{}12}
+\PYG{o}{!}\PYG{n+nb}{false} \PYG{c+c1}{// true}
+\PYG{o}{+}\PYG{n+nb}{true} \PYG{c+c1}{// 1}
+\end{Verbatim}

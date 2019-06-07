@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{l+m+mi}{10} \PYG{o}{+} \PYG{l+m+mi}{20} \PYG{c+c1}{// 30}
+\PYG{l+m+mi}{20} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{50} \PYG{c+c1}{// true}
+\PYG{l+s}{\PYGZdq{}sample\PYGZdq{}} \PYG{o}{==} \PYG{l+s}{\PYGZdq{}sample\PYGZdq{}}
+\PYG{l+s}{\PYGZdq{}abc\PYGZdq{}} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{c+c1}{// \PYGZdq{}abcabc\PYGZdq{}}
+\PYG{l+s}{\PYGZdq{}erik\PYGZdq{}} \PYG{o}{/} \PYG{l+m+mi}{4} \PYG{c+c1}{// [\PYGZdq{}e\PYGZdq{}, \PYGZdq{}r\PYGZdq{}, \PYGZdq{}i\PYGZdq{}, \PYGZdq{}k\PYGZdq{}]}
+\end{Verbatim}

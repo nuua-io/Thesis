@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Person} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{name}\PYG{p}{:} \PYG{n}{string}
+\PYG{p}{\PYGZcb{}}
+\PYG{n+nl}{p} \PYG{p}{:}\PYG{o}{=} \PYG{n}{Person}\PYG{o}{!}\PYG{p}{\PYGZob{}}\PYG{n+nl}{name}\PYG{p}{:} \PYG{l+s}{\PYGZdq{}Erik\PYGZdq{}}\PYG{p}{\PYGZcb{}}
+\PYG{n}{p}\PYG{p}{.}\PYG{n}{name} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}User\PYGZdq{}} \PYG{c+c1}{// \PYGZdq{}User\PYGZdq{}}
+\PYG{c+c1}{// The value of p will now be Person!\PYGZob{}name: \PYGZdq{}User\PYGZdq{}\PYGZcb{}}
+\end{Verbatim}

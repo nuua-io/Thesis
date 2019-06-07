@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Program}
+\PYG{p}{\PYGZob{}}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the main frame of the program.}
+        \PYG{n}{Frame} \PYG{n}{main\PYGZus{}frame}\PYG{p}{;}
+        \PYG{c+c1}{// Stores the program memory (The main code).}
+        \PYG{n}{std}\PYG{o}{::}\PYG{n}{unique\PYGZus{}ptr}\PYG{o}{\PYGZlt{}}\PYG{n}{Memory}\PYG{o}{\PYGZgt{}} \PYG{n}{memory}\PYG{p}{;}
+        \PYG{c+c1}{// Constructor to allocate the memory of the}
+        \PYG{c+c1}{// program memory. Can\PYGZsq{}t be done here since}
+        \PYG{c+c1}{// Memory is a forward declared class.}
+        \PYG{n}{Program}\PYG{p}{();}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

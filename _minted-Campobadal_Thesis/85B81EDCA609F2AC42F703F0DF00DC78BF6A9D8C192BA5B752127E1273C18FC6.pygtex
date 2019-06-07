@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Person} \PYG{p}{\PYGZob{}}
+    \PYG{n+nl}{name}\PYG{p}{:} \PYG{n}{string}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

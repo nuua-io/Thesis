@@ -1,0 +1,209 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{typedef} \PYG{k}{enum} \PYG{o}{:} \PYG{k+kt}{uint8\PYGZus{}t} \PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Others}
+    \PYG{n}{OP\PYGZus{}EXIT}\PYG{p}{,} \PYG{c+c1}{// EXIT \PYGZhy{} \PYGZhy{} \PYGZhy{}}
+
+    \PYG{c+cm}{/* Register manipulation */}
+    \PYG{c+c1}{// Moves (copy) the value from RY to RX.}
+    \PYG{n}{OP\PYGZus{}MOVE}\PYG{p}{,} \PYG{c+c1}{// MOVE RX RY}
+    \PYG{c+c1}{// Load a constant to the register.}
+    \PYG{n}{OP\PYGZus{}LOAD\PYGZus{}C}\PYG{p}{,} \PYG{c+c1}{// OP\PYGZus{}LOAD\PYGZus{}C RX C1}
+    \PYG{c+c1}{// Load a global register to a local register.}
+    \PYG{n}{OP\PYGZus{}LOAD\PYGZus{}G}\PYG{p}{,} \PYG{c+c1}{// OP\PYGZus{}LOAD\PYGZus{}G RX G1}
+    \PYG{c+c1}{// Set a global value.}
+    \PYG{n}{OP\PYGZus{}SET\PYGZus{}G}\PYG{p}{,} \PYG{c+c1}{// OP\PYGZus{}SET\PYGZus{}G G1 RX}
+
+    \PYG{c+cm}{/* Stack manipulation */}
+    \PYG{c+c1}{// Push a value to the shared stack.}
+    \PYG{n}{OP\PYGZus{}PUSH}\PYG{p}{,} \PYG{c+c1}{// PUSH RX}
+    \PYG{c+c1}{// Push a constant to the shared stack.}
+    \PYG{n}{OP\PYGZus{}PUSH\PYGZus{}C}\PYG{p}{,} \PYG{c+c1}{// PUSH C1}
+    \PYG{c+c1}{// Pops a value from the shared stack.}
+    \PYG{n}{OP\PYGZus{}POP}\PYG{p}{,} \PYG{c+c1}{// POP RX}
+
+    \PYG{c+cm}{/* String releated */}
+    \PYG{c+c1}{// Get the char from a string given its index.}
+    \PYG{n}{OP\PYGZus{}SGET}\PYG{p}{,} \PYG{c+c1}{// SGET RX RY RZ}
+    \PYG{c+c1}{// Set a char of the string given its index.}
+    \PYG{n}{OP\PYGZus{}SSET}\PYG{p}{,} \PYG{c+c1}{// SSET RX RY RZ}
+    \PYG{c+c1}{// Delete a given char in a string given its index.}
+    \PYG{n}{OP\PYGZus{}SDELETE}\PYG{p}{,} \PYG{c+c1}{// SDELETE RX RY}
+
+    \PYG{c+cm}{/* List releated */}
+    \PYG{c+c1}{// Push a value to a list.}
+    \PYG{n}{OP\PYGZus{}LPUSH}\PYG{p}{,} \PYG{c+c1}{// LPUSH RX RY}
+    \PYG{c+c1}{// Push a constant to a list.}
+    \PYG{n}{OP\PYGZus{}LPUSH\PYGZus{}C}\PYG{p}{,} \PYG{c+c1}{// LPUSH RX C1}
+    \PYG{c+c1}{// Pop a value from a list.}
+    \PYG{n}{OP\PYGZus{}LPOP}\PYG{p}{,} \PYG{c+c1}{// LPOP RX}
+    \PYG{c+c1}{// Get the value of a list given it\PYGZsq{}s index.}
+    \PYG{n}{OP\PYGZus{}LGET}\PYG{p}{,} \PYG{c+c1}{// LGET RX RY RZ}
+    \PYG{c+c1}{// Set the value of the list in the given index.}
+    \PYG{n}{OP\PYGZus{}LSET}\PYG{p}{,} \PYG{c+c1}{// LSET RX RY RZ}
+    \PYG{c+c1}{// Delete a value of the list given the index.}
+    \PYG{n}{OP\PYGZus{}LDELETE}\PYG{p}{,} \PYG{c+c1}{// LDELETE RX RY}
+
+    \PYG{c+cm}{/* Dictionary releated */}
+    \PYG{c+c1}{// Get dictionary key given the integer index and the key order.}
+    \PYG{n}{OP\PYGZus{}DKEY}\PYG{p}{,} \PYG{c+c1}{// DKEY RX RY RZ}
+    \PYG{c+c1}{// Get a value from the dictionary given the key.}
+    \PYG{n}{OP\PYGZus{}DGET}\PYG{p}{,} \PYG{c+c1}{// DGET RX RY RZ}
+    \PYG{c+c1}{// Set the value of the given index key.}
+    \PYG{n}{OP\PYGZus{}DSET}\PYG{p}{,} \PYG{c+c1}{// DSET RX RY RZ}
+    \PYG{c+c1}{// Delete a given key\PYGZhy{}value pair.}
+    \PYG{n}{OP\PYGZus{}DDELETE}\PYG{p}{,} \PYG{c+c1}{// DDELETE RX RY}
+
+    \PYG{c+cm}{/* Function releated */}
+    \PYG{c+c1}{// Call a function.}
+    \PYG{n}{OP\PYGZus{}CALL}\PYG{p}{,} \PYG{c+c1}{// CALL RX}
+    \PYG{c+c1}{// Return to previous frame.}
+    \PYG{n}{OP\PYGZus{}RETURN}\PYG{p}{,} \PYG{c+c1}{// RETURN}
+
+    \PYG{c+cm}{/* Object releated */}
+    \PYG{c+c1}{// Get object property.}
+    \PYG{n}{OP\PYGZus{}LPROP}\PYG{p}{,} \PYG{c+c1}{// PROP RX PX}
+    \PYG{c+c1}{// Set object property.}
+    \PYG{n}{OP\PYGZus{}SPROP}\PYG{p}{,} \PYG{c+c1}{// PROP PX RX}
+
+    \PYG{c+cm}{/* Casting Operations */}
+
+    \PYG{c+c1}{// Value casting}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}INT\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}INT\PYGZus{}FLOAT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}INT\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}INT\PYGZus{}BOOL RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}INT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}INT\PYGZus{}STRING RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}FLOAT\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}FLOAT\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}FLOAT\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}FLOAT\PYGZus{}BOOL RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}FLOAT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}FLOAT\PYGZus{}STRING RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}BOOL\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}BOOL\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}BOOL\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}BOOL\PYGZus{}FLOAT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}BOOL\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}BOOL\PYGZus{}STRING RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}LIST\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}LIST\PYGZus{}STRING RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}LIST\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}LIST\PYGZus{}BOOL RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}LIST\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}LIST\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}DICT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}DICT\PYGZus{}STRING RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}DICT\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}DICT\PYGZus{}BOOL RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}DICT\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}DICT\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}STRING\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}STRING\PYGZus{}BOOL RX RY}
+    \PYG{n}{OP\PYGZus{}CAST\PYGZus{}STRING\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// CAST\PYGZus{}STRING\PYGZus{}INT RX RY}
+
+    \PYG{c+cm}{/* Unary Operations */}
+
+    \PYG{c+c1}{// Negation}
+    \PYG{n}{OP\PYGZus{}NEG\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// NEG\PYGZus{}BOOL RX RY}
+    \PYG{c+c1}{// Minus operations}
+    \PYG{n}{OP\PYGZus{}MINUS\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// MINUS\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}MINUS\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// MINUS\PYGZus{}FLOAT RX RY}
+    \PYG{n}{OP\PYGZus{}MINUS\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// MINUS\PYGZus{}BOOL RX RY}
+    \PYG{c+c1}{// Plus operations}
+    \PYG{n}{OP\PYGZus{}PLUS\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// PLUS\PYGZus{}INT RX RY}
+    \PYG{n}{OP\PYGZus{}PLUS\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// PLUS\PYGZus{}FLOAT RX RY}
+    \PYG{n}{OP\PYGZus{}PLUS\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// PLUS\PYGZus{}BOOL RX RY}
+
+    \PYG{c+cm}{/* Extra binary but unary */}
+    \PYG{c+c1}{// Increment register integer}
+    \PYG{n}{OP\PYGZus{}IINC}\PYG{p}{,} \PYG{c+c1}{// INC RX}
+    \PYG{c+c1}{// Decrement register integer}
+    \PYG{n}{OP\PYGZus{}IDEC}\PYG{p}{,} \PYG{c+c1}{// DEC RX}
+
+    \PYG{c+cm}{/* Binary Operations */}
+
+    \PYG{c+c1}{// Addition}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}BOOL RX RY RZ}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}LIST}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}LIST RX RY RZ}
+    \PYG{n}{OP\PYGZus{}ADD\PYGZus{}DICT}\PYG{p}{,} \PYG{c+c1}{// ADD\PYGZus{}DICT RX RY RZ}
+    \PYG{c+c1}{// Substraction}
+    \PYG{n}{OP\PYGZus{}SUB\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// SUB\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}SUB\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// SUB\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}SUB\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// SUB\PYGZus{}BOOL RX RY RZ}
+    \PYG{c+c1}{// Multiplication}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}BOOL RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}INT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}INT\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}STRING\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}STRING\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}INT\PYGZus{}LIST}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}INT\PYGZus{}LIST RX RY RZ}
+    \PYG{n}{OP\PYGZus{}MUL\PYGZus{}LIST\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// MUL\PYGZus{}LIST\PYGZus{}INT RX RY RZ}
+    \PYG{c+c1}{// Division}
+    \PYG{n}{OP\PYGZus{}DIV\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// DIV\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}DIV\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// DIV\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}DIV\PYGZus{}STRING\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// DIV\PYGZus{}STRING\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}DIV\PYGZus{}LIST\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// DIV\PYGZus{}LIST\PYGZus{}INT RX RY RZ}
+    \PYG{c+c1}{// Equality}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}BOOL RX RY RZ}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}LIST}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}LIST RX RY RZ}
+    \PYG{n}{OP\PYGZus{}EQ\PYGZus{}DICT}\PYG{p}{,} \PYG{c+c1}{// EQ\PYGZus{}DICT RX RY RZ}
+    \PYG{c+c1}{// Not Equality}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}BOOL RX RY RZ}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}LIST}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}LIST RX RY RZ}
+    \PYG{n}{OP\PYGZus{}NEQ\PYGZus{}DICT}\PYG{p}{,} \PYG{c+c1}{// NEQ\PYGZus{}DICT RX RY RZ}
+    \PYG{c+c1}{// Higher than}
+    \PYG{n}{OP\PYGZus{}HT\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// HT\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HT\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// HT\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// HT\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HT\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// HT\PYGZus{}BOOL RX RY RZ}
+    \PYG{c+c1}{// Higher than or equal to}
+    \PYG{n}{OP\PYGZus{}HTE\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// HTE\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HTE\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// HTE\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HTE\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// HTE\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}HTE\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// HTE\PYGZus{}BOOL RX RY RZ}
+    \PYG{c+c1}{// Lower than}
+    \PYG{n}{OP\PYGZus{}LT\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// LT\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LT\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// LT\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LT\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// LT\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LT\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// LT\PYGZus{}BOOL RX RY RZ}
+    \PYG{c+c1}{// Lower than or equal to}
+    \PYG{n}{OP\PYGZus{}LTE\PYGZus{}INT}\PYG{p}{,} \PYG{c+c1}{// LTE\PYGZus{}INT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LTE\PYGZus{}FLOAT}\PYG{p}{,} \PYG{c+c1}{// LTE\PYGZus{}FLOAT RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LTE\PYGZus{}STRING}\PYG{p}{,} \PYG{c+c1}{// LTE\PYGZus{}STRING RX RY RZ}
+    \PYG{n}{OP\PYGZus{}LTE\PYGZus{}BOOL}\PYG{p}{,} \PYG{c+c1}{// LTE\PYGZus{}BOOL RX RY RZ}
+
+    \PYG{c+cm}{/* Logical operations */}
+    \PYG{c+c1}{// Logical or}
+    \PYG{n}{OP\PYGZus{}OR}\PYG{p}{,} \PYG{c+c1}{// OR RX RY RZ}
+    \PYG{c+c1}{// Logical and}
+    \PYG{n}{OP\PYGZus{}AND}\PYG{p}{,} \PYG{c+c1}{// AND RX RY RZ}
+
+    \PYG{c+cm}{/* Control flow (All relative jumps) */}
+    \PYG{c+c1}{// Forward jump}
+    \PYG{n}{OP\PYGZus{}FJUMP}\PYG{p}{,} \PYG{c+c1}{// FJUMP A}
+    \PYG{c+c1}{// Backward jump}
+    \PYG{n}{OP\PYGZus{}BJUMP}\PYG{p}{,} \PYG{c+c1}{// BJUMP A}
+    \PYG{c+c1}{// Conditional forward jump}
+    \PYG{n}{OP\PYGZus{}CFJUMP}\PYG{p}{,} \PYG{c+c1}{// FJUMP A RX}
+    \PYG{c+c1}{// Conditional backward jump}
+    \PYG{n}{OP\PYGZus{}CBJUMP}\PYG{p}{,} \PYG{c+c1}{// BJUMP A RX}
+    \PYG{c+c1}{// Conditional forward negative jump}
+    \PYG{n}{OP\PYGZus{}CFNJUMP}\PYG{p}{,} \PYG{c+c1}{// FNJUMP A RX}
+    \PYG{c+c1}{// Conditional backward negative jump}
+    \PYG{n}{OP\PYGZus{}CBNJUMP}\PYG{p}{,} \PYG{c+c1}{// BNJUMP A RX}
+
+    \PYG{c+cm}{/* Slice and range */}
+    \PYG{c+c1}{// String slice.}
+    \PYG{n}{OP\PYGZus{}SSLICE}\PYG{p}{,} \PYG{c+c1}{// SSLICE RX RY R1 R2 R3 (dest, target, start, end, step)}
+    \PYG{c+c1}{// String slice to the end.}
+    \PYG{n}{OP\PYGZus{}SSLICEE}\PYG{p}{,} \PYG{c+c1}{// SSLICEE RX RY R1 R2 (dest, target, start, step)}
+    \PYG{c+c1}{// List slice.}
+    \PYG{n}{OP\PYGZus{}LSLICE}\PYG{p}{,} \PYG{c+c1}{// LSLICE RX RY R1 R2 R3 (dest, target, start, end, step)}
+    \PYG{c+c1}{// List slice to the end.}
+    \PYG{n}{OP\PYGZus{}LSLICEE}\PYG{p}{,} \PYG{c+c1}{// LSLICEE RX RY R1 R2 (dest, target, start, step)}
+    \PYG{c+c1}{// Exclusive range.}
+    \PYG{n}{OP\PYGZus{}RANGEE}\PYG{p}{,} \PYG{c+c1}{// RANGEE RX R1 R2 (dest, start, end)}
+    \PYG{c+c1}{// Inclusive range.}
+    \PYG{n}{OP\PYGZus{}RANGEI}\PYG{p}{,} \PYG{c+c1}{// RANGEI RX R1 R2 (dest, start, end)}
+
+    \PYG{c+cm}{/* Utilities */}
+    \PYG{c+c1}{// Print a register}
+    \PYG{n}{OP\PYGZus{}PRINT}\PYG{p}{,} \PYG{c+c1}{// PRINT RX}
+    \PYG{c+c1}{// Print a constant}
+    \PYG{n}{OP\PYGZus{}PRINT\PYGZus{}C}\PYG{p}{,} \PYG{c+c1}{// PRINT C1}
+\PYG{p}{\PYGZcb{}} \PYG{n}{OpCode}\PYG{p}{;}
+\end{Verbatim}

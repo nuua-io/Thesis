@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{l+m+mi}{10} \PYG{n}{as} \PYG{k+kt}{float} \PYG{c+c1}{// 10.0}
+\PYG{l+m+mf}{25.8} \PYG{n}{as} \PYG{k+kt}{int} \PYG{c+c1}{// 25}
+\PYG{n+nb}{false} \PYG{n}{as} \PYG{n}{string} \PYG{c+c1}{// \PYGZdq{}false\PYGZdq{}}
+\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{]} \PYG{n}{as} \PYG{n}{string} \PYG{c+c1}{// \PYGZdq{}[1, 2, 3]\PYGZdq{}}
+\PYG{p}{[}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{l+m+mi}{30}\PYG{p}{]} \PYG{n}{as} \PYG{k+kt}{int} \PYG{c+c1}{// 2}
+\end{Verbatim}

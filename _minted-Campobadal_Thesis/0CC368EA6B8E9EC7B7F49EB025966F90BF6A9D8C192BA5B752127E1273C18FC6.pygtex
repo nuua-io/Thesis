@@ -1,0 +1,21 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{FrameInfo}
+\PYG{p}{\PYGZob{}}
+    \PYG{c+c1}{// Stores the registers that are free to use again.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{register\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{n}{free\PYGZus{}registers}\PYG{p}{;}
+    \PYG{c+c1}{// Stores the registers that are protected to get free unless forçed.}
+    \PYG{n}{std}\PYG{o}{::}\PYG{n}{vector}\PYG{o}{\PYGZlt{}}\PYG{n}{register\PYGZus{}t}\PYG{o}{\PYGZgt{}} \PYG{n}{protected\PYGZus{}registers}\PYG{p}{;}
+    \PYG{k}{public}\PYG{o}{:}
+        \PYG{c+c1}{// Stores the next register to give in case no free ones are available.}
+        \PYG{n}{register\PYGZus{}t} \PYG{n}{current\PYGZus{}register} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+        \PYG{c+c1}{// Method to return an available register.}
+        \PYG{c+c1}{// It will try to get it from the free\PYGZus{}registers}
+        \PYG{c+c1}{// otherwise it will return a new register and}
+        \PYG{c+c1}{// increment current\PYGZus{}register by 1}
+        \PYG{n}{register\PYGZus{}t} \PYG{n+nf}{get\PYGZus{}register}\PYG{p}{(}\PYG{k+kt}{bool} \PYG{n}{protect} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+        \PYG{c+c1}{// Used to free a register.}
+        \PYG{k+kt}{void} \PYG{n+nf}{free\PYGZus{}register}\PYG{p}{(}\PYG{n}{register\PYGZus{}t} \PYG{n}{reg}\PYG{p}{,} \PYG{k+kt}{bool} \PYG{n}{force} \PYG{o}{=} \PYG{n+nb}{false}\PYG{p}{);}
+        \PYG{c+c1}{// Resets the frame info.}
+        \PYG{k+kt}{void} \PYG{n+nf}{reset}\PYG{p}{();}
+\PYG{p}{\PYGZcb{};}
+\end{Verbatim}

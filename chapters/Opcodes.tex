@@ -1,0 +1,224 @@
+All the Nuua virtual machine opcodes can be found in this list with a small comment on the right-hand side with the required operands of each
+opcode. If the opcode has a result or destination, this is always the \emph{first} operand found in the opcode. For example the opcode
+\texttt{OP\_MOVE RX RY} moves the value of \texttt{RY} to \texttt{RX}. As another example, the opcode \texttt{OP\_ADD\_INT RX RY RZ} performs
+the addition of values \texttt{RY + RZ} and stores the result at \texttt{RX}. The following table explains the different operand types found.
+
+\begin{itemize}
+    \item \emph{RX, RY, RX, R1, R2, R3}: Represents the value of a register (they are found in the top frame).
+    \item \emph{PX}: Represent the value of a register (they are found in the object)
+    \item \emph{A}: Represents a literal value (normaly used for jumping offsets)
+    \item \emph{G1}: Represents a global value (they are found in the global registers)
+    \item \emph{C1}: Represents a constant value (they are found in the constant pool)\\
+\end{itemize}
+
+\begin{code}
+\begin{minted}{cpp}
+typedef enum : uint8_t {
+    // Others
+    OP_EXIT, // EXIT - - -
+
+    /* Register manipulation */
+    // Moves (copy) the value from RY to RX.
+    OP_MOVE, // MOVE RX RY
+    // Load a constant to the register.
+    OP_LOAD_C, // OP_LOAD_C RX C1
+    // Load a global register to a local register.
+    OP_LOAD_G, // OP_LOAD_G RX G1
+    // Set a global value.
+    OP_SET_G, // OP_SET_G G1 RX
+
+    /* Stack manipulation */
+    // Push a value to the shared stack.
+    OP_PUSH, // PUSH RX
+    // Push a constant to the shared stack.
+    OP_PUSH_C, // PUSH C1
+    // Pops a value from the shared stack.
+    OP_POP, // POP RX
+
+    /* String releated */
+    // Get the char from a string given its index.
+    OP_SGET, // SGET RX RY RZ
+    // Set a char of the string given its index.
+    OP_SSET, // SSET RX RY RZ
+    // Delete a given char in a string given its index.
+    OP_SDELETE, // SDELETE RX RY
+
+    /* List releated */
+    // Push a value to a list.
+    OP_LPUSH, // LPUSH RX RY
+    // Push a constant to a list.
+    OP_LPUSH_C, // LPUSH RX C1
+    // Pop a value from a list.
+    OP_LPOP, // LPOP RX
+    // Get the value of a list given it's index.
+    OP_LGET, // LGET RX RY RZ
+    // Set the value of the list in the given index.
+    OP_LSET, // LSET RX RY RZ
+    // Delete a value of the list given the index.
+    OP_LDELETE, // LDELETE RX RY
+
+    /* Dictionary releated */
+    // Get dictionary key given the integer index and the key order.
+    OP_DKEY, // DKEY RX RY RZ
+    // Get a value from the dictionary given the key.
+    OP_DGET, // DGET RX RY RZ
+    // Set the value of the given index key.
+    OP_DSET, // DSET RX RY RZ
+    // Delete a given key-value pair.
+    OP_DDELETE, // DDELETE RX RY
+
+    /* Function releated */
+    // Call a function.
+    OP_CALL, // CALL RX
+    // Return to previous frame.
+    OP_RETURN, // RETURN
+
+    /* Object releated */
+    // Get object property.
+    OP_LPROP, // PROP RX PX
+    // Set object property.
+    OP_SPROP, // PROP PX RX
+
+    /* Casting Operations */
+
+    // Value casting
+    OP_CAST_INT_FLOAT, // CAST_INT_FLOAT RX RY
+    OP_CAST_INT_BOOL, // CAST_INT_BOOL RX RY
+    OP_CAST_INT_STRING, // CAST_INT_STRING RX RY
+    OP_CAST_FLOAT_INT, // CAST_FLOAT_INT RX RY
+    OP_CAST_FLOAT_BOOL, // CAST_FLOAT_BOOL RX RY
+    OP_CAST_FLOAT_STRING, // CAST_FLOAT_STRING RX RY
+    OP_CAST_BOOL_INT, // CAST_BOOL_INT RX RY
+    OP_CAST_BOOL_FLOAT, // CAST_BOOL_FLOAT RX RY
+    OP_CAST_BOOL_STRING, // CAST_BOOL_STRING RX RY
+    OP_CAST_LIST_STRING, // CAST_LIST_STRING RX RY
+    OP_CAST_LIST_BOOL, // CAST_LIST_BOOL RX RY
+    OP_CAST_LIST_INT, // CAST_LIST_INT RX RY
+    OP_CAST_DICT_STRING, // CAST_DICT_STRING RX RY
+    OP_CAST_DICT_BOOL, // CAST_DICT_BOOL RX RY
+    OP_CAST_DICT_INT, // CAST_DICT_INT RX RY
+    OP_CAST_STRING_BOOL, // CAST_STRING_BOOL RX RY
+    OP_CAST_STRING_INT, // CAST_STRING_INT RX RY
+
+    /* Unary Operations */
+
+    // Negation
+    OP_NEG_BOOL, // NEG_BOOL RX RY
+    // Minus operations
+    OP_MINUS_INT, // MINUS_INT RX RY
+    OP_MINUS_FLOAT, // MINUS_FLOAT RX RY
+    OP_MINUS_BOOL, // MINUS_BOOL RX RY
+    // Plus operations
+    OP_PLUS_INT, // PLUS_INT RX RY
+    OP_PLUS_FLOAT, // PLUS_FLOAT RX RY
+    OP_PLUS_BOOL, // PLUS_BOOL RX RY
+
+    /* Extra binary but unary */
+    // Increment register integer
+    OP_IINC, // INC RX
+    // Decrement register integer
+    OP_IDEC, // DEC RX
+
+    /* Binary Operations */
+
+    // Addition
+    OP_ADD_INT, // ADD_INT RX RY RZ
+    OP_ADD_FLOAT, // ADD_FLOAT RX RY RZ
+    OP_ADD_STRING, // ADD_STRING RX RY RZ
+    OP_ADD_BOOL, // ADD_BOOL RX RY RZ
+    OP_ADD_LIST, // ADD_LIST RX RY RZ
+    OP_ADD_DICT, // ADD_DICT RX RY RZ
+    // Substraction
+    OP_SUB_INT, // SUB_INT RX RY RZ
+    OP_SUB_FLOAT, // SUB_FLOAT RX RY RZ
+    OP_SUB_BOOL, // SUB_BOOL RX RY RZ
+    // Multiplication
+    OP_MUL_INT, // MUL_INT RX RY RZ
+    OP_MUL_FLOAT, // MUL_FLOAT RX RY RZ
+    OP_MUL_BOOL, // MUL_BOOL RX RY RZ
+    OP_MUL_INT_STRING, // MUL_INT_STRING RX RY RZ
+    OP_MUL_STRING_INT, // MUL_STRING_INT RX RY RZ
+    OP_MUL_INT_LIST, // MUL_INT_LIST RX RY RZ
+    OP_MUL_LIST_INT, // MUL_LIST_INT RX RY RZ
+    // Division
+    OP_DIV_INT, // DIV_INT RX RY RZ
+    OP_DIV_FLOAT, // DIV_FLOAT RX RY RZ
+    OP_DIV_STRING_INT, // DIV_STRING_INT RX RY RZ
+    OP_DIV_LIST_INT, // DIV_LIST_INT RX RY RZ
+    // Equality
+    OP_EQ_INT, // EQ_INT RX RY RZ
+    OP_EQ_FLOAT, // EQ_FLOAT RX RY RZ
+    OP_EQ_STRING, // EQ_STRING RX RY RZ
+    OP_EQ_BOOL, // EQ_BOOL RX RY RZ
+    OP_EQ_LIST, // EQ_LIST RX RY RZ
+    OP_EQ_DICT, // EQ_DICT RX RY RZ
+    // Not Equality
+    OP_NEQ_INT, // NEQ_INT RX RY RZ
+    OP_NEQ_FLOAT, // NEQ_FLOAT RX RY RZ
+    OP_NEQ_STRING, // NEQ_STRING RX RY RZ
+    OP_NEQ_BOOL, // NEQ_BOOL RX RY RZ
+    OP_NEQ_LIST, // NEQ_LIST RX RY RZ
+    OP_NEQ_DICT, // NEQ_DICT RX RY RZ
+    // Higher than
+    OP_HT_INT, // HT_INT RX RY RZ
+    OP_HT_FLOAT, // HT_FLOAT RX RY RZ
+    OP_HT_STRING, // HT_STRING RX RY RZ
+    OP_HT_BOOL, // HT_BOOL RX RY RZ
+    // Higher than or equal to
+    OP_HTE_INT, // HTE_INT RX RY RZ
+    OP_HTE_FLOAT, // HTE_FLOAT RX RY RZ
+    OP_HTE_STRING, // HTE_STRING RX RY RZ
+    OP_HTE_BOOL, // HTE_BOOL RX RY RZ
+    // Lower than
+    OP_LT_INT, // LT_INT RX RY RZ
+    OP_LT_FLOAT, // LT_FLOAT RX RY RZ
+    OP_LT_STRING, // LT_STRING RX RY RZ
+    OP_LT_BOOL, // LT_BOOL RX RY RZ
+    // Lower than or equal to
+    OP_LTE_INT, // LTE_INT RX RY RZ
+    OP_LTE_FLOAT, // LTE_FLOAT RX RY RZ
+    OP_LTE_STRING, // LTE_STRING RX RY RZ
+    OP_LTE_BOOL, // LTE_BOOL RX RY RZ
+
+    /* Logical operations */
+    // Logical or
+    OP_OR, // OR RX RY RZ
+    // Logical and
+    OP_AND, // AND RX RY RZ
+
+    /* Control flow (All relative jumps) */
+    // Forward jump
+    OP_FJUMP, // FJUMP A
+    // Backward jump
+    OP_BJUMP, // BJUMP A
+    // Conditional forward jump
+    OP_CFJUMP, // FJUMP A RX
+    // Conditional backward jump
+    OP_CBJUMP, // BJUMP A RX
+    // Conditional forward negative jump
+    OP_CFNJUMP, // FNJUMP A RX
+    // Conditional backward negative jump
+    OP_CBNJUMP, // BNJUMP A RX
+
+    /* Slice and range */
+    // String slice.
+    OP_SSLICE, // SSLICE RX RY R1 R2 R3 (dest, target, start, end, step)
+    // String slice to the end.
+    OP_SSLICEE, // SSLICEE RX RY R1 R2 (dest, target, start, step)
+    // List slice.
+    OP_LSLICE, // LSLICE RX RY R1 R2 R3 (dest, target, start, end, step)
+    // List slice to the end.
+    OP_LSLICEE, // LSLICEE RX RY R1 R2 (dest, target, start, step)
+    // Exclusive range.
+    OP_RANGEE, // RANGEE RX R1 R2 (dest, start, end)
+    // Inclusive range.
+    OP_RANGEI, // RANGEI RX R1 R2 (dest, start, end)
+
+    /* Utilities */
+    // Print a register
+    OP_PRINT, // PRINT RX
+    // Print a constant
+    OP_PRINT_C, // PRINT C1
+} OpCode;
+\end{minted}
+\end{code}

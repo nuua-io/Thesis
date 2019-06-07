@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nb}{true} \PYG{n}{or} \PYG{n+nb}{false} \PYG{c+c1}{// true}
+\PYG{n+nb}{true} \PYG{n}{or} \PYG{n+nb}{true} \PYG{c+c1}{// true}
+\end{Verbatim}

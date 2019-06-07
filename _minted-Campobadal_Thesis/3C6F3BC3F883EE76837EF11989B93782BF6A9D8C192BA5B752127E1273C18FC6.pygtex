@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Some comment here}
+\PYG{n}{fun} \PYG{n+nf}{test}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Hello\PYGZdq{}}
+    \PYG{c+c1}{// Some other comment here}
+    \PYG{n}{print} \PYG{l+s}{\PYGZdq{}Hello again\PYGZdq{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

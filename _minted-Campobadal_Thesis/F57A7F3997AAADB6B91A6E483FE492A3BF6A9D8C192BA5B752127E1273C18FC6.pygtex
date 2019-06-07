@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if} \PYG{n}{number} \PYG{o}{==} \PYG{l+m+mi}{0} \PYG{o}{=\PYGZgt{}} \PYG{n}{print} \PYG{l+s}{\PYGZdq{}The number is 0\PYGZdq{}}
+\PYG{n}{elif} \PYG{n}{number} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{o}{=\PYGZgt{}} \PYG{n}{print} \PYG{l+s}{\PYGZdq{}The number is 1\PYGZdq{}}
+\PYG{k}{else} \PYG{o}{=\PYGZgt{}} \PYG{n}{print} \PYG{l+s}{\PYGZdq{}The number is not 0 nor 1\PYGZdq{}}
+\end{Verbatim}

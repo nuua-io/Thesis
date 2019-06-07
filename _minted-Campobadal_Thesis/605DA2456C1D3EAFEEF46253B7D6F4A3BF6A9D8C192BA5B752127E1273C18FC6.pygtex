@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{*} \PYG{l+m+mi}{3} \PYG{c+c1}{// 9}
+\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{l+m+mi}{4} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{3}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{p}{))} \PYG{c+c1}{// 16}
+\PYG{err}{\PYGZbs{}}\PYG{n}{end}\PYG{p}{\PYGZob{}}\PYG{n}{lstlisting}\PYG{p}{\PYGZcb{}}
+
+\PYG{err}{\PYGZbs{}}\PYG{n}{subsection}\PYG{p}{\PYGZob{}}\PYG{n}{Access} \PYG{n}{Expression}\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{The} \PYG{n}{access} \PYG{n}{expression} \PYG{n}{is} \PYG{n}{used} \PYG{n}{to} \PYG{n}{access} \PYG{n}{an} \PYG{n}{inner} \PYG{n}{value} \PYG{n}{of} \PYG{n}{another} \PYG{n}{expressions}\PYG{p}{.} \PYG{n}{In} \PYG{k+kt}{short}\PYG{p}{,} \PYG{n}{the} \PYG{n}{access} \PYG{n}{expression} \PYG{n}{can} \PYG{n}{be} \PYG{n}{used} \PYG{n}{in} \PYG{n}{any}
+\PYG{n}{Nuua} \PYG{n}{iterator} \PYG{n}{and} \PYG{n}{the} \PYG{n}{returned} \PYG{n}{value} \PYG{n}{is} \PYG{n}{the} \PYG{n}{inner} \PYG{n}{value} \PYG{n}{found} \PYG{n}{on} \PYG{n}{its} \PYG{n}{index} \PYG{n}{with} \PYG{n}{the} \PYG{n}{respective} \PYG{n}{type} \PYG{n}{as} \PYG{n}{shown} \PYG{n}{in} \PYG{err}{\PYGZbs{}}\PYG{n}{autoref}\PYG{p}{\PYGZob{}}\PYG{n+nl}{fig}\PYG{p}{:}\PYG{n}{nuua\PYGZus{}iterators}\PYG{p}{\PYGZcb{}.}
+
+\PYG{err}{\PYGZbs{}}\PYG{n}{subsubsection}\PYG{p}{\PYGZob{}}\PYG{n}{Caveats}\PYG{p}{\PYGZcb{}}
+
+\PYG{err}{\PYGZbs{}}\PYG{n}{begin}\PYG{p}{\PYGZob{}}\PYG{n}{itemize}\PYG{p}{\PYGZcb{}}
+    \PYG{err}{\PYGZbs{}}\PYG{n}{item} \PYG{n}{Only} \PYG{n}{Nuua} \PYG{n}{iterators} \PYG{n}{can} \PYG{n}{be} \PYG{n}{accessed}\PYG{p}{.}
+\PYG{err}{\PYGZbs{}}\PYG{n}{end}\PYG{p}{\PYGZob{}}\PYG{n}{itemize}\PYG{p}{\PYGZcb{}}
+
+\PYG{err}{\PYGZbs{}}\PYG{n}{subsubsection}\PYG{p}{\PYGZob{}}\PYG{n}{Examples}\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{A} \PYG{n}{string} \PYG{n}{access}\PYG{p}{.}
+\PYG{err}{\PYGZbs{}}\PYG{n}{begin}\PYG{p}{\PYGZob{}}\PYG{n}{minted}\PYG{p}{\PYGZcb{}\PYGZob{}}\PYG{n}{cpp}\PYG{p}{\PYGZcb{}}
+\PYG{l+s}{\PYGZdq{}Hello\PYGZdq{}}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{c+c1}{// \PYGZdq{}e\PYGZdq{}}
+\end{Verbatim}

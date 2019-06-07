@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nl}{a}\PYG{p}{:} \PYG{k+kt}{int} \PYG{o}{=} \PYG{l+m+mi}{0}
+\PYG{k}{while} \PYG{n}{a} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{10} \PYG{o}{=\PYGZgt{}} \PYG{p}{\PYGZob{}}
+    \PYG{n}{print} \PYG{n}{a}
+    \PYG{n}{a} \PYG{o}{=} \PYG{n}{a} \PYG{o}{+} \PYG{l+m+mi}{1}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

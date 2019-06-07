@@ -8,7 +8,7 @@ The job of the parser is to transform the list of tokens returned by the Lexer i
         % Nodes of the layered system
         \node[block] (input) {List of tokens};
         \node[block,right=of input] (parser) {Parser};
-        \node[block,right=of lexer] (output) {Abstract Syntax Tree};
+        \node[block,right=of lexer] (output) {Abstract syntax tree};
 
         % Lines
         \draw[line] (input) -- (parser);
@@ -21,33 +21,32 @@ The job of the parser is to transform the list of tokens returned by the Lexer i
     \label{fig:parser_overview}
 \end{figure}
 
-There are a lot of different algorithms and strategies for parsing different set of grammars.
-There are also a lot of parser generators out there that can help building a parser. However, this thesis implements
-a hand written top down recursive descend predictive parser for the following reasons:
+There are a lot of different algorithms and strategies for parsing grammars.
+There are also a lot of parser generators out there to automatically build a parser given the grammar. However, this thesis implements
+a handwritten top-down recursive descend predictive parser for the following reasons:
 
 \begin{enumerate}
-    \item To have as much control as needed over the parser. Specially for error reporting.
+    \item To have as much control as needed over the parser. Especially for error reporting.
     \item To enforce a zero-dependency policy.
     \item Easy to build and fast enough for the job.
-    \item To learn how to build a recursive descend parser and learn how it works.
+    \item To learn how to build a recursive descent parser and learn how it works.
 \end{enumerate}
 
-Recursive descend parsers are probably the simplest way to build a parser as mentioned in \autocite[Section~6]{crafting_interpreters}.
+Recursive descent parsers are probably the simplest way to build a parser as mentioned in \autocite[Section~6]{crafting_interpreters}.
 In fact, even if it's a simple parser it's used in very famous and large projects like \texttt{GCC} or \texttt{V8}.
 
 As can be seen on \autocite{top_down_parsing} the top down parers can be classified into the ones using backtracking and the ones using a predictive technique.
 
 \begin{itemize}
-    \item \emph{Backtracking parsers}: Backtracking parsers try to guess the correct production rule based on the current token. This guess can however, lead to a
-        dead-end and therefore a backtrack is needed to go back and make anothe decision. This is hoever, very inefficient for programming languages due the ammount
-        of nonterminals found in them.
-    \item \emph{Predictive parsers}: Predictive parsers choose the production rule acording to the current token and the next token found. The next tooken is called
+    \item \emph{Backtracking parsers}: Backtracking parsers try to guess the correct production rule based on the current token. This guess can, however, lead to a
+        dead-end and therefore a backtrack is needed to go back and make another decision. This is, however, very inefficient for programming languages due to the number of nonterminals found in them.
+    \item \emph{Predictive parsers}: Predictive parsers choose the production rule according to the current token and the next token found. The next token is called
         a lookahead token. Predictive parsers have a major issue with left-recursion and therefore, the language grammar needs to be adapted to it.
         The Nuua grammar as seen on \autoref{sec:nuua_grammar} is already adapted for left-recursion based on the solution mentioned on
         \autocite[Section~6]{crafting_interpreters}.
 \end{itemize}
 
-A recursive descend parser is a possible technique for implementing a top-down predictive parser that consists in the creation of a funciton for each
+A recursive descent parser is a possible technique for implementing a top-down predictive parser that consists in the creation of a function for each
 nonterminal found in the grammar and then calling the functions depending on the current token and the lookahead.
 
 \section{Abstract Syntax Tree}
@@ -57,19 +56,20 @@ representation of the program starting from an initial node \texttt{program} as 
 \autoref{fig:ast_example} shows an example AST.
 
 \begin{figure}[H]
-	\centering
-	\begin{subtable}{0.45\textwidth}
-		\centering
-        \texttt{1 - 2 * -3}
-		\caption{Program}
-	\end{subtable}
-	\begin{subtable}{0.45\textwidth}
-		\centering
+    \centering
+    \begin{subtable}{0.45\textwidth}
+\begin{minted}{cpp}
+1 - 2 * -3
+\end{minted}
+        \caption{Program}
+    \end{subtable}
+    \begin{subtable}{0.45\textwidth}
+        \centering
         \texttt{TOKEN\_INTEGER TOKEN\_MINUS TOKEN\_INTEGER TOKEN\_STAR TOKEN\_MINUS TOKEN\_INTEGER}
-		\caption{List of tokens}
-	\end{subtable}
+        \caption{List of tokens}
+    \end{subtable}
     \begin{subfigure}{0.45\textwidth}
-		\centering
+        \centering
         \begin{tikzpicture}[node distance=1.75cm]
             % Nodes
             \node[state] (1) {\texttt{-}};
@@ -85,10 +85,10 @@ representation of the program starting from an initial node \texttt{program} as 
             \draw (3) -- (5);
             \draw (5) -- (6);
         \end{tikzpicture}
-		\caption{Abstract syntax tree}
-	\end{subfigure}
+        \caption{Abstract syntax tree}
+    \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
-		\centering
+        \centering
         \begin{tikzpicture}[node distance=1.75cm]
             % Nodes
             \node[state] (0) {\texttt{P(1)}};
@@ -113,25 +113,28 @@ representation of the program starting from an initial node \texttt{program} as 
             \draw (3) -- (5);
             \draw (5) -- (6);
         \end{tikzpicture}
-		\caption{Nuua AST}
-	\end{subfigure}
-	\caption{Example abstract syntax tree}
+        \caption{Nuua AST}
+    \end{subfigure}
+    \caption{Example abstract syntax tree}
     \label{fig:ast_example}
 \end{figure}
 
-\section{Data Types}
+All the nodes found in the abstract syntax tree of Nuua can be found at \autoref{sec:tree_nodes}. Each node is explained with the information it
+stores for further use in the compiler.
+
+\section{Value Data Types}
 
 The parser layer is responsible for creating the type class used in the nodes and in the blocks to determine the type of the values.
 Since some nodes will store information about their type and it will be added when the semantic analyzer runs. The blocks also need
-the type of the variables stores so it's convinient to define it here.
+the type of the variables stores so it's convenient to define it here.
 
-The data types supported in nuua are already explained in \autoref{sec:nuua_data_types}, therefore \autoref{ls:nuua_data_types} shows the
+The data types supported in Nuua are already explained in \autoref{sec:nuua_data_types}, therefore \autoref{ls:nuua_data_types} shows the
 available data types supported with the addition of a value type that contains no type. This is used in call expression to functions that don't have
 a return type. This type is only used by the compiler and not the interpreter.
 
 \begin{listing}[H]
 \begin{minted}{cpp}
-// Determines the available native types in nuua.
+// Determines the available native types in Nuua.
 typedef enum : uint8_t {
     VALUE_INT, VALUE_FLOAT, VALUE_BOOL,
     VALUE_STRING, VALUE_LIST, VALUE_DICT, VALUE_FUN,
@@ -142,11 +145,11 @@ typedef enum : uint8_t {
 \label{ls:nuua_data_types}
 \end{listing}
 
-The type class is very complex. In fact, it must store the \texttt{VALUE\_TYPE} and additional information about the type, for example
-the inner type for values like lists or dictionaries. For the function type it must store the function parameter types and its return type. For class types
-it must store the class name used. \autoref{ls:type_class} shows the type class used in the Nuua compiler. As it can be seen, there are lot
-of additional methods bound to it to help working with types. Those include copy methods, reset methods, type comparisons and additionally,
-methods that help dealing with the long list of casts, unary and binary operations found in \autoref{sec:expressions}.
+The type class is very complex. In fact, it must store the \texttt{VALUE\_TYPE} and additional information about the type, for example,
+the inner type for values like lists or dictionaries. For the function type, it must store the function parameter types and its return type. For class types,
+it must store the class name used. \autoref{ls:type_class} shows the type class used in the Nuua compiler. As can be seen, there are a lot
+of additional methods bound to it to work with types. Those include copy methods, reset methods, type comparisons and additionally,
+methods that help to deal with the long list of casts, unary and binary operations found in \autoref{sec:expressions}.
 
 \begin{listing}[H]
 \begin{minted}{cpp}
@@ -200,15 +203,15 @@ class Type
 \section{Block Scope and symbol table}
 
 The parser layer will also create the block representation explained in \autoref{sec:nuua_scopes}. The way the scope block is built must be
-explained here since it will be attached as part of some of the AST nodes. This acts as a symbol table for the specific scope.
+explained here since it will be attached as part of some of the AST nodes. This acts as a symbol table for a specific scope.
 
 A symbol table is used to store the name of the variables in the block and further verify if they are declared or get specific data of them.
 For example, the symbol table can verify if a variable is declared, the type of the variable, the register where it is placed, etc.
-Aditionally, the block does also store the defined classes. This is done due the fact that the block class is also used as the module scope internaly.
+Additionally, the block does also store the defined classes. This is done due to the fact that the block class is also used as the module scope internally.
 
 \subsection{Block Variable Type}
 
-The block variable type is the representation of a variable stores in the block. A variable must include the following fields:
+The block variable type is the representation of a variable stored in the block. A variable must include the following fields:
 
 \begin{itemize}
     \item The variable type.
@@ -218,7 +221,7 @@ The block variable type is the representation of a variable stores in the block.
     \item The node where it was last used.
 \end{itemize}
 
-The variable name however, is not part of this class, since to reference this variable class, a hashmap is used and the hashmap key is variable name.
+The variable name, however, is not part of this class, since to reference this variable class, a hashmap is used and the hashmap key is a variable name.
 
 \autoref{ls:block_variable_class} shows the class representation of a block variable type.
 
@@ -253,7 +256,7 @@ class BlockVariableType
 
 \subsection{Block Class Type}
 
-The block class type is similar to the block variable type but stores much less fields. Also this information is only used in the module scope.
+The block class type is similar to the block variable type but stores much fewer fields. Also, this information is only used in the module scope.
 The block class type stores the following information:
 
 \begin{itemize}
@@ -293,9 +296,9 @@ class BlockClassType
 \subsection{Block Class}
 
 With the form of the variables and the classes that are stored in the block the final definition for a block can be given, therefore, the block must
-then be able to store variables, classes and additionally provide with methods to help perform different opterations on them.
+then be able to store variables, classes and additionally provide with methods to help perform different operations on them.
 
-\autoref{ls:block_class} shows the block class used in the Nuua compiler. As it can be seen, two hashmaps are used to store the relation between
+\autoref{ls:block_class} shows the block class used in the Nuua compiler. As can be seen, two hashmaps are used to store the relation between
 variable names and its class shown in \autoref{ls:block_variable_class} and the same with the class name with its class shown in \autoref{ls:block_class_class}.
 
 \begin{listing}[H]
@@ -334,891 +337,15 @@ class Block
 \label{ls:block_class}
 \end{listing}
 
-\section{Tree Nodes}
-\label{sec:tree_nodes}
-
-A node in the AST is represented by the class found \autoref{ls:node_class}
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Node
-{
-    public:
-        // Stores the real rule of the node.
-        const Rule rule;
-        // Stores the file where it's found.
-        std::shared_ptr<const std::string> file;
-        // Stores the line where it's found.
-        line_t line;
-        // Stores the column where it's found.
-        column_t column;
-        // Constructor.
-        Node(
-            const Rule r,
-            const std::shared_ptr<const std::string> &f,
-            const line_t l, const column_t c
-        ) : rule(r), file(f), line(l), column(c) {};
-};
-\end{minted}
-\caption{Node class}
-\label{ls:node_class}
-\end{listing}
-
-However, nodes are categorized into two sections. Nodes can be either statements or expressions. Therefore, two classes
-are used as nodes instead as shown in \autoref{ls:expr_stmt_classes}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Expression : public Node
-{
-    public:
-        explicit Expression(const Node &node)
-            : Node(node) {};
-};
-class Statement : public Node
-{
-    public:
-        explicit Statement(const Node &node)
-            : Node(node) {};
-};
-\end{minted}
-\caption{Expression and Statement classes}
-\label{ls:expr_stmt_classes}
-\end{listing}
-
-This two classes extend the node class so they inherit all the attributes from it.
-
-To work with all the nodes in a more effective way, the definition in \autoref{ls:node_def} is added.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-#define NODE_PROPS std::shared_ptr<const std::string> &file, const line_t line, const column_t column
-\end{minted}
-\caption{Node properties definition}
-\label{ls:node_def}
-\end{listing}
-
-\subsection{Integer Node}
-
-The integer node only needs the value that corresponds to it. In this case a C++ \texttt{int64\_t} type is used as shown in
-\autoref{ls:integer_node}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Integer : public Expression
-{
-    public:
-        int64_t value;
-        Integer(NODE_PROPS, const int64_t v)
-            : Expression({ RULE_INTEGER, file, line, column }),
-              value(v) {};
-};
-\end{minted}
-\caption{Integer Node}
-\label{ls:integer_node}
-\end{listing}
-
-\subsection{Float Node}
-
-The float node only needs the value that corresponds to it. In this case a C++ \texttt{double} type is used as shown in
-\autoref{ls:float_node}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Float : public Expression
-{
-    public:
-        double value;
-        Float(NODE_PROPS, const double v)
-            : Expression({ RULE_FLOAT, file, line, column }),
-              value(v) {};
-};
-\end{minted}
-\caption{Float Node}
-\label{ls:float_node}
-\end{listing}
-
-\subsection{String Node}
-
-The string node only needs the value that corresponds to it. In this case a C++ \texttt{std::string} type is used as shown in
-\autoref{ls:string_node}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class String : public Expression
-{
-    public:
-        std::string value;
-        String(NODE_PROPS, const std::string &v)
-            : Expression({ RULE_STRING, file, line, column }),
-              value(v) {};
-};
-\end{minted}
-\caption{String Node}
-\label{ls:string_node}
-\end{listing}
-
-\subsection{Boolean Node}
-
-The boolean node only needs the value that corresponds to it. In this case a C++ \texttt{bool} type is used as shown in
-\autoref{ls:bool_node}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Boolean : public Expression
-{
-    public:
-        bool value;
-        Boolean(NODE_PROPS, const bool v)
-            : Expression({ RULE_BOOLEAN, file, line, column }),
-              value(v) {};
-};
-\end{minted}
-\caption{Boolean Node}
-\label{ls:bool_node}
-\end{listing}
-
-\subsection{List Node}
-
-The list node needs the value that corresponds to it and a type parameter that's filled in by the semantic analyzer.
-In this case a C++ \texttt{std::vector<std::shared\_ptr<Expression>>} type is used as shown in \autoref{ls:list_node}.
-The vector contains other expressions found inside the list.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class List : public Expression
-{
-    public:
-        std::vector<std::shared_ptr<Expression>> value;
-        // Stores the list type since it's complex to analyze later.
-        std::shared_ptr<Type> type;
-        List(
-            NODE_PROPS,
-            const std::vector<std::shared_ptr<Expression>> &v
-        ) : Expression({ RULE_LIST, file, line, column }),
-            value(v) {};
-};
-\end{minted}
-\caption{List Node}
-\label{ls:list_node}
-\end{listing}
-
-\subsection{Dictionary Node}
-
-The dictionary node needs the key value pairs of strings and expressions and the key order. In this case a C++ \texttt{std::unordered\_map<std::string, std::shared\_ptr<Expression>>} type is used as shown in \autoref{ls:dict_node}. The type is also added and used by the semantic analyzer.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Dictionary : public Expression
-{
-    public:
-        std::unordered_map<std::string, std::shared_ptr<Expression>> value;
-        std::vector<std::string> key_order;
-        // Stores the dict type since it's complex to analyze later.
-        std::shared_ptr<Type> type;
-        Dictionary(
-            NODE_PROPS,
-            const std::unordered_map<std::string, std::shared_ptr<Expression>> &v,
-            const std::vector<std::string> &ko
-        ) : Expression({ RULE_DICTIONARY, file, line, column }),
-            value(std::move(v)),
-            key_order(std::move(ko)) {};
-};
-\end{minted}
-\caption{Dictionary Node}
-\label{ls:dict_node}
-\end{listing}
-
-\subsection{Group Node}
-
-The group node consists of a single expression as seen in \autoref{ls:group_node}.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Group : public Expression
-{
-    public:
-        std::shared_ptr<Expression> expression;
-        Group(NODE_PROPS, const std::shared_ptr<Expression> &v)
-            : Expression({ RULE_GROUP, file, line, column }),
-              expression(std::move(v)) {};
-};
-\end{minted}
-\caption{Group Node}
-\label{ls:group_node}
-\end{listing}
-
-\subsection{Unary Node}
-
-The unary node consists of the token operation to do and the right expression. It also stores the type of unary operation as seen in
-\autoref{sec:unary_expression}. \autoref{ls:unary_node} shows the representation of the unary node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Unary : public Expression
-{
-    public:
-        Token op;
-        std::shared_ptr<Expression> right;
-        // Determines what type of unary operation
-        // will be performed, no need to store a Type.
-        UnaryType type = (UnaryType) NULL;
-        Unary(NODE_PROPS, const Token &o, const std::shared_ptr<Expression> &r)
-            : Expression({ RULE_UNARY, file, line, column }),
-              op(o),
-              right(std::move(r)) {};
-};
-\end{minted}
-\caption{Unary Node}
-\label{ls:unary_node}
-\end{listing}
-
-\subsection{Binary Node}
-
-The binary node consists of the token operation to do and the left and right expression. It also stores the type of binary operation as seen in
-\autoref{sec:binary_expression}. \autoref{ls:binary_node} shows the representation of the binary node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Binary : public Expression
-{
-    public:
-        std::shared_ptr<Expression> left;
-        Token op;
-        std::shared_ptr<Expression> right;
-        // Determines what type of binary operation will be performed.
-        BinaryType type = (BinaryType) NULL;
-        Binary(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &l,
-            const Token &o,
-            const std::shared_ptr<Expression> &r
-        ) : Expression({ RULE_BINARY, file, line, column }),
-            left(std::move(l)),
-            op(o),
-            right(std::move(r)) {};
-};
-\end{minted}
-\caption{Binary Node}
-\label{ls:binary_node}
-\end{listing}
-
-\subsection{Variable Node}
-
-The variable node consists of the the name of the variable. \autoref{ls:variable_node} shows the representation of the variable node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Variable : public Expression
-{
-    public:
-        std::string name;
-        Variable(NODE_PROPS, const std::string &n)
-            : Expression({ RULE_VARIABLE, file, line, column }),
-              name(n) {};
-};
-\end{minted}
-\caption{Variable Node}
-\label{ls:variable_node}
-\end{listing}
-
-\subsection{Assign Node}
-
-The assign node consists of the target (the expression to be assigned) and the value of the assignment.
-\autoref{ls:assign_node} shows the representation of the assign node. It also stores a boolean that determines if
-the assignment is done to an access target (an inner value of a Nuua iterator). This boolean is used by the semantic analyzer.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Assign : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        std::shared_ptr<Expression> value;
-        bool is_access = false;
-        Assign(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t,
-            const std::shared_ptr<Expression> &v
-        ) : Expression({ RULE_ASSIGN, file, line, column }),
-            target(std::move(t)),
-            value(std::move(v)) {};
-};
-\end{minted}
-\caption{Assign Node}
-\label{ls:assign_node}
-\end{listing}
-
-\subsection{Logical Node}
-
-The logical node consists the logical operation (\texttt{or} or \texttt{and}) and the left and right expressions.
-\autoref{ls:logical_node} shows the representation of the logical node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Logical : public Expression
-{
-    public:
-        std::shared_ptr<Expression> left;
-        Token op;
-        std::shared_ptr<Expression> right;
-        Logical(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &l,
-            const Token &o,
-            const std::shared_ptr<Expression> &r
-        ) : Expression({ RULE_LOGICAL, file, line, column }),
-            left(std::move(l)),
-            op(o),
-            right(std::move(r)) {};
-};
-\end{minted}
-\caption{Logical Node}
-\label{ls:logical_node}
-\end{listing}
-
-\subsection{Call Node}
-
-The call node consists the calle target and of the arguments provided to perform the call.
-\autoref{ls:call_node} shows the representation of the call node. It also stores if the call has a return
-depending on the callee. This helps the semantic analyzer determine where and when this call can be used since
-this expression may have no value.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Call : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        std::vector<std::shared_ptr<Expression>> arguments;
-        // Determines if the call target returns a value or not.
-        bool has_return = false;
-        Call(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t,
-            const std::vector<std::shared_ptr<Expression>> &a
-        ) : Expression({ RULE_CALL, file, line, column }),
-            target(std::move(t)),
-            arguments(a) {};
-};
-\end{minted}
-\caption{Call Node}
-\label{ls:call_node}
-\end{listing}
-
-\subsection{Access Node}
-
-The access node consists the target to access and the index for it.
-\autoref{ls:access_node} shows the representation of the access node.
-The type represents the type of access (the type of iterator to access).
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Access : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        std::shared_ptr<Expression> index;
-        AccessType type = (AccessType) NULL;
-        Access(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t,
-            const std::shared_ptr<Expression> &i
-        ) : Expression({ RULE_ACCESS, file, line, column }),
-            target(std::move(t)),
-            index(std::move(i)) {};
-};
-\end{minted}
-\caption{Access Node}
-\label{ls:access_node}
-\end{listing}
-
-\subsection{Cast Node}
-
-The cast node consists the expression to cast and the type to cast it to.
-\autoref{ls:cast_node} shows the representation of the access node.
-The type of cast as show in \autoref{sec:cast_expression} is also stored and further used by the analyzer.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Cast : public Expression
-{
-    public:
-        std::shared_ptr<Expression> expression;
-        std::shared_ptr<Type> type;
-        CastType cast_type = (CastType) NULL;
-        Cast(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &e,
-            std::shared_ptr<Type> &t
-        ) : Expression({ RULE_CAST, file, line, column }),
-            expression(std::move(e)),
-            type(std::move(t)) {}
-};
-\end{minted}
-\caption{Cast Node}
-\label{ls:cast_node}
-\end{listing}
-
-\subsection{Slice Node}
-
-The slice node consists the expressions of the target and the expressions of the start, end and step indexes.
-\autoref{ls:slice_node} shows the representation of the access node.
-The additional \texttt{is\_list} represents if the slice is done to a list or a string and it's used by the semantic analyzer.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Slice : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        std::shared_ptr<Expression> start;
-        std::shared_ptr<Expression> end;
-        std::shared_ptr<Expression> step;
-        // Determines if it's a list or a string, used by Analyzer.
-        bool is_list = false;
-        Slice(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t,
-            const std::shared_ptr<Expression> &s,
-            const std::shared_ptr<Expression> &e,
-            const std::shared_ptr<Expression> &st
-        ) : Expression({ RULE_SLICE, file, line, column }),
-            target(std::move(t)),
-            start(std::move(s)),
-            end(std::move(e)),
-            step(std::move(st)) {}
-};
-\end{minted}
-\caption{Slice Node}
-\label{ls:slice_node}
-\end{listing}
-
-\subsection{Range Node}
-
-The range node consists the expressions of the start and end indexes.
-\autoref{ls:range_node} shows the representation of the access node.
-The inclusive fields indicates if the range is inclusive or exclusive.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Range : public Expression
-{
-    public:
-        std::shared_ptr<Expression> start;
-        std::shared_ptr<Expression> end;
-        bool inclusive;
-        Range(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &s,
-            const std::shared_ptr<Expression> &e,
-            const bool i
-        ) : Expression({ RULE_RANGE, file, line, column }),
-            start(std::move(s)),
-            end(std::move(e)),
-            inclusive(i) {}
-};
-\end{minted}
-\caption{Range Node}
-\label{ls:range_node}
-\end{listing}
-
-\subsection{Delete Node}
-
-The delete node consists the target expression to delete.
-\autoref{ls:range_node} shows the representation of the access node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Delete : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        Delete(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t
-        ) : Expression({ RULE_DELETE, file, line, column }),
-            target(std::move(t)) {}
-};
-\end{minted}
-\caption{Delete Node}
-\label{ls:delete_node}
-\end{listing}
-
-\subsection{Function Value Node}
-
-The function value node represents a value to build a function. The node must know the function name,
-the parameters of it, the return type and the body. Aditionally the scope block is also stored for further use.
-\autoref{ls:function_value_node} shows the representation of the FunctionValue node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class FunctionValue : public Expression
-{
-    public:
-        std::string name;
-        std::vector<std::shared_ptr<Declaration>> parameters;
-        std::shared_ptr<Type> return_type;
-        std::vector<std::shared_ptr<Statement>> body;
-        std::shared_ptr<Block> block;
-        FunctionValue(
-            NODE_PROPS,
-            const std::string &n,
-            const std::vector<std::shared_ptr<Declaration>> &p,
-            std::shared_ptr<Type> &rt,
-            const std::vector<std::shared_ptr<Statement>> &b
-        ) : Expression({ RULE_FUNCTION, file, line, column }),
-            name(n), parameters(p),
-            return_type(std::move(rt)),
-            body(b) {}
-};
-\end{minted}
-\caption{FunctionValue Node}
-\label{ls:function_value_node}
-\end{listing}
-
-\subsection{Object Node}
-
-The object node represents an object expression. The required informations are the class name and the arguments to initialize the instance (as a key value pair).
-Aditionally the scope block is also stored for further use.
-\autoref{ls:object_node} shows the representation of the Object node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Object : public Expression
-{
-    public:
-        std::string name;
-        std::unordered_map<std::string, std::shared_ptr<Expression>> arguments;
-        Object(
-            NODE_PROPS,
-            const std::string &n,
-            const std::unordered_map<std::string, std::shared_ptr<Expression>> &a
-        ) : Expression({ RULE_OBJECT, file, line, column }),
-            name(n),
-            arguments(a) {}
-};
-\end{minted}
-\caption{Object Node}
-\label{ls:object_node}
-\end{listing}
-
-\subsection{Property Node}
-
-The property node represents an access to an object property.
-The information needed is the expression to access and the name of the property.
-\autoref{ls:property_node} shows the representation of the Property node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Property : public Expression
-{
-    public:
-        std::shared_ptr<Expression> object;
-        std::string name;
-        Property(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &o,
-            const std::string &n
-        ) : Expression({ RULE_PROPERTY, file, line, column }),
-            object(o),
-            name(n) {}
-};
-\end{minted}
-\caption{Property Node}
-\label{ls:property_node}
-\end{listing}
-
-\subsection{Print Node}
-
-The print node only requires the expression to print.
-\autoref{ls:print_node} shows the representation of the Print node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Print : public Statement
-{
-    public:
-        std::shared_ptr<Expression> expression;
-        Print(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &e
-        ) : Statement({ RULE_PRINT, file, line, column }),
-            expression(std::move(e)) {}
-};
-\end{minted}
-\caption{Print Node}
-\label{ls:print_node}
-\end{listing}
-
-\subsection{Expression Statement Node}
-
-The expression statement node is used as a wrapper to treat an expression as a valid statement.
-\autoref{ls:expression_statement_node} shows the representation of the ExpressionStatement node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class ExpressionStatement : public Statement
-{
-    public:
-        std::shared_ptr<Expression> expression;
-        ExpressionStatement(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &e
-        ) : Statement({ RULE_EXPRESSION_STATEMENT, file, line, column }),
-            expression(std::move(e)) {}
-};
-\end{minted}
-\caption{ExpressionStatement Node}
-\label{ls:expression_statement_node}
-\end{listing}
-
-\subsection{Declaration Node}
-
-The declaration node is requires the name of the variable to declare and then a combination of the type and the initializer.
-The type may be empty if the initializer is set, and the initializer may be empty if the type is set. Both of them may also be set
-but not empty.
-\autoref{ls:declaration_node} shows the representation of the Declaration node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Declaration : public Statement
-{
-    public:
-        std::string name;
-        std::shared_ptr<Type> type;
-        std::shared_ptr<Expression> initializer;
-        Declaration(
-            NODE_PROPS,
-            const std::string &n, std::shared_ptr<Type> &t,
-            const std::shared_ptr<Expression> &i
-        ) : Statement({ RULE_DECLARATION, file, line, column }),
-            name(n),
-            type(std::move(t)),
-            initializer(std::move(i)) {};
-};
-\end{minted}
-\caption{Declaration Node}
-\label{ls:declaration_node}
-\end{listing}
-
-\subsection{Return Node}
-
-The return node does not need an expression to be valid, but one may be provided.
-\autoref{ls:return_node} shows the representation of the Return node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Return : public Statement
-{
-    public:
-        std::shared_ptr<Expression> value;
-        Return(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &v = std::shared_ptr<Expression>()
-        ) : Statement({ RULE_RETURN, file, line, column }),
-            value(std::move(v)) {}
-};
-\end{minted}
-\caption{Return Node}
-\label{ls:return_node}
-\end{listing}
-
-\subsection{If Node}
-
-The if node does need the condition expression and the then branch followed by the then block.
-Aditionally, it may have an else branch and an else scope block.
-\autoref{ls:if_node} shows the representation of the If node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class If : public Statement
-{
-    public:
-        std::shared_ptr<Expression> condition;
-        std::vector<std::shared_ptr<Statement>> then_branch;
-        std::vector<std::shared_ptr<Statement>> else_branch;
-        std::shared_ptr<Block> then_block, else_block;
-        If(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &c,
-            const std::vector<std::shared_ptr<Statement>> &tb,
-            const std::vector<std::shared_ptr<Statement>> &eb
-        ) : Statement({ RULE_IF, file, line, column }),
-            condition(std::move(c)),
-            then_branch(tb),
-            else_branch(eb) {};
-};
-\end{minted}
-\caption{If Node}
-\label{ls:if_node}
-\end{listing}
-
-\subsection{While Node}
-
-The while node does need the condition expression and the body of it.
-It also stores the scope block for further use.
-\autoref{ls:while_node} shows the representation of the While node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class While : public Statement
-{
-    public:
-        std::shared_ptr<Expression> condition;
-        std::vector<std::shared_ptr<Statement>> body;
-        std::shared_ptr<Block> block;
-        While(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &c,
-            const std::vector<std::shared_ptr<Statement>> &b
-        ) : Statement({ RULE_WHILE, file, line, column }),
-            condition(std::move(c)),
-            body(b) {};
-};
-\end{minted}
-\caption{While Node}
-\label{ls:while_node}
-\end{listing}
-
-\subsection{For Node}
-
-The for node does require the iterator and the variable to store the loop value.
-Aditionally it may have the index in case it's needed as part of the loop.
-It also stores the scope block for further use.
-\autoref{ls:for_node} shows the representation of the For node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class For : public Statement
-{
-    public:
-        std::string variable;
-        std::string index;
-        std::shared_ptr<Expression> iterator;
-        std::vector<std::shared_ptr<Statement>> body;
-        std::shared_ptr<Block> block;
-        // Stores the type of the iterator.
-        std::shared_ptr<Type> type;
-        For(
-            NODE_PROPS,
-            const std::string &v,
-            const std::string &i,
-            const std::shared_ptr<Expression> &it,
-            const std::vector<std::shared_ptr<Statement>> &b
-        ) : Statement({ RULE_FOR, file, line, column }),
-            variable(v),
-            index(i),
-            iterator(std::move(it)), body(b) {}
-};
-\end{minted}
-\caption{For Node}
-\label{ls:for_node}
-\end{listing}
-
-\subsection{Function Node}
-
-The function node wraps the \texttt{FunctionValue} node as a statement.
-\autoref{ls:function_node} shows the representation of the Function node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Function : public Statement
-{
-    public:
-        std::shared_ptr<FunctionValue> value;
-        Function(const std::shared_ptr<FunctionValue> &v)
-            : Statement({ RULE_FUNCTION, v->file, v->line, v->column }),
-                value(v) {}
-};
-\end{minted}
-\caption{Function Node}
-\label{ls:function_node}
-\end{listing}
-
-\subsection{Use Node}
-
-The use node requires the module name to import and an optional target list. Targets can be empty and all exported targets
-will be imported. It also requires a property to store the code of the module (the AST of that particular module) and
-the module scope block of it.
-\autoref{ls:use_node} shows the representation of the Use node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Use : public Statement
-{
-    public:
-        std::vector<std::string> targets;
-        std::shared_ptr<const std::string> module;
-        std::shared_ptr<std::vector<std::shared_ptr<Statement>>> code;
-        std::shared_ptr<Block> block;
-        Use(
-            NODE_PROPS,
-            const std::vector<std::string> &t,
-            const std::shared_ptr<const std::string> &m
-        ) : Statement({ RULE_USE, file, line, column }),
-            targets(t),
-            module(std::move(m)) {};
-};
-\end{minted}
-\caption{Use Node}
-\label{ls:use_node}
-\end{listing}
-
-\subsection{Export Node}
-
-The export node just requires the statement that is exporting.
-\autoref{ls:export_node} shows the representation of the Export node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Export : public Statement
-{
-    public:
-        std::shared_ptr<Statement> statement;
-        Export(NODE_PROPS, const std::shared_ptr<Statement> &s)
-            : Statement({ RULE_EXPORT, file, line, column }),
-                statement(std::move(s)) {}
-};
-\end{minted}
-\caption{Export Node}
-\label{ls:export_node}
-\end{listing}
-
-\subsection{Class Node}
-
-The class node needs the class name, the body of the class and it saves the scope block of the class for further use.
-\autoref{ls:class_node} shows the representation of the Class node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Class : public Statement
-{
-    public:
-        std::string name;
-        std::vector<std::shared_ptr<Statement>> body;
-        std::shared_ptr<Block> block;
-        Class(
-            NODE_PROPS,
-            const std::string &n,
-            const std::vector<std::shared_ptr<Statement>> &b
-        ) : Statement({ RULE_CLASS, file, line, column }),
-            name(n),
-            body(b) {}
-};
-\end{minted}
-\caption{Class Node}
-\label{ls:class_node}
-\end{listing}
-
 \section{Parser Class}
+\label{sec:parser_class}
 
 The parser class is able to parse the program tree by using some recursive logic. When a use declaration is found when parsing,
 the contents of the imported module are parsed using a new instance of the parser class. That way, the first parser class contains
 the AST of all the program. It's also good to note that the parser class formats the given paths to absolute paths and checks for the
 file location to determine if the imported module belongs to a relative file or the standard library. The parser class uses a similar technique
-as the Lexer when dealing with the current token. The parser have a pointer to the current token beeing parser and the lookahead token can be
-calculated by using pointer arithmentic. \autoref{ls:parser_class} shows the implementation of the parser.
+as the Lexer when dealing with the current token. The parser has a pointer to the current token being parser and the lookahead token can be
+calculated by using pointer arithmetic. \autoref{ls:parser_class} shows the implementation of the parser.
 
 \begin{listing}[H]
 \begin{minted}{cpp}
@@ -1259,10 +386,10 @@ class Parser
 \label{ls:parser_class}
 \end{listing}
 
-\section{Module In-memory Cache}
+\section{In-memory Module Cache}
 
 During the parsing of a module, this might require the use of other modules. When importing a module, the required module is first
-parser. However, The module might have already been parser by a previous import, so there's no need to parse that file again. This is prevented
+parsed. However, The module might have already been parsed by a previous import, so there's no need to parse that file again. This is prevented
 by having an in-memory cache to avoid re-parsing files more than once.
 
 \begin{figure}[H]
@@ -1286,5 +413,5 @@ by having an in-memory cache to avoid re-parsing files more than once.
 \end{figure}
 
 This situation increases performance when a library is used by a lot of modules.
-\autoref{fig:module_mem_cache} ilustrates this situation by having a module \texttt{D} imported more than once. The in-memory cache will prevent the second
+\autoref{fig:module_mem_cache} illustrates this situation by having a module \texttt{D} imported more than once. The in-memory cache will prevent the second
 parse and will assign that use node the right AST parsed previously.
