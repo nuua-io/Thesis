@@ -356,6 +356,8 @@ class Call : public Expression
         std::vector<std::shared_ptr<Expression>> arguments;
         // Determines if the call target returns a value or not.
         bool has_return = false;
+        // Determines if the call target is a method.
+        bool is_method;
         Call(
             NODE_PROPS,
             const std::shared_ptr<Expression> &t,

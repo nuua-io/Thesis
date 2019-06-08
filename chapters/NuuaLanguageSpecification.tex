@@ -449,10 +449,10 @@ DICTIONARY_EXPR
 \end{lstlisting}
 
 Dictionaries, like lists, can't be empty, so at least one expression must be provided.
-
+\clearpage
 \subsection{Operator Precedence}
 
-Given that expressions are grouped by their precedence, the operator precedence table of Nuua is as follows:
+Given the grammar, the operator precedence table of Nuua is shown at \autoref{fig:nuua_operator_precedence}.
 
 \begin{table}[H]
     \centering
@@ -852,7 +852,7 @@ shorthands can be used to minimize the lines of code.
 \begin{itemize}
     \item The condition must always be a boolean. Explicit casting is needed.
 \end{itemize}
-
+\clearpage
 \subsubsection{Examples}
 
 Simple if statement.
@@ -947,7 +947,7 @@ another optional variable containing the current index being used.
     \item The value and the index are variables that are automatically declared with their respective types in the "for" block.
     \item The value and the index types are automatically inferred according to \autoref{fig:nuua_iterators}.
 \end{itemize}
-
+\clearpage
 \subsubsection{Examples}
 
 Simple for statement.
@@ -1083,7 +1083,7 @@ Float expressions return a value with the \texttt{float} data type.
     \item An integer followed by a \texttt{"."} without any other number on the right-hand side, it's considered an error. An explicit number
         must be written in the right-hand side to create a float expression, even to indicate \texttt{.0}.
 \end{itemize}
-
+\clearpage
 \subsubsection{Examples}
 
 \begin{minted}{cpp}
@@ -1233,7 +1233,7 @@ Nuua iterator and the returned value is the inner value found on its index with 
 \begin{itemize}
     \item Only Nuua iterators can be accessed.
 \end{itemize}
-\clearpage
+
 \subsubsection{Examples}
 
 A string access.
@@ -1511,6 +1511,8 @@ that is treated differently. The binary operations that can be performed are sho
     \label{fig:nuua_relational_equality_bin_ops}
 \end{table}
 
+The types \texttt{[T]} and \texttt{\{T\}} are equal when all their inner values are equal.
+
 \begin{table}[H]
     \centering
     \begin{subtable}{\textwidth}
@@ -1560,7 +1562,7 @@ that is treated differently. The binary operations that can be performed are sho
     \caption{Nuua relational ordering binary operations}
     \label{fig:nuua_relational_ordering_bin_ops}
 \end{table}
-
+\clearpage
 \subsubsection{Examples}
 
 Example binary operations.
@@ -1645,6 +1647,7 @@ d := {"a": 10, "b": 20}
 d["a"] = 5 // 5
 // The value of d will now be {"a": 5, "b": 20}
 \end{minted}
+\clearpage
 Example property assignment.
 \begin{minted}{cpp}
 class Person {
