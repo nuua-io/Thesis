@@ -424,14 +424,14 @@ Primary expressions have the highest precedence and are mostly native types, wit
 
 \begin{lstlisting}
 OBJECT_EXPR
-    : IDENTIFIER "{" object_args? "}"
+    : IDENTIFIER "!" "{" object_args? "}"
     ;
 object_args
     : IDENTIFIER ":" expression ("," IDENTIFIER ":" expression)*
     ;
 \end{lstlisting}
 
-An object is defined by an identifier containing the class name, followed by optional arguments surrounded by \texttt{\{} and \texttt{\}} to
+An object is defined by an identifier containing the class name, followed by an \texttt{"!"} and optional arguments surrounded by \texttt{\{} and \texttt{\}} to
 initialize the class properties.
 
 \begin{lstlisting}
