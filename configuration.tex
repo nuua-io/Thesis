@@ -4,7 +4,7 @@
 %\RequirePackage[utf8]{inputenc}
 %\RequirePackage{environ}
 
-\documentclass[12pt, bibliography=totoc, headings=openright, twoside=semi]{scrbook}
+\documentclass[12pt, numbers=noenddot, bibliography=totoc, headings=openright, twoside=semi]{scrbook}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -28,10 +28,10 @@
 \def\advisor#1{\gdef\@advisor{#1}\gdef\theadvisor{#1}}
 
 % Graphics
+\usepackage[labelsep=endash]{caption}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{newfloat}
-\usepackage{caption}
 \usepackage{subcaption}
 \setlength{\abovecaptionskip}{10pt}
 \setlength{\belowcaptionskip}{10pt}
@@ -56,12 +56,13 @@
 \usepackage{minted}
 %\usemintedstyle{colorful}
 \setminted{breaklines=true, baselinestretch=1}
-\DeclareBoolOption{newfloat}
+%\DeclareBoolOption{newfloat}
 
 % References and links
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 \addto\extrasenglish{\renewcommand{\chapterautorefname}{Chapter}}
 \providecommand*{\listingautorefname}{Listing}
+\renewcommand{\lstlistingname}{Listing}
 \hypersetup{hidelinks=true}
 \usepackage[usestackEOL]{stackengine}
 
@@ -96,7 +97,6 @@
 \fancypagestyle{plain}{
 \fancyhf{}
 \fancyfoot[RO,LE]{\textit{\thepage}}}
-
 % Identations and newlines
 \usepackage[parfill]{parskip}
 \usetikzlibrary{
