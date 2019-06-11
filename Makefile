@@ -17,7 +17,7 @@ $(DOC).pdf: *.tex chapters/*.tex references.bib
 
 clean:
 	@echo " -> Removing temp documents..."
-	@rm -f *.toc *.out *.log *.aux *.lof *.bbl *blg *.xml *blx.bib *.bcf
+	@rm -f *.toc *.out *.log *.aux *.lof *.bbl *blg *.xml *blx.bib *.bcf *.lol *.lot
 	@echo " -> Temp documents removed!"
 
 clean_pdf:
