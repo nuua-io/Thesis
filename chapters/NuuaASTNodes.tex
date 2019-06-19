@@ -488,28 +488,6 @@ class Range : public Expression
 \label{ls:range_node}
 \end{listing}
 
-\section{Delete Node}
-
-The delete node consists of the target expression to delete.
-\autoref{ls:range_node} shows the representation of the access node.
-
-\begin{listing}[H]
-\begin{minted}{cpp}
-class Delete : public Expression
-{
-    public:
-        std::shared_ptr<Expression> target;
-        Delete(
-            NODE_PROPS,
-            const std::shared_ptr<Expression> &t
-        ) : Expression({ RULE_DELETE, file, line, column }),
-            target(std::move(t)) {}
-};
-\end{minted}
-\caption{Delete Node}
-\label{ls:delete_node}
-\end{listing}
-
 \section{Function Value Node}
 
 The function value node represents a value to build a function. The node must know the function name,
@@ -874,4 +852,26 @@ class Class : public Statement
 \end{minted}
 \caption{Class Node}
 \label{ls:class_node}
+\end{listing}
+
+\section{Delete Node}
+
+The delete node consists of the target expression to delete.
+\autoref{ls:range_node} shows the representation of the access node.
+
+\begin{listing}[H]
+\begin{minted}{cpp}
+class Delete : public Statement
+{
+    public:
+        std::shared_ptr<Expression> target;
+        Delete(
+            NODE_PROPS,
+            const std::shared_ptr<Expression> &t
+        ) : Statement({ RULE_DELETE, file, line, column }),
+            target(std::move(t)) {}
+};
+\end{minted}
+\caption{Delete Node}
+\label{ls:delete_node}
 \end{listing}
