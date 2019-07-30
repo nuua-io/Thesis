@@ -73,7 +73,7 @@ class Frame
 
 \section{Register Allocation}
 
-Compiler allocation takes place during code generation by the use of a \texttt{FrameInfo} class that helps to determine the right amount of registers needed
+Register allocation takes place during code generation by the use of a \texttt{FrameInfo} class that helps to determine the right amount of registers needed
 to compile a function and also optimizes the registers used by using a very simple strategy. The frame information class is shown in \autoref{ls:frame_info_class}.
 
 As it can be seen, the frame info is used as a register allocator, it basically consists of two lists of registers and a current register index.
